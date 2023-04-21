@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           title: const Text('Kingdomino'),
           backgroundColor: const Color.fromRGBO(149, 107, 169, 1),
         ),
-        body: Container(color: const Color.fromRGBO(149, 107, 169, 0.5), child: PlayerInteractionInterface()),
+        body: Container(color: const Color.fromRGBO(149, 107, 169, 0.5), child: const PlayerInteractionInterface()),
       ),
     );
   }

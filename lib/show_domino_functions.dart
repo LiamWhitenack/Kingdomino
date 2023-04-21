@@ -13,13 +13,6 @@ List<Widget> getImages(int n, int m, List<List<int>> values, List<List<String>> 
     for (int j = 0; j < m; j++) {
       String color = colors[i][j];
       String value = values[i][j] > 0 ? '${values[i][j]}' : '';
-      // Widget squareImage = Image.asset(
-      //   'images/$color.png',
-      //   fit: BoxFit.cover,
-      //   width: squareSize,
-      //   height: squareSize,
-      //   opacity: color == 'white' ? const AlwaysStoppedAnimation(0) : const AlwaysStoppedAnimation(1),
-      // );
       Widget squareImage = showDominoSection(color, squareSize);
 
       Widget overlayImage = Text(
@@ -62,11 +55,11 @@ Widget displayDomino(Domino domino) {
   List<Widget> images = [];
 
   for (int i = 0; i < 2; i++) {
-    square = showDominoSection(domino.colors[i], 40);
+    square = showDominoSection(domino.colors[i], 60);
     value = Text(
       domino.crowns[i] > 0 ? '${domino.crowns[i]}' : '',
       style: const TextStyle(
-        fontSize: 25,
+        fontSize: 45,
         color: Color.fromRGBO(245, 245, 245, 0.9),
       ),
     );

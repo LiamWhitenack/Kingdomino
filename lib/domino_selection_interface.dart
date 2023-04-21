@@ -15,21 +15,39 @@ class DominoSelectionInterface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        DominoSelectionColumn(
-          dominoOptionsForSelection: dominoOptionsForSelection,
-          activePlayersSelectedDomino: activePlayersSelectedDomino,
-          onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
+    return Center(
+      child: Container(
+        height: 500,
+        color: Colors.white24,
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DominoSelectionColumn(
+                  dominoOptionsForSelection: dominoOptionsForSelection,
+                  activePlayersSelectedDomino: activePlayersSelectedDomino,
+                  onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
+                ),
+                DominoSelectionColumn(
+                  dominoOptionsForSelection: [],
+                  activePlayersSelectedDomino: activePlayersSelectedDomino,
+                  onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
+                ),
+              ],
+            ),
+            const SizedBox(height: 50),
+            TextButton(
+              onPressed: () {},
+              child: const Text(
+                'Select',
+                style: TextStyle(color: Colors.purple, fontSize: 20),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 50),
-        DominoSelectionColumn(
-          dominoOptionsForSelection: dominoOptionsForSelection,
-          activePlayersSelectedDomino: activePlayersSelectedDomino,
-          onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
-        ),
-      ],
+      ),
     );
   }
 }
@@ -52,10 +70,10 @@ class DominoSelectionColumn extends StatefulWidget {
   @override
 
   // ignore: library_private_types_in_public_api
-  _DominoSelectionWidgetState createState() => _DominoSelectionWidgetState();
+  _DominoSelectionColumnState createState() => _DominoSelectionColumnState();
 }
 
-class _DominoSelectionWidgetState extends State<DominoSelectionColumn> {
+class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
   int _selectedIndex = -1;
 
   void _onCardTapped(int index) {
@@ -64,6 +82,13 @@ class _DominoSelectionWidgetState extends State<DominoSelectionColumn> {
       if (_selectedIndex >= 0) {
         widget.dominoOptionsForSelection[_selectedIndex].revertToOriginalOrientation();
       }
+
+      // if the card is taken, do nothing
+      if (widget.dominoOptionsForSelection[index].taken) {
+        return;
+      }
+
+      // select and use the tapped piece
       _selectedIndex = index;
       widget.onDominoSelectedByActivePlayer(widget.dominoOptionsForSelection[index]);
     });
@@ -71,25 +96,30 @@ class _DominoSelectionWidgetState extends State<DominoSelectionColumn> {
 
   @override
   Widget build(BuildContext context) {
+    // if there aren't any dominoes, no need to do anything :)
+    if (widget.dominoOptionsForSelection.isEmpty) return const SizedBox();
     return Column(
       children: widget.dominoOptionsForSelection.asMap().entries.map((entry) {
         final int index = entry.key;
         final Domino dominoOption = entry.value;
-        return GestureDetector(
-          onTap: () {
-            _onCardTapped(index);
-          },
-          child: SizedBox(
-            width: 118,
-            child: Card(
-              color: _selectedIndex == index ? const Color.fromRGBO(149, 107, 169, 0.5) : Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: displayDomino(dominoOption),
-              ),
-            ),
-          ),
-        );
+        return dominoOption.placed
+            ? const SizedBox()
+            : Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _onCardTapped(index);
+                    },
+                    child: SizedBox(
+                      width: 124,
+                      child: dominoOption.taken ? const SizedBox(height: 60) : displayDomino(dominoOption),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                ],
+              );
       }).toList(),
     );
   }

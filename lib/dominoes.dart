@@ -4,8 +4,15 @@ class Domino {
   late int value;
   bool horizontal;
   bool taken;
+  bool placed;
   bool flipped;
-  Domino({required this.crowns, required this.colors, this.horizontal = true, this.taken = true, this.flipped = true});
+  Domino(
+      {required this.crowns,
+      required this.colors,
+      this.horizontal = true,
+      this.taken = false,
+      this.placed = false,
+      this.flipped = true});
 
   void rotate() {
     if (!horizontal) {

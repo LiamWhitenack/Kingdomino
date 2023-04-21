@@ -4,7 +4,8 @@ class Domino {
   late int value;
   bool horizontal;
   bool taken;
-  Domino({required this.crowns, required this.colors, this.horizontal = true, this.taken = true});
+  bool flipped;
+  Domino({required this.crowns, required this.colors, this.horizontal = true, this.taken = true, this.flipped = true});
 
   void rotate() {
     if (!horizontal) {
@@ -15,8 +16,16 @@ class Domino {
       var tempColors = colors[0];
       colors[0] = colors[1];
       colors[1] = tempColors;
+
+      flipped = !flipped;
     }
     horizontal = !horizontal;
+  }
+
+  void revertToOriginalOrientation() {
+    while (!horizontal | !flipped) {
+      rotate();
+    }
   }
 }
 

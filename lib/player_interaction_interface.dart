@@ -29,15 +29,17 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
 
     return Column(
       children: [
         DominoSelectionInterface(
-            dominoOptionsForSelection: dominoOptionsForSelection,
-            activePlayersSelectedDomino: activePlayersSelectedDomino,
-            onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer),
+          dominoOptionsForSelection: dominoOptionsForSelection,
+          activePlayersSelectedDomino: activePlayersSelectedDomino,
+          onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
+        ),
         PlayerPlacementGrid(
           i: i,
           j: j,
@@ -50,7 +52,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
             i = kingdomOne.i;
             j = kingdomOne.j;
             // make sure that the placement of the piece is legitimate, otherwise show message explaining what went wrong
-            String errorMessage = checkValidPlacementAtPositionIJ(kingdomOne, dominoesInTheBox[42], i, j);
+            String errorMessage = checkValidPlacementAtPositionIJ(kingdomOne, activePlayersSelectedDomino!, i, j);
             if (errorMessage != '') {
               print(errorMessage);
               return;

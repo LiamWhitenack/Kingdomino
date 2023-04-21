@@ -60,6 +60,10 @@ class _DominoSelectionWidgetState extends State<DominoSelectionColumn> {
 
   void _onCardTapped(int index) {
     setState(() {
+      // rotate the old selected piece to its original orientation
+      if (_selectedIndex >= 0) {
+        widget.dominoOptionsForSelection[_selectedIndex].revertToOriginalOrientation();
+      }
       _selectedIndex = index;
       widget.onDominoSelectedByActivePlayer(widget.dominoOptionsForSelection[index]);
     });

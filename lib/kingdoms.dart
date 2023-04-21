@@ -8,12 +8,12 @@ import 'dart:math';
 class Kingdom {
   late List<List<int>> kingdomCrowns;
   late List<List<String>> kingdomColors;
-  late int i;
-  late int j;
-  late Domino domino;
   late List<List<int>> newKingdomCrowns;
   late List<List<String>> newKingdomColors;
+  late Domino domino;
   late bool fullyUpdated;
+  late int i;
+  late int j;
 
   Kingdom() {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));

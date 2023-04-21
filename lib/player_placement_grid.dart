@@ -12,13 +12,14 @@ class PlayerPlacementGrid extends StatefulWidget {
   Domino? domino;
   Kingdom kingdom;
   Widget scoreTextWidget;
-  PlayerPlacementGrid(
-      {required this.i,
-      required this.j,
-      required this.kingdom,
-      required this.domino,
-      required this.scoreTextWidget,
-      super.key});
+  PlayerPlacementGrid({
+    required this.i,
+    required this.j,
+    required this.kingdom,
+    required this.domino,
+    required this.scoreTextWidget,
+    super.key,
+  });
 
   @override
   State<PlayerPlacementGrid> createState() => _PlayerPlacementGridState();

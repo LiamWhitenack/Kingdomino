@@ -67,7 +67,7 @@ Widget displayDomino(Domino domino) {
       domino.crowns[i] > 0 ? '${domino.crowns[i]}' : '',
       style: const TextStyle(
         fontSize: 25,
-        color: Color.fromRGBO(245, 245, 245, 0),
+        color: Color.fromRGBO(245, 245, 245, 0.9),
       ),
     );
 

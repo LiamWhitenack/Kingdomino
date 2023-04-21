@@ -34,6 +34,7 @@ class DominoSelectionInterface extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class DominoSelectionColumn extends StatefulWidget {
   final List<Domino> dominoOptionsForSelection;
   Domino? activePlayersSelectedDomino;

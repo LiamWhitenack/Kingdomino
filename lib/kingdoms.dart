@@ -13,12 +13,14 @@ class Kingdom {
   late Domino domino;
   late List<List<int>> newKingdomCrowns;
   late List<List<String>> newKingdomColors;
+  late bool fullyUpdated;
 
   Kingdom() {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     kingdomColors = List.generate(9, (_) => List.filled(9, 'white'));
     kingdomCrowns[4][4] = 0;
     kingdomColors[4][4] = 'grey';
+    fullyUpdated = true;
   }
 
   List<List<String>> deepCopyColors(List<List<String>> source) {
@@ -30,8 +32,7 @@ class Kingdom {
   }
 
   void placePiece(Domino domino, int i, int j) {
-    if (i < 0) throw 'fix this instance';
-    if (j < 0) throw 'fix this instance';
+    fullyUpdated = false;
     this.i = i;
     this.j = j;
     this.domino = domino;
@@ -56,16 +57,17 @@ class Kingdom {
     checkValidPlacementAtPositionIJ(this, domino, i, j);
     kingdomCrowns = newKingdomCrowns;
     kingdomColors = newKingdomColors;
+    fullyUpdated = false;
   }
 
-  List<List<int>> getImportantRowsAndColumns() {
+  List<List<int>> getImportantRowsAndColumns(List<List<String>> kingdomColors) {
     List<int> rows = [];
     List<int> columns = [];
 
     // Check each row for partial completion
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
-        if (newKingdomColors[i][j] != 'white') {
+        if (kingdomColors[i][j] != 'white') {
           rows.add(i);
           columns.add(j);
         }
@@ -76,10 +78,10 @@ class Kingdom {
     return [rows, columns];
   }
 
-  List kingdomDisplay() {
+  List kingdomDisplay(List<List<int>> kingdomCrowns, List<List<String>> kingdomColors) {
     List<List<int>> displayKingdomCrowns = [];
     List<List<String>> displayKingdomColors = [];
-    List<List<int>> importantRowsAndColumns = getImportantRowsAndColumns();
+    List<List<int>> importantRowsAndColumns = getImportantRowsAndColumns(kingdomColors);
     List<int> importantRows = importantRowsAndColumns[0];
     List<int> importantColumns = importantRowsAndColumns[1];
 
@@ -88,8 +90,8 @@ class Kingdom {
       displayKingdomColors.add([]);
       displayKingdomCrowns.add([]);
       for (int j = importantColumns.reduce(min); j < importantColumns.reduce(max) + 1; j++) {
-        displayKingdomColors[i - importantRows.reduce(min)].add(newKingdomColors[i][j]);
-        displayKingdomCrowns[i - importantRows.reduce(min)].add(newKingdomCrowns[i][j]);
+        displayKingdomColors[i - importantRows.reduce(min)].add(kingdomColors[i][j]);
+        displayKingdomCrowns[i - importantRows.reduce(min)].add(kingdomCrowns[i][j]);
       }
     }
     return [displayKingdomCrowns, displayKingdomColors];
@@ -204,8 +206,8 @@ class Kingdom {
     return newScoringInfo;
   }
 
-  int score() {
-    List kingdomDisplayReturn = kingdomDisplay();
+  int score(List<List<int>> kingdomCrowns, List<List<String>> kingdomColors) {
+    List kingdomDisplayReturn = kingdomDisplay(kingdomCrowns, kingdomColors);
     List<List<int>> importantKingdomCrowns = kingdomDisplayReturn[0];
     List<List<String>> importantKingdomColors = kingdomDisplayReturn[1];
     List<List<int>> unscoredCoordinates = [];
@@ -218,6 +220,8 @@ class Kingdom {
         }
       }
     }
+
+    if (unscoredCoordinates.isEmpty) return 0;
 
     int score = 0;
     ScoringInfo scoringInfo =

@@ -27,7 +27,7 @@ bool checkWithinBounds(Kingdom kingdom, Domino domino, int i, int j) {
   List<int> rows;
   List<int> columns;
   // see how many rows (m) and columns (n) we need to display (minimum one)
-  List rowsAndColumns = kingdom.getImportantRowsAndColumns();
+  List rowsAndColumns = kingdom.getImportantRowsAndColumns(kingdom.newKingdomColors);
   rows = rowsAndColumns[0];
   // add the new row we would be moving the piece to (depending on if the piece is horizontal or now)
   rows.add(!domino.horizontal ? i + 1 : i);

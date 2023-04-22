@@ -33,6 +33,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   @override
   Widget build(BuildContext context) {
     scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
+    PanelController panelController = PanelController();
+    ScrollController scrollController = ScrollController();
 
     return SlidingUpPanel(
       collapsed: Container(
@@ -40,16 +42,17 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         height: 75,
         child: const Center(
           child: Icon(
-            Icons.keyboard_arrow_down_rounded,
+            Icons.keyboard_arrow_up_rounded,
             color: Colors.grey,
           ),
         ),
       ),
-      slideDirection: SlideDirection.DOWN,
+      slideDirection: SlideDirection.UP,
       minHeight: 75,
       maxHeight: MediaQuery.of(context).size.height,
+      controller: panelController,
       // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
-      panelBuilder: (ScrollController) => Stack(
+      panelBuilder: (scrollController) => Stack(
         alignment: Alignment.bottomCenter,
         children: [
           DominoSelectionInterface(
@@ -60,8 +63,17 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           const SizedBox(
             height: 75,
             child: Icon(
-              Icons.keyboard_arrow_up_rounded,
+              Icons.keyboard_arrow_down_rounded,
               color: Colors.grey,
+            ),
+          ),
+          TextButton(
+            onPressed: () => {
+              panelController.close(),
+            },
+            child: const Text(
+              'close',
+              style: TextStyle(color: Colors.black),
             ),
           )
         ],

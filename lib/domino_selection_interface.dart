@@ -69,7 +69,9 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
           TextButton(
             onPressed: () {
               Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
+
               if (activePlayersSelectedDomino == null) return;
+              activePlayersSelectedDomino.taken = true;
               widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
 
               // close the window
@@ -132,7 +134,9 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
       }
 
       for (Domino domino in widget.dominoOptionsForSelection) {
-        domino.whiteIfPieceNotTakenElseColor = 'white';
+        if (!domino.taken) {
+          domino.whiteIfPieceNotTakenElseColor = 'white';
+        }
       }
 
       // select and use the tapped piece

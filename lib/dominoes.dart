@@ -4,6 +4,7 @@ class Domino {
   late int value;
   bool horizontal;
   String whiteIfPieceNotTakenElseColor;
+  bool taken;
   bool placed;
   bool flipped;
   Domino({
@@ -11,6 +12,7 @@ class Domino {
     required this.colors,
     this.horizontal = true,
     this.whiteIfPieceNotTakenElseColor = 'white',
+    this.taken = false,
     this.placed = false,
     this.flipped = true,
   });

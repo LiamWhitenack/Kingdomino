@@ -1,20 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:kingdomino/show_domino_functions.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'dominoes.dart';
 
-class DominoSelectionInterface extends StatelessWidget {
+class DominoSelectionInterface extends StatefulWidget {
   final List<Domino> dominoOptionsForSelection;
   final Domino? activePlayersSelectedDomino;
   final Function onDominoSelectedByActivePlayer;
+  final Function onDominoChosenByActivePlayer;
+  final PanelController panelController;
   const DominoSelectionInterface({
     super.key,
     required this.dominoOptionsForSelection,
     required this.activePlayersSelectedDomino,
     required this.onDominoSelectedByActivePlayer,
+    required this.onDominoChosenByActivePlayer,
+    required this.panelController,
   });
 
   @override
+  State<DominoSelectionInterface> createState() => _DominoSelectionInterfaceState();
+}
+
+class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
+  @override
   Widget build(BuildContext context) {
+    DominoSelectionColumn dominoSelectionColumnOne = DominoSelectionColumn(
+      dominoOptionsForSelection: const [],
+      activePlayersSelectedDomino: widget.activePlayersSelectedDomino,
+      onDominoSelectedByActivePlayer: widget.onDominoSelectedByActivePlayer,
+      onDominoChosenByActivePlayer: widget.onDominoChosenByActivePlayer,
+      panelController: widget.panelController,
+    );
+    DominoSelectionColumn dominoSelectionColumnTwo = DominoSelectionColumn(
+      dominoOptionsForSelection: widget.dominoOptionsForSelection,
+      activePlayersSelectedDomino: widget.activePlayersSelectedDomino,
+      onDominoSelectedByActivePlayer: widget.onDominoSelectedByActivePlayer,
+      onDominoChosenByActivePlayer: widget.onDominoChosenByActivePlayer,
+      panelController: widget.panelController,
+    );
+
+    Color textButtonColor = (dominoSelectionColumnTwo.activePlayersSelectedDomino == null) ? Colors.white : Colors.blue;
+
     return Center(
       child: Container(
         height: 500,
@@ -25,24 +52,26 @@ class DominoSelectionInterface extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                DominoSelectionColumn(
-                  dominoOptionsForSelection: dominoOptionsForSelection,
-                  activePlayersSelectedDomino: activePlayersSelectedDomino,
-                  onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
-                ),
-                DominoSelectionColumn(
-                  dominoOptionsForSelection: [],
-                  activePlayersSelectedDomino: activePlayersSelectedDomino,
-                  onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
-                ),
+                dominoSelectionColumnOne,
+                dominoSelectionColumnTwo,
               ],
             ),
             const SizedBox(height: 50),
             TextButton(
-              onPressed: () {},
-              child: const Text(
+              onPressed: () {
+                Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
+                if (activePlayersSelectedDomino == null) return;
+                widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
+
+                // close the window
+                widget.panelController.close();
+              },
+              child: Text(
                 'Select',
-                style: TextStyle(color: Colors.purple, fontSize: 20),
+                style: TextStyle(
+                  color: textButtonColor,
+                  fontSize: 20,
+                ),
               ),
             ),
           ],
@@ -57,6 +86,8 @@ class DominoSelectionColumn extends StatefulWidget {
   final List<Domino> dominoOptionsForSelection;
   Domino? activePlayersSelectedDomino;
   final Function onDominoSelectedByActivePlayer;
+  final Function onDominoChosenByActivePlayer;
+  final PanelController panelController;
 
   // final Function onDominoPressed;
   // ignore: prefer_const_constructors_in_immutables
@@ -65,6 +96,8 @@ class DominoSelectionColumn extends StatefulWidget {
     required this.dominoOptionsForSelection,
     required this.activePlayersSelectedDomino,
     required this.onDominoSelectedByActivePlayer,
+    required this.onDominoChosenByActivePlayer,
+    required this.panelController,
   });
 
   @override
@@ -90,7 +123,8 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
 
       // select and use the tapped piece
       _selectedIndex = index;
-      widget.onDominoSelectedByActivePlayer(widget.dominoOptionsForSelection[index]);
+      widget.activePlayersSelectedDomino = widget.dominoOptionsForSelection[_selectedIndex];
+      widget.onDominoSelectedByActivePlayer(widget.activePlayersSelectedDomino);
     });
   }
 

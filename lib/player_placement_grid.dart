@@ -60,62 +60,63 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
     if (kingdom.fullyUpdated) {}
 
     return GestureDetector(
-        onHorizontalDragEnd: (details) {
-          // Swipe west
-          if (details.primaryVelocity! < 0) {
-            validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i, widget.j + 1);
-            if (validPositionMessage != '') {
-            } else {
-              setState(() {
-                widget.j = widget.j + 1;
-              });
-            }
+      onHorizontalDragEnd: (details) {
+        // Swipe west
+        if (details.primaryVelocity! < 0) {
+          validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i, widget.j + 1);
+          if (validPositionMessage != '') {
+          } else {
+            setState(() {
+              widget.j = widget.j + 1;
+            });
           }
-          // Swipe east
-          if (details.primaryVelocity! > 0) {
-            validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i, widget.j - 1);
-            if (validPositionMessage != '') {
-            } else {
-              setState(() {
-                widget.j = widget.j - 1;
-              });
-            }
+        }
+        // Swipe east
+        if (details.primaryVelocity! > 0) {
+          validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i, widget.j - 1);
+          if (validPositionMessage != '') {
+          } else {
+            setState(() {
+              widget.j = widget.j - 1;
+            });
           }
-        },
-        onVerticalDragEnd: (details) {
-          // Swipe south
-          if (details.primaryVelocity! > 0) {
-            validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i + 1, widget.j);
-            if (validPositionMessage != '') {
-            } else {
-              setState(() {
-                widget.i = widget.i + 1;
-              });
-            }
+        }
+      },
+      onVerticalDragEnd: (details) {
+        // Swipe south
+        if (details.primaryVelocity! > 0) {
+          validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i + 1, widget.j);
+          if (validPositionMessage != '') {
+          } else {
+            setState(() {
+              widget.i = widget.i + 1;
+            });
           }
-          // Swipe north
-          if (details.primaryVelocity! < 0) {
-            validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i - 1, widget.j);
-            if (validPositionMessage != '') {
-            } else {
-              setState(() {
-                widget.i = widget.i - 1;
-              });
-            }
+        }
+        // Swipe north
+        if (details.primaryVelocity! < 0) {
+          validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i - 1, widget.j);
+          if (validPositionMessage != '') {
+          } else {
+            setState(() {
+              widget.i = widget.i - 1;
+            });
           }
-        },
-        onDoubleTap: () {
-          setState(() {
-            widget.domino!.rotate();
-          });
-        },
-        child: PlayerKingdomGrid(
-          numColumns: numColumns,
-          numRows: numRows,
-          crowns: crowns,
-          colors: colors,
-          scoreTextWidget: widget.scoreTextWidget,
-        ));
+        }
+      },
+      onDoubleTap: () {
+        setState(() {
+          widget.domino!.rotate();
+        });
+      },
+      child: PlayerKingdomGrid(
+        numColumns: numColumns,
+        numRows: numRows,
+        crowns: crowns,
+        colors: colors,
+        scoreTextWidget: widget.scoreTextWidget,
+      ),
+    );
   }
 }
 

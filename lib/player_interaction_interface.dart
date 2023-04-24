@@ -23,6 +23,13 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   int i = 5;
   int j = 4;
   List<Domino> dominoOptionsForSelection = drawNSortedDominoes(4, returnEveryDominoFunction());
+  PanelController panelController = PanelController();
+
+  void onDominoChosenByActivePlayer(Domino domino) {
+    setState(() {
+      activePlayersSelectedDomino = domino;
+    });
+  }
 
   void onDominoSelectedByActivePlayer(Domino domino) {
     setState(() {
@@ -33,8 +40,6 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   @override
   Widget build(BuildContext context) {
     scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
-    PanelController panelController = PanelController();
-    ScrollController scrollController = ScrollController();
 
     return SlidingUpPanel(
       collapsed: Container(
@@ -53,12 +58,14 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       controller: panelController,
       // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
       panelBuilder: (scrollController) => Stack(
-        alignment: Alignment.bottomCenter,
+        alignment: Alignment.topCenter,
         children: [
           DominoSelectionInterface(
             dominoOptionsForSelection: dominoOptionsForSelection,
             activePlayersSelectedDomino: activePlayersSelectedDomino,
             onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
+            onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,
+            panelController: panelController,
           ),
           const SizedBox(
             height: 75,
@@ -67,15 +74,6 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
               color: Colors.grey,
             ),
           ),
-          TextButton(
-            onPressed: () => {
-              panelController.close(),
-            },
-            child: const Text(
-              'close',
-              style: TextStyle(color: Colors.black),
-            ),
-          )
         ],
       ),
       body: Column(

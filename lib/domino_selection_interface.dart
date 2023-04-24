@@ -45,7 +45,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       panelController: widget.panelController,
     );
 
-    Color textButtonColor = (dominoSelectionColumnTwo.activePlayersSelectedDomino == null) ? Colors.white : Colors.blue;
+    bool showTextButton = (dominoSelectionColumnTwo.activePlayersSelectedDomino == null) ? false : true;
 
     return Container(
       height: 700,
@@ -66,25 +66,27 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
             ],
           ),
           const SizedBox(height: 50),
-          TextButton(
-            onPressed: () {
-              Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
+          showTextButton
+              ? TextButton(
+                  onPressed: () {
+                    Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
 
-              if (activePlayersSelectedDomino == null) return;
-              activePlayersSelectedDomino.taken = true;
-              widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
+                    if (activePlayersSelectedDomino == null) return;
+                    activePlayersSelectedDomino.taken = true;
+                    widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
 
-              // close the window
-              widget.panelController.close();
-            },
-            child: Text(
-              'Select',
-              style: TextStyle(
-                color: textButtonColor,
-                fontSize: 20,
-              ),
-            ),
-          ),
+                    // close the window
+                    widget.panelController.close();
+                  },
+                  child: const Text(
+                    'Select',
+                    style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 20,
+                    ),
+                  ),
+                )
+              : const SizedBox(),
         ],
       ),
     );

@@ -9,6 +9,7 @@ class Kingdom {
   late List<List<int>> newKingdomCrowns;
   late List<List<String>> newKingdomColors;
   late Domino domino;
+  Domino? dominoInPurgatory;
   late bool fullyUpdated;
   late int i;
   late int j;

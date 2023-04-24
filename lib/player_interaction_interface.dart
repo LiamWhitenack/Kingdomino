@@ -28,6 +28,10 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   void onDominoChosenByActivePlayer(Domino domino) {
     setState(() {
       activePlayersSelectedDomino = domino;
+      if (kingdomOne.dominoInPurgatory != null) {
+        kingdomOne.domino = kingdomOne.dominoInPurgatory!;
+      }
+      kingdomOne.dominoInPurgatory = domino;
     });
   }
 
@@ -56,17 +60,16 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       minHeight: 75,
       maxHeight: MediaQuery.of(context).size.height,
       controller: panelController,
-      // ignore: avoid_types_as_parameter_names, non_constant_identifier_names
       panelBuilder: (scrollController) => Stack(
         alignment: Alignment.topCenter,
         children: [
           DominoSelectionInterface(
-            dominoOptionsForSelection: dominoOptionsForSelection,
             kingdomSelecting: kingdomOne,
             activePlayersSelectedDomino: activePlayersSelectedDomino,
             onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
             onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,
             panelController: panelController,
+            dominoesInTheBox: dominoesInTheBox,
           ),
           const SizedBox(
             height: 75,
@@ -88,30 +91,34 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
                   i: i,
                   j: j,
                   kingdom: kingdomOne,
-                  domino: activePlayersSelectedDomino,
+                  domino: kingdomOne.dominoInPurgatory,
                   scoreTextWidget: scoreTextWidget,
                 ),
-                TextButton(
-                  onPressed: () {
-                    i = kingdomOne.i;
-                    j = kingdomOne.j;
-                    // make sure that the placement of the piece is legitimate, otherwise show message explaining what went wrong
-                    String errorMessage =
-                        checkValidPlacementAtPositionIJ(kingdomOne, activePlayersSelectedDomino!, i, j);
-                    if (errorMessage != '') {
-                      print(errorMessage);
-                      return;
-                    }
+                activePlayersSelectedDomino == null
+                    ? const SizedBox()
+                    : TextButton(
+                        onPressed: () {
+                          i = kingdomOne.i;
+                          j = kingdomOne.j;
+                          // make sure that the placement of the piece is legitimate, otherwise show message explaining what went wrong
+                          String errorMessage =
+                              checkValidPlacementAtPositionIJ(kingdomOne, activePlayersSelectedDomino!, i, j);
+                          if (errorMessage != '') {
+                            print(errorMessage);
+                            return;
+                          }
 
-                    // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
-                    activePlayersSelectedDomino!.placed = true;
+                          // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
+                          activePlayersSelectedDomino!.placed = true;
 
-                    scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
-                    kingdomOne.updateBoard();
-                    setState(() {});
-                  },
-                  child: const Text("Place"),
-                )
+                          scoreTextWidget =
+                              Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
+                          kingdomOne.updateBoard();
+                          panelController.show();
+                          setState(() {});
+                        },
+                        child: const Text("Place"),
+                      )
               ],
             ),
           ),

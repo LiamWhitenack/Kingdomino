@@ -5,7 +5,7 @@ import 'dominoes.dart';
 import 'kingdoms.dart';
 
 class DominoSelectionInterface extends StatefulWidget {
-  final List<Domino> dominoOptionsForSelection;
+  final List<Domino> dominoesInTheBox;
   final Domino? activePlayersSelectedDomino;
   final Kingdom kingdomSelecting;
   final Function onDominoSelectedByActivePlayer;
@@ -14,7 +14,7 @@ class DominoSelectionInterface extends StatefulWidget {
   const DominoSelectionInterface({
     super.key,
     required this.kingdomSelecting,
-    required this.dominoOptionsForSelection,
+    required this.dominoesInTheBox,
     required this.activePlayersSelectedDomino,
     required this.onDominoSelectedByActivePlayer,
     required this.onDominoChosenByActivePlayer,
@@ -26,10 +26,59 @@ class DominoSelectionInterface extends StatefulWidget {
 }
 
 class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
+  List<Domino> dominoOptionsForSelectionColumnOne = [];
+  List<Domino> dominoOptionsForSelectionColumnTwo = [];
+
+  void fillAnEmptyColumn(
+    List<Domino> dominoOptionsForSelectionColumnOne,
+    List<Domino> dominoOptionsForSelectionColumnTwo,
+  ) {
+    bool allPiecesPlaced = true;
+    for (Domino domino in dominoOptionsForSelectionColumnOne) {
+      if (!domino.placed) allPiecesPlaced = false;
+    }
+    if (allPiecesPlaced) {
+      List<Domino> dominoesToAdd = drawNSortedDominoes(4, widget.dominoesInTheBox);
+      // fill the column
+      dominoOptionsForSelectionColumnOne.addAll(dominoesToAdd);
+      return;
+    }
+    allPiecesPlaced = true;
+    for (Domino domino in dominoOptionsForSelectionColumnTwo) {
+      if (!domino.placed) allPiecesPlaced = false;
+    }
+    if (allPiecesPlaced) {
+      List<Domino> dominoesToAdd = drawNSortedDominoes(4, widget.dominoesInTheBox);
+      // fill the column
+      dominoOptionsForSelectionColumnTwo.addAll(dominoesToAdd);
+      return;
+    } else {
+      print('there were no empty columns!');
+    }
+  }
+
+  bool noRemainingOptionsForSelction(
+    List<Domino> dominoOptionsForSelectionColumnOne,
+    List<Domino> dominoOptionsForSelectionColumnTwo,
+  ) {
+    bool allPiecesTakenOrPlaced = true;
+    for (Domino domino in dominoOptionsForSelectionColumnOne) {
+      if (!domino.taken | !domino.placed) allPiecesTakenOrPlaced = false;
+    }
+    for (Domino domino in dominoOptionsForSelectionColumnTwo) {
+      if (!domino.taken | !domino.placed) allPiecesTakenOrPlaced = false;
+    }
+    return allPiecesTakenOrPlaced;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (noRemainingOptionsForSelction(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
+      fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+    }
+
     DominoSelectionColumn dominoSelectionColumnOne = DominoSelectionColumn(
-      dominoOptionsForSelection: [],
+      dominoOptionsForSelection: dominoOptionsForSelectionColumnOne,
       kingdomSelecting: widget.kingdomSelecting,
       activePlayersSelectedDomino: widget.activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: widget.onDominoSelectedByActivePlayer,
@@ -37,7 +86,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       panelController: widget.panelController,
     );
     DominoSelectionColumn dominoSelectionColumnTwo = DominoSelectionColumn(
-      dominoOptionsForSelection: widget.dominoOptionsForSelection,
+      dominoOptionsForSelection: dominoOptionsForSelectionColumnTwo,
       kingdomSelecting: widget.kingdomSelecting,
       activePlayersSelectedDomino: widget.activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: widget.onDominoSelectedByActivePlayer,
@@ -75,8 +124,15 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
                     activePlayersSelectedDomino.taken = true;
                     widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
 
-                    // close the window
-                    widget.panelController.close();
+                    // force the player to place their piece
+                    widget.kingdomSelecting.domino = activePlayersSelectedDomino;
+                    widget.panelController.hide();
+
+                    // check to see if all of the pieces in the current column have been taken
+                    if (noRemainingOptionsForSelction(
+                        dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
+                      fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+                    }
                   },
                   child: const Text(
                     'Select',

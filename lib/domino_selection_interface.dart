@@ -11,6 +11,8 @@ class DominoSelectionInterface extends StatefulWidget {
   final Function onDominoSelectedByActivePlayer;
   final Function onDominoChosenByActivePlayer;
   final PanelController panelController;
+  final List<Domino> dominoOptionsForSelectionColumnOne;
+  final List<Domino> dominoOptionsForSelectionColumnTwo;
   const DominoSelectionInterface({
     super.key,
     required this.kingdomSelecting,
@@ -19,6 +21,8 @@ class DominoSelectionInterface extends StatefulWidget {
     required this.onDominoSelectedByActivePlayer,
     required this.onDominoChosenByActivePlayer,
     required this.panelController,
+    required this.dominoOptionsForSelectionColumnOne,
+    required this.dominoOptionsForSelectionColumnTwo,
   });
 
   @override
@@ -26,9 +30,6 @@ class DominoSelectionInterface extends StatefulWidget {
 }
 
 class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
-  List<Domino> dominoOptionsForSelectionColumnOne = [];
-  List<Domino> dominoOptionsForSelectionColumnTwo = [];
-
   void fillAnEmptyColumn(
     List<Domino> dominoOptionsForSelectionColumnOne,
     List<Domino> dominoOptionsForSelectionColumnTwo,
@@ -73,6 +74,9 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
   @override
   Widget build(BuildContext context) {
+    List<Domino> dominoOptionsForSelectionColumnOne = widget.dominoOptionsForSelectionColumnOne;
+    List<Domino> dominoOptionsForSelectionColumnTwo = widget.dominoOptionsForSelectionColumnTwo;
+
     if (noRemainingOptionsForSelction(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
       fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
     }
@@ -128,6 +132,9 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
                     if (widget.kingdomSelecting.domino != null) {
                       widget.panelController.hide();
                     }
+
+                    // set the activePlayersSelectedDomino value to null since the kingdom will later need to select a new value
+                    activePlayersSelectedDomino = null;
 
                     // check to see if all of the pieces in the current column have been taken
                     if (noRemainingOptionsForSelction(

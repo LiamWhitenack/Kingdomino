@@ -22,8 +22,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   Widget scoreTextWidget = const Text('');
   int i = 5;
   int j = 4;
-  List<Domino> dominoOptionsForSelection = drawNSortedDominoes(4, returnEveryDominoFunction());
   PanelController panelController = PanelController();
+  List<Domino> dominoOptionsForSelectionColumnOne = [];
+  List<Domino> dominoOptionsForSelectionColumnTwo = [];
 
   void onDominoChosenByActivePlayer(Domino domino) {
     setState(() {
@@ -64,7 +65,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         }
 
         // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
-        activePlayersSelectedDomino!.placed = true;
+        if (kingdomOne.domino != null) {
+          kingdomOne.domino!.placed = true;
+        }
 
         scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
         kingdomOne.updateBoard();
@@ -100,6 +103,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
             onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,
             panelController: panelController,
             dominoesInTheBox: dominoesInTheBox,
+            dominoOptionsForSelectionColumnOne: dominoOptionsForSelectionColumnOne,
+            dominoOptionsForSelectionColumnTwo: dominoOptionsForSelectionColumnTwo,
           ),
           const SizedBox(
             height: 75,

@@ -15,7 +15,6 @@ class PlayerInteractionInterface extends StatefulWidget {
 }
 
 class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface> {
-  @override
   List<Domino> dominoesInTheBox = returnEveryDominoFunction();
   Domino? activePlayersSelectedDomino;
   Kingdom kingdomOne = Kingdom('grey');
@@ -72,6 +71,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
         kingdomOne.updateBoard();
         panelController.show();
+        panelController.open();
         setState(() {});
       },
       child: const Text("Place"),

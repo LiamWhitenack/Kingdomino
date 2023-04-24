@@ -80,12 +80,35 @@ Widget displayDomino(Domino domino) {
         ),
         child: Stack(
           alignment: AlignmentDirectional.center,
-          children: [square, value],
+          children: [
+            square,
+            value,
+          ],
         ),
       ),
     );
   }
   return Row(children: images);
+}
+
+Widget displayDominoInABox(Domino domino, {String colorOfTheBox = 'white'}) {
+  List? color = colors[colorOfTheBox];
+  int r = color![0];
+  int g = color[1];
+  int b = color[2];
+  double opacity = color[3];
+
+  return Container(
+    height: 90,
+    width: 180,
+    color: Color.fromRGBO(r, g, b, opacity),
+    child: Center(
+      child: SizedBox(
+        width: 124,
+        child: displayDomino(domino),
+      ),
+    ),
+  );
 }
 
 Widget showDominoSection(String color, double size) {

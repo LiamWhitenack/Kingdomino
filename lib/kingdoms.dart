@@ -1,6 +1,4 @@
 import 'dart:core';
-import 'package:flutter/material.dart';
-
 import 'check_valid_position.dart';
 import 'dominoes.dart';
 import 'dart:math';
@@ -14,13 +12,15 @@ class Kingdom {
   late bool fullyUpdated;
   late int i;
   late int j;
+  final String color;
 
-  Kingdom() {
+  Kingdom(this.color) {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     kingdomColors = List.generate(9, (_) => List.filled(9, 'white'));
     kingdomCrowns[4][4] = 0;
     kingdomColors[4][4] = 'grey';
     fullyUpdated = true;
+    color;
   }
 
   List<List<String>> deepCopyColors(List<List<String>> source) {

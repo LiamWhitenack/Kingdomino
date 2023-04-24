@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kingdomino/check_valid_position.dart';
 import 'package:kingdomino/player_interaction_interface.dart';
-import 'domino_selection_interface.dart';
-import 'player_placement_grid.dart';
-import 'dominoes.dart';
-import 'kingdoms.dart';
 
 void main() {
   runApp(const MyApp());

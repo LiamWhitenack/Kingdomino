@@ -18,8 +18,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   @override
   List<Domino> dominoesInTheBox = returnEveryDominoFunction();
   Domino? activePlayersSelectedDomino;
-  Kingdom kingdomOne = Kingdom();
-  Widget scoreTextWidget = Text('data');
+  Kingdom kingdomOne = Kingdom('grey');
+  Widget scoreTextWidget = const Text('');
   int i = 5;
   int j = 4;
   List<Domino> dominoOptionsForSelection = drawNSortedDominoes(4, returnEveryDominoFunction());
@@ -62,6 +62,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         children: [
           DominoSelectionInterface(
             dominoOptionsForSelection: dominoOptionsForSelection,
+            kingdomSelecting: kingdomOne,
             activePlayersSelectedDomino: activePlayersSelectedDomino,
             onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
             onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,
@@ -102,7 +103,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
                       return;
                     }
 
-                    // mark the domino as taken so that it doesn't appear anymore
+                    // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
                     activePlayersSelectedDomino!.placed = true;
 
                     scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');

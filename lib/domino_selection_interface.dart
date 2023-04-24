@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:kingdomino/show_domino_functions.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'dominoes.dart';
+import 'kingdoms.dart';
 
 class DominoSelectionInterface extends StatefulWidget {
   final List<Domino> dominoOptionsForSelection;
   final Domino? activePlayersSelectedDomino;
+  final Kingdom kingdomSelecting;
   final Function onDominoSelectedByActivePlayer;
   final Function onDominoChosenByActivePlayer;
   final PanelController panelController;
   const DominoSelectionInterface({
     super.key,
+    required this.kingdomSelecting,
     required this.dominoOptionsForSelection,
     required this.activePlayersSelectedDomino,
     required this.onDominoSelectedByActivePlayer,
@@ -26,7 +29,8 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
   @override
   Widget build(BuildContext context) {
     DominoSelectionColumn dominoSelectionColumnOne = DominoSelectionColumn(
-      dominoOptionsForSelection: const [],
+      dominoOptionsForSelection: [],
+      kingdomSelecting: widget.kingdomSelecting,
       activePlayersSelectedDomino: widget.activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: widget.onDominoSelectedByActivePlayer,
       onDominoChosenByActivePlayer: widget.onDominoChosenByActivePlayer,
@@ -34,6 +38,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     );
     DominoSelectionColumn dominoSelectionColumnTwo = DominoSelectionColumn(
       dominoOptionsForSelection: widget.dominoOptionsForSelection,
+      kingdomSelecting: widget.kingdomSelecting,
       activePlayersSelectedDomino: widget.activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: widget.onDominoSelectedByActivePlayer,
       onDominoChosenByActivePlayer: widget.onDominoChosenByActivePlayer,
@@ -42,40 +47,43 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
     Color textButtonColor = (dominoSelectionColumnTwo.activePlayersSelectedDomino == null) ? Colors.white : Colors.blue;
 
-    return Center(
-      child: Container(
-        height: 500,
-        color: Colors.white24,
-        child: Column(
-          children: [
-            const SizedBox(height: 50),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                dominoSelectionColumnOne,
-                dominoSelectionColumnTwo,
-              ],
-            ),
-            const SizedBox(height: 50),
-            TextButton(
-              onPressed: () {
-                Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
-                if (activePlayersSelectedDomino == null) return;
-                widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
+    return Container(
+      height: 700,
+      color: Colors.white24,
+      child: Column(
+        children: [
+          const SizedBox(height: 100),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              dominoSelectionColumnOne,
+              // add a gap if there's two columns
+              (dominoSelectionColumnOne.dominoOptionsForSelection.isNotEmpty &&
+                      dominoSelectionColumnTwo.dominoOptionsForSelection.isNotEmpty)
+                  ? const SizedBox(width: 25)
+                  : const SizedBox(width: 0),
+              dominoSelectionColumnTwo,
+            ],
+          ),
+          const SizedBox(height: 50),
+          TextButton(
+            onPressed: () {
+              Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
+              if (activePlayersSelectedDomino == null) return;
+              widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
 
-                // close the window
-                widget.panelController.close();
-              },
-              child: Text(
-                'Select',
-                style: TextStyle(
-                  color: textButtonColor,
-                  fontSize: 20,
-                ),
+              // close the window
+              widget.panelController.close();
+            },
+            child: Text(
+              'Select',
+              style: TextStyle(
+                color: textButtonColor,
+                fontSize: 20,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -85,6 +93,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 class DominoSelectionColumn extends StatefulWidget {
   final List<Domino> dominoOptionsForSelection;
   Domino? activePlayersSelectedDomino;
+  final Kingdom kingdomSelecting;
   final Function onDominoSelectedByActivePlayer;
   final Function onDominoChosenByActivePlayer;
   final PanelController panelController;
@@ -93,6 +102,7 @@ class DominoSelectionColumn extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
   DominoSelectionColumn({
     super.key,
+    required this.kingdomSelecting,
     required this.dominoOptionsForSelection,
     required this.activePlayersSelectedDomino,
     required this.onDominoSelectedByActivePlayer,
@@ -116,14 +126,20 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
         widget.dominoOptionsForSelection[_selectedIndex].revertToOriginalOrientation();
       }
 
-      // if the card is taken, do nothing
-      if (widget.dominoOptionsForSelection[index].taken) {
+      // if the card is whiteIfPieceNotTakenElseColor, do nothing
+      if (widget.dominoOptionsForSelection[index].whiteIfPieceNotTakenElseColor != 'white') {
         return;
+      }
+
+      for (Domino domino in widget.dominoOptionsForSelection) {
+        domino.whiteIfPieceNotTakenElseColor = 'white';
       }
 
       // select and use the tapped piece
       _selectedIndex = index;
       widget.activePlayersSelectedDomino = widget.dominoOptionsForSelection[_selectedIndex];
+      // change the color of the backdrop to the color of the kingdom
+      widget.activePlayersSelectedDomino?.whiteIfPieceNotTakenElseColor = widget.kingdomSelecting.color;
       widget.onDominoSelectedByActivePlayer(widget.activePlayersSelectedDomino);
     });
   }
@@ -136,6 +152,10 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
       children: widget.dominoOptionsForSelection.asMap().entries.map((entry) {
         final int index = entry.key;
         final Domino dominoOption = entry.value;
+        Widget dominoDisplay = dominoOption.placed
+            ? const SizedBox(height: 60)
+            : displayDominoInABox(dominoOption, colorOfTheBox: dominoOption.whiteIfPieceNotTakenElseColor);
+
         return dominoOption.placed
             ? const SizedBox()
             : Column(
@@ -145,8 +165,8 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
                       _onCardTapped(index);
                     },
                     child: SizedBox(
-                      width: 124,
-                      child: dominoOption.taken ? const SizedBox(height: 60) : displayDomino(dominoOption),
+                      width: 160,
+                      child: dominoDisplay,
                     ),
                   ),
                   const SizedBox(

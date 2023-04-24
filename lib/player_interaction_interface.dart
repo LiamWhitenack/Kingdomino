@@ -44,8 +44,38 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   @override
   Widget build(BuildContext context) {
     scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
+    PlayerPlacementGrid playerPlacementGrid = PlayerPlacementGrid(
+      i: i,
+      j: j,
+      kingdom: kingdomOne,
+      domino: kingdomOne.domino,
+      scoreTextWidget: scoreTextWidget,
+    );
+
+    TextButton placePieceButton = TextButton(
+      onPressed: () {
+        i = kingdomOne.i;
+        j = kingdomOne.j;
+        // make sure that the placement of the piece is legitimate, otherwise show message explaining what went wrong
+        String errorMessage = checkValidPlacementAtPositionIJ(kingdomOne, kingdomOne.domino!, i, j);
+        if (errorMessage != '') {
+          print(errorMessage);
+          return;
+        }
+
+        // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
+        activePlayersSelectedDomino!.placed = true;
+
+        scoreTextWidget = Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
+        kingdomOne.updateBoard();
+        panelController.show();
+        setState(() {});
+      },
+      child: const Text("Place"),
+    );
 
     return SlidingUpPanel(
+      defaultPanelState: PanelState.OPEN,
       collapsed: Container(
         color: Colors.white,
         height: 75,
@@ -87,38 +117,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
             height: 400,
             child: Column(
               children: [
-                PlayerPlacementGrid(
-                  i: i,
-                  j: j,
-                  kingdom: kingdomOne,
-                  domino: kingdomOne.dominoInPurgatory,
-                  scoreTextWidget: scoreTextWidget,
-                ),
-                activePlayersSelectedDomino == null
-                    ? const SizedBox()
-                    : TextButton(
-                        onPressed: () {
-                          i = kingdomOne.i;
-                          j = kingdomOne.j;
-                          // make sure that the placement of the piece is legitimate, otherwise show message explaining what went wrong
-                          String errorMessage =
-                              checkValidPlacementAtPositionIJ(kingdomOne, activePlayersSelectedDomino!, i, j);
-                          if (errorMessage != '') {
-                            print(errorMessage);
-                            return;
-                          }
-
-                          // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
-                          activePlayersSelectedDomino!.placed = true;
-
-                          scoreTextWidget =
-                              Text('${kingdomOne.score(kingdomOne.kingdomCrowns, kingdomOne.kingdomColors)}');
-                          kingdomOne.updateBoard();
-                          panelController.show();
-                          setState(() {});
-                        },
-                        child: const Text("Place"),
-                      )
+                kingdomOne.domino == null ? const SizedBox() : playerPlacementGrid,
+                kingdomOne.domino == null ? const SizedBox() : placePieceButton,
               ],
             ),
           ),

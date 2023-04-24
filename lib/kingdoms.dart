@@ -8,7 +8,7 @@ class Kingdom {
   late List<List<String>> kingdomColors;
   late List<List<int>> newKingdomCrowns;
   late List<List<String>> newKingdomColors;
-  late Domino domino;
+  Domino? domino;
   Domino? dominoInPurgatory;
   late bool fullyUpdated;
   late int i;
@@ -55,7 +55,7 @@ class Kingdom {
   }
 
   void updateBoard() {
-    checkValidPlacementAtPositionIJ(this, domino, i, j);
+    checkValidPlacementAtPositionIJ(this, domino!, i, j);
     kingdomCrowns = newKingdomCrowns;
     kingdomColors = newKingdomColors;
     fullyUpdated = false;

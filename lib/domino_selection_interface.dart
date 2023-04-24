@@ -124,9 +124,10 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
                     activePlayersSelectedDomino.taken = true;
                     widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
 
-                    // force the player to place their piece
-                    widget.kingdomSelecting.domino = activePlayersSelectedDomino;
-                    widget.panelController.hide();
+                    // force the player to place their piece if they have a piece ready to place
+                    if (widget.kingdomSelecting.domino != null) {
+                      widget.panelController.hide();
+                    }
 
                     // check to see if all of the pieces in the current column have been taken
                     if (noRemainingOptionsForSelction(

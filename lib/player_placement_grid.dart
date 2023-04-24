@@ -29,15 +29,19 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
   Widget build(BuildContext context) {
     Kingdom kingdom = widget.kingdom;
 
+    // if there's no domino, do nothing
     if (widget.domino == null) {
+      // get the crowns and colors we need to display
       List temp = kingdom.kingdomDisplay(kingdom.kingdomCrowns, kingdom.kingdomColors);
       List<List<int>> crowns = temp[0];
       List<List<String>> colors = temp[1];
+      // this is for determining how big the screen has to be:
       int numRows = crowns.length;
       int numColumns = crowns[0].length;
       // if no domino is selected, display the score as one part
       widget.scoreTextWidget =
           Text('${widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)}');
+
       return PlayerKingdomGrid(
         numColumns: numColumns,
         numRows: numRows,
@@ -47,17 +51,19 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
       );
     }
 
+    // otherwise, let's get this party started:
+    // check to make sure the placement is valid
     String validPositionMessage;
     kingdom.placePiece(widget.domino!, widget.i, widget.j);
+    // show the results of the new placement
     List temp = kingdom.kingdomDisplay(kingdom.newKingdomCrowns, kingdom.newKingdomColors);
     List<List<int>> crowns = temp[0];
     List<List<String>> colors = temp[1];
     int numRows = crowns.length;
     int numColumns = crowns[0].length;
+    // show the score as two parts this time
     widget.scoreTextWidget = Text(
         '${widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)} + ${widget.kingdom.score(widget.kingdom.newKingdomCrowns, widget.kingdom.newKingdomColors) - widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)}');
-
-    if (kingdom.fullyUpdated) {}
 
     return GestureDetector(
       onHorizontalDragEnd: (details) {
@@ -66,6 +72,7 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
           validPositionMessage = checkValidMovementAtPositionIJ(kingdom, widget.domino!, widget.i, widget.j + 1);
           if (validPositionMessage != '') {
           } else {
+            // change the positioning accordingly
             setState(() {
               widget.j = widget.j + 1;
             });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kingdomino/dominoes.dart';
 import 'package:kingdomino/player_interaction_interface.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         //   title: const Text('Kingdomino'),
         //   backgroundColor: const Color.fromRGBO(149, 107, 169, 1),
         // ),
-        body: Container(color: const Color.fromRGBO(149, 107, 169, 0.5), child: const PlayerInteractionInterface()),
+        body: Container(child: PlayerInteractionInterface(dominoesInTheBox: returnEveryDominoFunction())),
       ),
     );
   }

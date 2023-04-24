@@ -32,6 +32,8 @@ class Domino {
     horizontal = !horizontal;
   }
 
+  // rotate the domino until it's facing the right way again
+
   void revertToOriginalOrientation() {
     while (!horizontal | !flipped) {
       rotate();
@@ -39,6 +41,9 @@ class Domino {
   }
 }
 
+// this is the list of every domino in the Kingdomino board game. It could be
+// really interesting if there was some randomization involved with making
+// pieces, especially because this is not a possibility in the physical game
 List<Domino> returnEveryDominoFunction() {
   List<Domino> dominoes = [
     Domino(crowns: [0, 0], colors: ['yellow', 'yellow']),

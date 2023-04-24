@@ -4,26 +4,35 @@ import 'dominoes.dart';
 import 'dart:math';
 
 class Kingdom {
+  // these are the values of the kingdom that WILL NOT be lost
   late List<List<int>> kingdomCrowns;
   late List<List<String>> kingdomColors;
+  // these are the same thing but they often have a domino moving around on them
   late List<List<int>> newKingdomCrowns;
   late List<List<String>> newKingdomColors;
+  // these are the dominoes in the kingdom's queue
   Domino? domino;
   Domino? dominoInPurgatory;
+  // this is true if the newKingdomCrowns == kingdomCrowns
   late bool fullyUpdated;
+  // these are the coordinates the piece is being placed at
   late int i;
   late int j;
+  // Every kingdom needs a unique color to choose from to distinguish themselves
+  // during gameplay
   final String color;
 
+  // initialize the kingdom as a 9x9 grid with one spot filled in
   Kingdom(this.color) {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     kingdomColors = List.generate(9, (_) => List.filled(9, 'white'));
     kingdomCrowns[4][4] = 0;
     kingdomColors[4][4] = 'grey';
     fullyUpdated = true;
-    color;
   }
 
+  // this is used to make sure when we make changes to kingdomColors we don't
+  // also change newKingdomColors
   List<List<String>> deepCopyColors(List<List<String>> source) {
     return source.map((e) => e.toList()).toList();
   }
@@ -32,6 +41,8 @@ class Kingdom {
     return source.map((e) => e.toList()).toList();
   }
 
+  // this is used to put a piece at a particular position and change only the
+  // newKingdomCrowns and Colors
   void placePiece(Domino domino, int i, int j) {
     fullyUpdated = false;
     this.i = i;
@@ -54,6 +65,7 @@ class Kingdom {
     }
   }
 
+  // this synchronized old and new grid values - cannot be reversed
   void updateBoard() {
     checkValidPlacementAtPositionIJ(this, domino!, i, j);
     kingdomCrowns = newKingdomCrowns;
@@ -61,6 +73,8 @@ class Kingdom {
     fullyUpdated = false;
   }
 
+  // this only returns the rows and columns that we care about as two separate
+  // lists
   List<List<int>> getImportantRowsAndColumns(List<List<String>> kingdomColors) {
     List<int> rows = [];
     List<int> columns = [];
@@ -80,6 +94,7 @@ class Kingdom {
   }
 
   List kingdomDisplay(List<List<int>> kingdomCrowns, List<List<String>> kingdomColors) {
+    // these are the crowns and colors that will be displayed
     List<List<int>> displayKingdomCrowns = [];
     List<List<String>> displayKingdomColors = [];
     List<List<int>> importantRowsAndColumns = getImportantRowsAndColumns(kingdomColors);
@@ -98,6 +113,7 @@ class Kingdom {
     return [displayKingdomCrowns, displayKingdomColors];
   }
 
+  // this function isn't being used for anything right now
   Map<String, List<List<int>>> mapOfAllCoordinatesOfColors() {
     Map<String, List<List<int>>> colorCoors = {};
 
@@ -119,6 +135,8 @@ class Kingdom {
     return colorCoors;
   }
 
+  // this function is used to see if item is in list since .contains() uses
+  // memory pointer equality instead of value equality
   bool containsCoordinate(List<List<int>> listOfCoordinates, List<int> element) {
     for (List<int> coordinate in listOfCoordinates) {
       if (coordinate[0] == element[0] && (coordinate[1] == element[1])) {
@@ -128,6 +146,7 @@ class Kingdom {
     return false;
   }
 
+  // this function evaluates if two coordinates are the same in value
   bool compareTwoCoordinates(List<int> elementOne, List<int> elementTwo) {
     // this may not be necessary
     if (elementOne[0] == elementTwo[0] && (elementOne[1] == elementTwo[1])) {
@@ -136,6 +155,7 @@ class Kingdom {
     return false;
   }
 
+  // this function also gets around memory problems like before
   List<List<int>> removeCoordinateFromListOfCoordinates(List<List<int>> listOfCoordinates, List<int> element) {
     if (!containsCoordinate(listOfCoordinates, element)) {
       print('no element in list!');
@@ -149,6 +169,9 @@ class Kingdom {
     return newListOfCoordinates;
   }
 
+  // This function will return ScoringInfo for a group of the same color using
+  // the group that contains given coordinate. If there are still groups left
+  // to score, the function will score the rest as well
   ScoringInfo useCoordinateForScoringGroup(ScoringInfo scoringInfo) {
     List<List<int>> originalCoordinateNeighbors;
     List<List<int>> unscoredSameColorNeighbors = [];
@@ -195,6 +218,7 @@ class Kingdom {
     }
     ScoringInfo newScoringInfo = scoringInfo;
 
+    // get a new coordinate to start the process over with
     if (newScoringInfo.unscoredCoordinates.isNotEmpty) {
       newScoringInfo.coordinate = newScoringInfo.unscoredCoordinates[0];
     }
@@ -207,13 +231,16 @@ class Kingdom {
     return newScoringInfo;
   }
 
+  // use this function to return the score of a given layout
   int score(List<List<int>> kingdomCrowns, List<List<String>> kingdomColors) {
+    // only use the rows and columns we care about
     List kingdomDisplayReturn = kingdomDisplay(kingdomCrowns, kingdomColors);
     List<List<int>> importantKingdomCrowns = kingdomDisplayReturn[0];
     List<List<String>> importantKingdomColors = kingdomDisplayReturn[1];
     List<List<int>> unscoredCoordinates = [];
 
-    // collect the (important) unscored coordinates that we will want to use for scoring
+    // collect the (important) unscored coordinates that we will want to use for
+    // scoring
     for (int i = 0; i < importantKingdomColors.length; i++) {
       for (int j = 0; j < importantKingdomColors[i].length; j++) {
         if (importantKingdomColors[i][j] != 'white' && (importantKingdomColors[i][j] != 'grey')) {
@@ -222,12 +249,14 @@ class Kingdom {
       }
     }
 
+    // if there isn't anything to score return 0 as the score
     if (unscoredCoordinates.isEmpty) return 0;
 
     int score = 0;
     ScoringInfo scoringInfo =
         ScoringInfo(importantKingdomCrowns, importantKingdomColors, unscoredCoordinates, 0, 0, unscoredCoordinates[0]);
     while (scoringInfo.unscoredCoordinates.isNotEmpty) {
+      // this routine scores every possible group
       scoringInfo.groupSize = 0;
       scoringInfo.groupScore = 0;
       scoringInfo = useCoordinateForScoringGroup(scoringInfo);
@@ -239,11 +268,18 @@ class Kingdom {
 }
 
 class ScoringInfo {
+  // the crowns we care about
   List<List<int>> importantKingdomCrowns;
+  // the colors we care about
+
   List<List<String>> importantKingdomColors;
+  // all the coordinates that haven't been scored yet
   List<List<int>> unscoredCoordinates;
+  // the value of the pieces of one group
   int groupScore;
+  // the size of given group
   int groupSize;
+  // the coordinate to start scoring at
   List<int> coordinate;
   ScoringInfo(
     this.importantKingdomCrowns,

@@ -6,15 +6,19 @@ import 'package:flutter/cupertino.dart';
 
 List<Widget> getImages(int n, int m, List<List<int>> values, List<List<String>> colors) {
   List<Widget> images = [];
+  // LIAM THE SQUARE SIZE IS RIGHT HERE
   double squareSize = 60.0;
 
+  // use a double nester for loop to make a copy of every square
   for (int i = 0; i < n; i++) {
     List<Widget> row = [];
     for (int j = 0; j < m; j++) {
       String color = colors[i][j];
       String value = values[i][j] > 0 ? '${values[i][j]}' : '';
+      // get the image with this very important function
       Widget squareImage = showDominoSection(color, squareSize);
 
+      // display the text (this may have a new font later)
       Widget overlayImage = Text(
         value,
         style: const TextStyle(
@@ -23,6 +27,7 @@ List<Widget> getImages(int n, int m, List<List<int>> values, List<List<String>> 
         ),
       );
 
+      // stack the text and the square
       Widget stack = Stack(
         alignment: AlignmentDirectional.center,
         children: [
@@ -41,15 +46,19 @@ List<Widget> getImages(int n, int m, List<List<int>> values, List<List<String>> 
         ),
         child: stack,
       );
-
+      // add each image to a row
       row.add(Expanded(child: borderedStack));
     }
+    // add each row to a column
     images.add(Row(children: row));
   }
+
   return images;
 }
 
 Widget displayDomino(Domino domino) {
+  // this function returns an entire domino instead of just one part of it
+
   Widget square;
   Widget value;
   List<Widget> images = [];
@@ -92,6 +101,8 @@ Widget displayDomino(Domino domino) {
 }
 
 Widget displayDominoInABox(Domino domino, {String colorOfTheBox = 'white'}) {
+  // this just puts the domino display in a box of a certain color,
+  // in this case a player's color
   List? color = colors[colorOfTheBox];
   int r = color![0];
   int g = color[1];
@@ -112,6 +123,7 @@ Widget displayDominoInABox(Domino domino, {String colorOfTheBox = 'white'}) {
 }
 
 Widget showDominoSection(String color, double size) {
+  // this shows ONE PART of a domino
   List rgboValues = colors[color]!;
   return Container(
     width: size,
@@ -123,7 +135,6 @@ Widget showDominoSection(String color, double size) {
         rgboValues[2], // B
         rgboValues[3], // O
       ),
-      // borderRadius: BorderRadius.circular(size /), // Replace with your desired border radius
     ),
   );
 }

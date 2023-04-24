@@ -98,6 +98,36 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       panelController: widget.panelController,
     );
 
+    TextButton selectPieceTextButton = TextButton(
+      onPressed: () {
+        Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
+
+        if (activePlayersSelectedDomino == null) return;
+        activePlayersSelectedDomino.taken = true;
+        widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
+
+        // force the player to place their piece if they have a piece ready to place
+        if (widget.kingdomSelecting.domino != null) {
+          widget.panelController.hide();
+        }
+
+        // set the activePlayersSelectedDomino value to null since the kingdom will later need to select a new value
+        activePlayersSelectedDomino = null;
+
+        // check to see if all of the pieces in the current column have been taken
+        if (noRemainingOptionsForSelction(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
+          fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+        }
+      },
+      child: const Text(
+        'Select',
+        style: TextStyle(
+          color: Colors.blueAccent,
+          fontSize: 20,
+        ),
+      ),
+    );
+
     bool showTextButton = (dominoSelectionColumnTwo.activePlayersSelectedDomino == null) ? false : true;
 
     return Container(
@@ -119,38 +149,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
             ],
           ),
           const SizedBox(height: 50),
-          showTextButton
-              ? TextButton(
-                  onPressed: () {
-                    Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
-
-                    if (activePlayersSelectedDomino == null) return;
-                    activePlayersSelectedDomino.taken = true;
-                    widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
-
-                    // force the player to place their piece if they have a piece ready to place
-                    if (widget.kingdomSelecting.domino != null) {
-                      widget.panelController.hide();
-                    }
-
-                    // set the activePlayersSelectedDomino value to null since the kingdom will later need to select a new value
-                    activePlayersSelectedDomino = null;
-
-                    // check to see if all of the pieces in the current column have been taken
-                    if (noRemainingOptionsForSelction(
-                        dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
-                      fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
-                    }
-                  },
-                  child: const Text(
-                    'Select',
-                    style: TextStyle(
-                      color: Colors.blueAccent,
-                      fontSize: 20,
-                    ),
-                  ),
-                )
-              : const SizedBox(),
+          showTextButton ? selectPieceTextButton : const SizedBox(),
         ],
       ),
     );

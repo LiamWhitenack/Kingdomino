@@ -16,7 +16,9 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         // ignore: avoid_unnecessary_containers
         body: Container(
-            color: Colors.blueAccent, child: PlayerInteractionInterface(dominoesInTheBox: returnEveryDominoFunction())),
+          color: Colors.blueAccent,
+          child: PlayerInteractionInterface(dominoesInTheBox: returnEveryDominoFunction()),
+        ),
       ),
     );
   }

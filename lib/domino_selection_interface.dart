@@ -10,7 +10,8 @@ import 'kingdoms.dart';
 class DominoSelectionInterface extends StatefulWidget {
   final List<Domino> dominoesInTheBox;
   final List<Kingdom> kingdoms;
-  final Domino? activePlayersSelectedDomino;
+  Domino? activePlayersSelectedDomino;
+  bool showTextButton;
   final int kingdomSelectingIndex;
   final Function onDominoSelectedByActivePlayer;
   final Function onDominoChosenByActivePlayer;
@@ -18,8 +19,9 @@ class DominoSelectionInterface extends StatefulWidget {
   final PanelController panelController;
   final List<Domino> dominoOptionsForSelectionColumnOne;
   final List<Domino> dominoOptionsForSelectionColumnTwo;
-  const DominoSelectionInterface({
+  DominoSelectionInterface({
     super.key,
+    required this.showTextButton,
     required this.kingdomSelectingIndex,
     required this.kingdoms,
     required this.dominoesInTheBox,
@@ -119,7 +121,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
     TextButton selectPieceTextButton = TextButton(
       onPressed: () {
-        Domino? activePlayersSelectedDomino = dominoSelectionColumnTwo.activePlayersSelectedDomino;
+        Domino? activePlayersSelectedDomino = widget.activePlayersSelectedDomino;
 
         if (activePlayersSelectedDomino == null) return;
         activePlayersSelectedDomino.taken = true;
@@ -132,19 +134,21 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
         // set the activePlayersSelectedDomino value to null since the kingdom will later need to select a new value
         activePlayersSelectedDomino = null;
+        setState(() {
+          // check to see if all of the pieces in the current column have been taken
+          if (noRemainingOptionsForSelction(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
+            // reorganize the list of kingdoms
+            widget.organizeKingdomsByColumnOrder(
+                dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
 
-        // check to see if all of the pieces in the current column have been taken
-        if (noRemainingOptionsForSelction(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
-          // reorganize the list of kingdoms
-          widget.organizeKingdomsByColumnOrder(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+            // check to make sure that the end game shouldn't start yet, otherwise
+            // start it here I guess
 
-          // check to make sure that the end game shouldn't start yet, otherwise
-          // start it here I guess
-
-          // fill in the column that just became empty or the one that was always
-          // empty
-          fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
-        }
+            // fill in the column that just became empty or the one that was always
+            // empty
+            fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+          }
+        });
       },
       child: const Text(
         'Select',
@@ -154,8 +158,6 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
         ),
       ),
     );
-
-    bool showTextButton = (dominoSelectionColumnTwo.activePlayersSelectedDomino == null) ? false : true;
 
     return Container(
       height: 700,
@@ -176,7 +178,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
             ],
           ),
           const SizedBox(height: 50),
-          showTextButton ? selectPieceTextButton : const SizedBox(),
+          widget.showTextButton ? selectPieceTextButton : const SizedBox(),
         ],
       ),
     );

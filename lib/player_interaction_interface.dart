@@ -35,6 +35,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     Kingdom('blue'),
   ];
 
+  bool showTextButton = false;
+
   // this is the index of the player turn, used as an index for the kingdoms
   // list
   int kingdomTurnIndex = 0;
@@ -64,12 +66,15 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // 2. rebuild the interface (if necessary) to show the new grid
   void onDominoChosenByActivePlayer(Domino domino) {
     activePlayersSelectedDomino = domino;
+    showTextButton = false;
     setState(() {
+      // if they don't need to place a piece
       if (kingdoms[kingdomTurnIndex].dominoInPurgatory == null) {
         kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
         kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
         return;
       }
+      // if they do need to place a piece
       kingdoms[kingdomTurnIndex].domino = kingdoms[kingdomTurnIndex].dominoInPurgatory!;
       kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
     });
@@ -81,6 +86,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   void onDominoSelectedByActivePlayer(Domino domino) {
     setState(() {
       activePlayersSelectedDomino = domino;
+      showTextButton = true;
     });
   }
 
@@ -173,6 +179,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     DominoSelectionInterface dominoSelectionInterface = DominoSelectionInterface(
       kingdoms: kingdoms,
       kingdomSelectingIndex: kingdomTurnIndex,
+      showTextButton: showTextButton,
       activePlayersSelectedDomino: activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
       onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,

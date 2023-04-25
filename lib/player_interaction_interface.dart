@@ -64,12 +64,12 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // 2. rebuild the interface (if necessary) to show the new grid
   void onDominoChosenByActivePlayer(Domino domino) {
     activePlayersSelectedDomino = domino;
-    if (kingdoms[kingdomTurnIndex].dominoInPurgatory == null) {
-      kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
-      kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
-      return;
-    }
     setState(() {
+      if (kingdoms[kingdomTurnIndex].dominoInPurgatory == null) {
+        kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
+        kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+        return;
+      }
       kingdoms[kingdomTurnIndex].domino = kingdoms[kingdomTurnIndex].dominoInPurgatory!;
       kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
     });
@@ -122,6 +122,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         scoreTextWidget = Text(
             '${kingdoms[kingdomTurnIndex].score(kingdoms[kingdomTurnIndex].kingdomCrowns, kingdoms[kingdomTurnIndex].kingdomColors)}');
         kingdoms[kingdomTurnIndex].updateBoard();
+
+        // if this isn't included the same piece can be placed twice
+        kingdoms[kingdomTurnIndex].domino = null;
 
         // bring back the selection interface
         await panelController.show();

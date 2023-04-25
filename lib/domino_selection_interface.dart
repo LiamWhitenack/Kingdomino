@@ -64,12 +64,15 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     List<Domino> dominoOptionsForSelectionColumnOne,
     List<Domino> dominoOptionsForSelectionColumnTwo,
   ) {
+    // assume the condition is true first
     bool allPiecesTakenOrPlaced = true;
     for (Domino domino in dominoOptionsForSelectionColumnOne) {
-      if (!domino.taken | !domino.placed) allPiecesTakenOrPlaced = false;
+      // if the piece hasn't been taken AND hasn't been placed
+      if (!domino.taken && !domino.placed) allPiecesTakenOrPlaced = false;
     }
     for (Domino domino in dominoOptionsForSelectionColumnTwo) {
-      if (!domino.taken | !domino.placed) allPiecesTakenOrPlaced = false;
+      // if the piece hasn't been taken AND hasn't been placed
+      if (!domino.taken && !domino.placed) allPiecesTakenOrPlaced = false;
     }
     return allPiecesTakenOrPlaced;
   }

@@ -84,6 +84,41 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     });
   }
 
+  // this function organizes the kingdoms list when a new round starts
+  void organizeKingdomsByColumnOrder(
+    List<Domino> dominoOptionsForSelectionColumnOne,
+    List<Domino> dominoOptionsForSelectionColumnTwo,
+  ) {
+    // I only care about the column that I'm not working on
+    List<Domino> workingDominoOptions = [];
+    if (dominoOptionsForSelectionColumnOne.isEmpty) {
+      workingDominoOptions = dominoOptionsForSelectionColumnTwo;
+    } else if (dominoOptionsForSelectionColumnTwo.isEmpty) {
+      workingDominoOptions = dominoOptionsForSelectionColumnOne;
+    }
+
+    // get the order of selections by collecting the colors, which we will soon use to
+    List<String> colorsInOrder = [];
+    for (Domino domino in workingDominoOptions) {
+      colorsInOrder.add(domino.whiteIfPieceNotTakenElseColor);
+    }
+
+    if (colorsInOrder.isEmpty) {
+      return;
+    }
+
+    List<Kingdom> newOrderOfKingdoms = [];
+    for (String color in colorsInOrder) {
+      for (Kingdom kingdom in kingdoms) {
+        if (kingdom.color == color) {
+          newOrderOfKingdoms.add(kingdom);
+        }
+      }
+    }
+
+    kingdoms = newOrderOfKingdoms;
+  }
+
   // Building the game
   // ===========================================================================
   @override
@@ -141,6 +176,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       activePlayersSelectedDomino: activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
       onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,
+      organizeKingdomsByColumnOrder: organizeKingdomsByColumnOrder,
       panelController: panelController,
       dominoesInTheBox: dominoesInTheBox,
       dominoOptionsForSelectionColumnOne: dominoOptionsForSelectionColumnOne,

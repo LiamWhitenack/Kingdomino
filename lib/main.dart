@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
       title: 'Kingdomino',
       home: Scaffold(
         // ignore: avoid_unnecessary_containers
-        body: Container(child: PlayerInteractionInterface(dominoesInTheBox: returnEveryDominoFunction())),
+        body: Container(
+            color: Colors.blueAccent, child: PlayerInteractionInterface(dominoesInTheBox: returnEveryDominoFunction())),
       ),
     );
   }

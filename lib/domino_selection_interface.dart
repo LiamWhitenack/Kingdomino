@@ -6,6 +6,7 @@ import 'domino_selection_column.dart';
 import 'dominoes.dart';
 import 'kingdoms.dart';
 
+// ignore:, must_be_immutable
 class DominoSelectionInterface extends StatefulWidget {
   final List<Domino> dominoesInTheBox;
   final List<Kingdom> kingdoms;
@@ -13,6 +14,7 @@ class DominoSelectionInterface extends StatefulWidget {
   final int kingdomSelectingIndex;
   final Function onDominoSelectedByActivePlayer;
   final Function onDominoChosenByActivePlayer;
+  final Function organizeKingdomsByColumnOrder;
   final PanelController panelController;
   final List<Domino> dominoOptionsForSelectionColumnOne;
   final List<Domino> dominoOptionsForSelectionColumnTwo;
@@ -24,6 +26,7 @@ class DominoSelectionInterface extends StatefulWidget {
     required this.activePlayersSelectedDomino,
     required this.onDominoSelectedByActivePlayer,
     required this.onDominoChosenByActivePlayer,
+    required this.organizeKingdomsByColumnOrder,
     required this.panelController,
     required this.dominoOptionsForSelectionColumnOne,
     required this.dominoOptionsForSelectionColumnTwo,
@@ -62,21 +65,22 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     }
   }
 
+  bool columnOutOfSelections(dominoOptionsForSelectionColumn) {
+    bool allPiecesTakenOrPlaced = true;
+    for (Domino domino in dominoOptionsForSelectionColumn) {
+      // if the piece hasn't been taken AND hasn't been placed
+      if (!domino.taken && !domino.placed) allPiecesTakenOrPlaced = false;
+    }
+    return allPiecesTakenOrPlaced;
+  }
+
   bool noRemainingOptionsForSelction(
     List<Domino> dominoOptionsForSelectionColumnOne,
     List<Domino> dominoOptionsForSelectionColumnTwo,
   ) {
     // assume the condition is true first
-    bool allPiecesTakenOrPlaced = true;
-    for (Domino domino in dominoOptionsForSelectionColumnOne) {
-      // if the piece hasn't been taken AND hasn't been placed
-      if (!domino.taken && !domino.placed) allPiecesTakenOrPlaced = false;
-    }
-    for (Domino domino in dominoOptionsForSelectionColumnTwo) {
-      // if the piece hasn't been taken AND hasn't been placed
-      if (!domino.taken && !domino.placed) allPiecesTakenOrPlaced = false;
-    }
-    return allPiecesTakenOrPlaced;
+    return columnOutOfSelections(dominoOptionsForSelectionColumnOne) &&
+        columnOutOfSelections(dominoOptionsForSelectionColumnTwo);
   }
 
   @override
@@ -86,6 +90,13 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
     if (noRemainingOptionsForSelction(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
       // reorganize the list of kingdoms
+      widget.organizeKingdomsByColumnOrder(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+
+      // check to make sure that the end game shouldn't start yet, otherwise
+      // start it here I guess
+
+      // fill in the column that just became empty or the one that was always
+      // empty
       fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
     }
 
@@ -124,6 +135,14 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
         // check to see if all of the pieces in the current column have been taken
         if (noRemainingOptionsForSelction(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
+          // reorganize the list of kingdoms
+          widget.organizeKingdomsByColumnOrder(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+
+          // check to make sure that the end game shouldn't start yet, otherwise
+          // start it here I guess
+
+          // fill in the column that just became empty or the one that was always
+          // empty
           fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
         }
       },

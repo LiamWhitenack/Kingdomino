@@ -111,7 +111,7 @@ Widget displayDominoInABox(Domino domino, {String colorOfTheBox = 'white'}) {
 
   return Container(
     height: 90,
-    width: 180,
+    width: 120,
     color: Color.fromRGBO(r, g, b, opacity),
     child: Center(
       child: SizedBox(

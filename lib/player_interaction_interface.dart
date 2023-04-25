@@ -136,7 +136,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     );
 
     DominoSelectionInterface dominoSelectionInterface = DominoSelectionInterface(
-      kingdomSelecting: kingdoms[kingdomTurnIndex],
+      kingdoms: kingdoms,
+      kingdomSelectingIndex: kingdomTurnIndex,
       activePlayersSelectedDomino: activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
       onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,
@@ -146,10 +147,17 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       dominoOptionsForSelectionColumnTwo: dominoOptionsForSelectionColumnTwo,
     );
 
+    // this is purely for the UI
+    BorderRadiusGeometry radius = const BorderRadius.only(
+      topLeft: Radius.circular(24.0),
+      topRight: Radius.circular(24.0),
+    );
+
     return SlidingUpPanel(
       defaultPanelState: PanelState.OPEN,
       collapsed: Container(
-        color: Colors.white,
+        decoration: BoxDecoration(borderRadius: radius, color: Colors.white),
+        margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0.0),
         height: 75,
         child: const Center(
           child: Icon(
@@ -162,20 +170,34 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       minHeight: 75,
       maxHeight: MediaQuery.of(context).size.height,
       controller: panelController,
+      borderRadius: radius,
 
       // inside the panel
-      panelBuilder: (scrollController) => Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          dominoSelectionInterface,
-          const SizedBox(
-            height: 75,
-            child: Icon(
-              Icons.keyboard_arrow_down_rounded,
+      panelBuilder: (scrollController) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(24.0)),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20.0,
               color: Colors.grey,
             ),
-          ),
-        ],
+          ],
+        ),
+        margin: const EdgeInsets.all(12.0),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            dominoSelectionInterface,
+            const SizedBox(
+              height: 75,
+              child: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
 
       // outside the panel
@@ -187,7 +209,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
             child: Column(
               children: [
                 // if there's no domino selected there's no need to show all of the bells and whistles
-                kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
+                playerPlacementGrid,
+                // kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
                 kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placePieceButton,
               ],
             ),

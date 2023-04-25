@@ -8,8 +8,9 @@ import 'kingdoms.dart';
 
 class DominoSelectionInterface extends StatefulWidget {
   final List<Domino> dominoesInTheBox;
+  final List<Kingdom> kingdoms;
   final Domino? activePlayersSelectedDomino;
-  final Kingdom kingdomSelecting;
+  final int kingdomSelectingIndex;
   final Function onDominoSelectedByActivePlayer;
   final Function onDominoChosenByActivePlayer;
   final PanelController panelController;
@@ -17,7 +18,8 @@ class DominoSelectionInterface extends StatefulWidget {
   final List<Domino> dominoOptionsForSelectionColumnTwo;
   const DominoSelectionInterface({
     super.key,
-    required this.kingdomSelecting,
+    required this.kingdomSelectingIndex,
+    required this.kingdoms,
     required this.dominoesInTheBox,
     required this.activePlayersSelectedDomino,
     required this.onDominoSelectedByActivePlayer,
@@ -83,12 +85,13 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     List<Domino> dominoOptionsForSelectionColumnTwo = widget.dominoOptionsForSelectionColumnTwo;
 
     if (noRemainingOptionsForSelction(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo)) {
+      // reorganize the list of kingdoms
       fillAnEmptyColumn(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
     }
 
     DominoSelectionColumn dominoSelectionColumnOne = DominoSelectionColumn(
       dominoOptionsForSelection: dominoOptionsForSelectionColumnOne,
-      kingdomSelecting: widget.kingdomSelecting,
+      kingdomSelecting: widget.kingdoms[widget.kingdomSelectingIndex],
       activePlayersSelectedDomino: widget.activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: widget.onDominoSelectedByActivePlayer,
       onDominoChosenByActivePlayer: widget.onDominoChosenByActivePlayer,
@@ -96,7 +99,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     );
     DominoSelectionColumn dominoSelectionColumnTwo = DominoSelectionColumn(
       dominoOptionsForSelection: dominoOptionsForSelectionColumnTwo,
-      kingdomSelecting: widget.kingdomSelecting,
+      kingdomSelecting: widget.kingdoms[widget.kingdomSelectingIndex],
       activePlayersSelectedDomino: widget.activePlayersSelectedDomino,
       onDominoSelectedByActivePlayer: widget.onDominoSelectedByActivePlayer,
       onDominoChosenByActivePlayer: widget.onDominoChosenByActivePlayer,
@@ -112,7 +115,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
         widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
 
         // force the player to place their piece if they have a piece ready to place
-        if (widget.kingdomSelecting.domino != null) {
+        if (widget.kingdoms[widget.kingdomSelectingIndex].domino != null) {
           widget.panelController.hide();
         }
 
@@ -148,7 +151,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
               // add a gap if there's two columns
               (dominoSelectionColumnOne.dominoOptionsForSelection.isNotEmpty &&
                       dominoSelectionColumnTwo.dominoOptionsForSelection.isNotEmpty)
-                  ? const SizedBox(width: 25)
+                  ? const SizedBox(width: 10)
                   : const SizedBox(width: 0),
               dominoSelectionColumnTwo,
             ],

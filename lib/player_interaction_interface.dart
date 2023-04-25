@@ -53,12 +53,13 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // 2. rebuild the interface (if necessary) to show the new grid
   void onDominoChosenByActivePlayer(Domino domino) {
     activePlayersSelectedDomino = domino;
-    kingdomOne.dominoInPurgatory = domino;
     if (kingdomOne.dominoInPurgatory == null) {
+      kingdomOne.dominoInPurgatory = domino;
       return;
     }
     setState(() {
       kingdomOne.domino = kingdomOne.dominoInPurgatory!;
+      kingdomOne.dominoInPurgatory = domino;
     });
   }
 
@@ -88,7 +89,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     );
 
     TextButton placePieceButton = TextButton(
-      onPressed: () {
+      onPressed: () async {
         i = kingdomOne.i;
         j = kingdomOne.j;
         // make sure that the placement of the piece is legitimate, otherwise show message explaining what went wrong
@@ -108,7 +109,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         kingdomOne.updateBoard();
 
         // bring back the selection interface
-        panelController.show();
+        await panelController.show();
         panelController.open();
         setState(() {});
       },

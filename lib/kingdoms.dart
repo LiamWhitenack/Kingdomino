@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:core';
 import 'check_valid_position.dart';
 import 'dominoes.dart';

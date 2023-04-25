@@ -14,10 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Kingdomino',
       home: Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('Kingdomino'),
-        //   backgroundColor: const Color.fromRGBO(149, 107, 169, 1),
-        // ),
+        // ignore: avoid_unnecessary_containers
         body: Container(child: PlayerInteractionInterface(dominoesInTheBox: returnEveryDominoFunction())),
       ),
     );

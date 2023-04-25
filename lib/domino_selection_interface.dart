@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:kingdomino/show_domino_functions.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';

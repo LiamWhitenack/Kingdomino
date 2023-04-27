@@ -11,9 +11,11 @@ import 'kingdoms.dart';
 
 class PlayerInteractionInterface extends StatefulWidget {
   final List<Domino> dominoesInTheBox;
+  final int numberOfRounds;
   const PlayerInteractionInterface({
     super.key,
     required this.dominoesInTheBox,
+    required this.numberOfRounds,
   });
 
   @override
@@ -23,6 +25,11 @@ class PlayerInteractionInterface extends StatefulWidget {
 class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface> {
   // variables for use in interface
   // ===========================================================================
+
+  // this value counts the round number. It starts at zero because a round is
+  // (for the purpose of programming) the part where a piece is placed and no
+  // pieces are placed on the first rotation.
+  int roundCounter = 0;
 
   // this is the domino selected (but not chosen) by the current player
   Domino? activePlayersSelectedDomino;
@@ -67,14 +74,17 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   void onDominoChosenByActivePlayer(Domino domino) {
     activePlayersSelectedDomino = domino;
     showTextButton = false;
+
     setState(() {
       // if they don't need to place a piece
       if (kingdoms[kingdomTurnIndex].dominoInPurgatory == null) {
         kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
         kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+        if (kingdomTurnIndex == 0) roundCounter++;
         return;
       }
-      // if they do need to place a piece
+
+      // if they do need to place a piece, move a domino up the queue
       kingdoms[kingdomTurnIndex].domino = kingdoms[kingdomTurnIndex].dominoInPurgatory!;
       kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
     });
@@ -168,13 +178,34 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         kingdoms[kingdomTurnIndex].domino = null;
 
         // bring back the selection interface
-        await panelController.show();
-        panelController.open();
+        if (roundCounter < widget.numberOfRounds - 1) {
+          await panelController.show();
+          panelController.open();
+        }
+
         kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+        if (kingdomTurnIndex == 0) roundCounter++;
         setState(() {});
       },
       child: const Text("Place"),
     );
+
+    String getWinningKingdomColor(List<Kingdom> kingdoms) {
+      int maxScore = 0;
+      String winningColor = 'none';
+      String endString = 'kingdom wins!!!';
+      for (int i = 0; i < kingdoms.length; i++) {
+        if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) > maxScore) {
+          maxScore = kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors);
+          winningColor = kingdoms[i].color;
+          endString = 'kingdom wins!!!';
+        } else if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) == maxScore) {
+          winningColor = '$winningColor and ${kingdoms[i].color}';
+          endString = 'kingdoms win!!!';
+        }
+      }
+      return 'The $winningColor $endString';
+    }
 
     DominoSelectionInterface dominoSelectionInterface = DominoSelectionInterface(
       kingdoms: kingdoms,
@@ -195,6 +226,41 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       topLeft: Radius.circular(24.0),
       topRight: Radius.circular(24.0),
     );
+
+    if (roundCounter == widget.numberOfRounds - 1) {
+      // start endgame
+      kingdoms[kingdomTurnIndex].domino = kingdoms[kingdomTurnIndex].dominoInPurgatory!;
+      playerPlacementGrid = PlayerPlacementGrid(
+        i: i,
+        j: j,
+        kingdom: kingdoms[kingdomTurnIndex],
+        domino: kingdoms[kingdomTurnIndex].domino,
+        scoreTextWidget: scoreTextWidget,
+      );
+
+      return Column(
+        children: [
+          const SizedBox(height: 250),
+          SizedBox(
+            height: 400,
+            child: Column(
+              children: [
+                // if there's no domino selected there's no need to show all of the bells and whistles
+                playerPlacementGrid,
+                // kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
+                kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placePieceButton,
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
+    if (roundCounter == widget.numberOfRounds) {
+      return Center(
+        child: Text(getWinningKingdomColor(kingdoms)),
+      );
+    }
 
     return SlidingUpPanel(
       defaultPanelState: PanelState.OPEN,

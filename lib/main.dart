@@ -17,7 +17,10 @@ class MyApp extends StatelessWidget {
         // ignore: avoid_unnecessary_containers
         body: Container(
           color: Colors.black87,
-          child: PlayerInteractionInterface(dominoesInTheBox: returnEveryDominoFunction()),
+          child: PlayerInteractionInterface(
+            dominoesInTheBox: returnEveryDominoFunction(),
+            numberOfRounds: 12,
+          ),
         ),
       ),
     );

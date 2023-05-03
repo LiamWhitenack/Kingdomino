@@ -100,6 +100,14 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     });
   }
 
+  bool dominoOptionsAreAllSelected(List<Domino> dominoOptions) {
+    int numberOfSelectedButNotPlacedDominoes = 0;
+    for (Domino domino in dominoOptions) {
+      if (domino.taken && !domino.placed) numberOfSelectedButNotPlacedDominoes++;
+    }
+    return numberOfSelectedButNotPlacedDominoes == 4;
+  }
+
   // this function organizes the kingdoms list when a new round starts
   void organizeKingdomsByColumnOrder(
     List<Domino> dominoOptionsForSelectionColumnOne,
@@ -107,10 +115,12 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   ) {
     // I only care about the column that I'm not working on
     List<Domino> workingDominoOptions = [];
-    if (dominoOptionsForSelectionColumnOne.isEmpty) {
-      workingDominoOptions = dominoOptionsForSelectionColumnTwo;
-    } else if (dominoOptionsForSelectionColumnTwo.isEmpty) {
+    if (dominoOptionsAreAllSelected(dominoOptionsForSelectionColumnOne)) {
       workingDominoOptions = dominoOptionsForSelectionColumnOne;
+    } else if (dominoOptionsAreAllSelected(dominoOptionsForSelectionColumnTwo)) {
+      workingDominoOptions = dominoOptionsForSelectionColumnTwo;
+    } else {
+      return;
     }
 
     // get the order of selections by collecting the colors, which we will soon use to
@@ -164,18 +174,10 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           return;
         }
 
-        // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
-        if (kingdoms[kingdomTurnIndex].domino != null) {
-          kingdoms[kingdomTurnIndex].domino!.placed = true;
-        }
-
         // Update the score and the board
         scoreTextWidget = Text(
             '${kingdoms[kingdomTurnIndex].score(kingdoms[kingdomTurnIndex].kingdomCrowns, kingdoms[kingdomTurnIndex].kingdomColors)}');
         kingdoms[kingdomTurnIndex].updateBoard();
-
-        // if this isn't included the same piece can be placed twice
-        kingdoms[kingdomTurnIndex].domino = null;
 
         // bring back the selection interface
         if (roundCounter < widget.numberOfRounds - 1) {
@@ -183,8 +185,16 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           panelController.open();
         }
 
+        // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
+        kingdoms[kingdomTurnIndex].domino!.placed = true;
+
         kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+
+        // if this isn't included the same piece can be placed twice
+        kingdoms[kingdomTurnIndex].domino = null;
+
         if (kingdomTurnIndex == 0) roundCounter++;
+
         setState(() {});
       },
       child: const Text("Place"),

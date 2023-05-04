@@ -12,10 +12,12 @@ import 'kingdoms.dart';
 class PlayerInteractionInterface extends StatefulWidget {
   final List<Domino> dominoesInTheBox;
   final int numberOfRounds;
-  const PlayerInteractionInterface({
+  List<Kingdom> kingdoms;
+  PlayerInteractionInterface({
     super.key,
     required this.dominoesInTheBox,
     required this.numberOfRounds,
+    required this.kingdoms,
   });
 
   @override
@@ -34,17 +36,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // this is the domino selected (but not chosen) by the current player
   Domino? activePlayersSelectedDomino;
 
-  // this is the list of players (or kingdoms) in the game
-  List<Kingdom> kingdoms = [
-    Kingdom('grey'),
-    Kingdom('purple'),
-    Kingdom('yellow'),
-    Kingdom('blue'),
-  ];
-
   bool showTextButton = false;
 
-  // this is the index of the player turn, used as an index for the kingdoms
+  // this is the index of the player turn, used as an index for the widget.kingdoms
   // list
   int kingdomTurnIndex = 0;
 
@@ -72,12 +66,12 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // 1. move the kingdom's selected pieces into the appropriate positions
   // 2. rebuild the interface (if necessary) to show the new grid
   Kingdom onDominoChosenByActivePlayer(Domino domino) {
-    Kingdom kingdomToReturn = kingdoms[kingdomTurnIndex];
+    Kingdom kingdomToReturn = widget.kingdoms[kingdomTurnIndex];
 
     setState(() {
       // if they don't need to place a piece
-      if (kingdoms[kingdomTurnIndex].dominoInPurgatory == null) {
-        kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
+      if (widget.kingdoms[kingdomTurnIndex].dominoInPurgatory == null) {
+        widget.kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
         kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
         if (kingdomTurnIndex == 0) roundCounter++;
         return;
@@ -102,7 +96,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   }
 
   void updateKingdomsList(List<Kingdom> newList) {
-    kingdoms = newList;
+    widget.kingdoms = newList;
   }
 
   void updateShowTextButton(bool newTextButtonValue) {
@@ -117,7 +111,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     return numberOfSelectedButNotPlacedDominoes == 4;
   }
 
-  // this function organizes the kingdoms list when a new round starts
+  // this function organizes the widget.kingdoms list when a new round starts
   List<Kingdom> organizeKingdomsByColumnOrder(
     List<Domino> dominoOptionsForSelectionColumnOne,
     List<Domino> dominoOptionsForSelectionColumnTwo,
@@ -130,7 +124,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       workingDominoOptions = dominoOptionsForSelectionColumnTwo;
     } else {
       print("this shouldnt happen...");
-      return kingdoms;
+      return widget.kingdoms;
     }
 
     // get the order of selections by collecting the colors, which we will soon use to
@@ -140,12 +134,12 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     }
 
     if (colorsInOrder.isEmpty) {
-      return kingdoms;
+      return widget.kingdoms;
     }
 
     List<Kingdom> newOrderOfKingdoms = [];
     for (String color in colorsInOrder) {
-      for (Kingdom kingdom in kingdoms) {
+      for (Kingdom kingdom in widget.kingdoms) {
         if (kingdom.color == color) {
           newOrderOfKingdoms.add(kingdom);
         }
@@ -162,18 +156,18 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     List<Domino> dominoesInTheBox = widget.dominoesInTheBox;
 
     scoreTextWidget = Text(
-        '${kingdoms[kingdomTurnIndex].score(kingdoms[kingdomTurnIndex].kingdomCrowns, kingdoms[kingdomTurnIndex].kingdomColors)}');
+        '${widget.kingdoms[kingdomTurnIndex].score(widget.kingdoms[kingdomTurnIndex].kingdomCrowns, widget.kingdoms[kingdomTurnIndex].kingdomColors)}');
 
     PlayerPlacementGrid playerPlacementGrid = PlayerPlacementGrid(
       i: i,
       j: j,
-      kingdom: kingdoms[kingdomTurnIndex],
-      domino: kingdoms[kingdomTurnIndex].domino,
+      kingdom: widget.kingdoms[kingdomTurnIndex],
+      domino: widget.kingdoms[kingdomTurnIndex].domino,
       scoreTextWidget: scoreTextWidget,
     );
 
     DominoSelectionInterface dominoSelectionInterface = DominoSelectionInterface(
-      kingdoms: kingdoms,
+      kingdoms: widget.kingdoms,
       kingdomSelectingIndex: kingdomTurnIndex,
       showTextButton: showTextButton,
       activePlayersSelectedDomino: activePlayersSelectedDomino,
@@ -190,11 +184,11 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
     TextButton placePieceButton = TextButton(
       onPressed: () async {
-        i = kingdoms[kingdomTurnIndex].i;
-        j = kingdoms[kingdomTurnIndex].j;
+        i = widget.kingdoms[kingdomTurnIndex].i;
+        j = widget.kingdoms[kingdomTurnIndex].j;
         // make sure that the placement of the piece is legitimate, otherwise show message explaining what went wrong
-        String errorMessage =
-            checkValidPlacementAtPositionIJ(kingdoms[kingdomTurnIndex], kingdoms[kingdomTurnIndex].domino!, i, j);
+        String errorMessage = checkValidPlacementAtPositionIJ(
+            widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!, i, j);
         if (errorMessage != '') {
           print(errorMessage);
           return;
@@ -202,8 +196,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
         // Update the score and the board
         scoreTextWidget = Text(
-            '${kingdoms[kingdomTurnIndex].score(kingdoms[kingdomTurnIndex].kingdomCrowns, kingdoms[kingdomTurnIndex].kingdomColors)}');
-        kingdoms[kingdomTurnIndex].updateBoard();
+            '${widget.kingdoms[kingdomTurnIndex].score(widget.kingdoms[kingdomTurnIndex].kingdomCrowns, widget.kingdoms[kingdomTurnIndex].kingdomColors)}');
+        widget.kingdoms[kingdomTurnIndex].updateBoard();
 
         // bring back the selection interface
         if (roundCounter < widget.numberOfRounds - 1) {
@@ -212,12 +206,12 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         }
 
         // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
-        kingdoms[kingdomTurnIndex].domino!.placed = true;
+        widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
 
         kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
 
         // if this isn't included the same piece can be placed twice
-        kingdoms[kingdomTurnIndex].domino = null;
+        widget.kingdoms[kingdomTurnIndex].domino = null;
 
         if (kingdomTurnIndex == 0) roundCounter++;
 
@@ -233,11 +227,11 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       for (int i = 0; i < kingdoms.length; i++) {
         if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) > maxScore) {
           maxScore = kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors);
-          winningColor = kingdoms[i].color;
+          winningColor = widget.kingdoms[i].color;
           endString = 'kingdom wins!!!';
         } else if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) == maxScore) {
           winningColor = '$winningColor and ${kingdoms[i].color}';
-          endString = 'kingdoms win!!!';
+          endString = 'widget.kingdoms win!!!';
         }
       }
       return 'The $winningColor $endString';
@@ -251,12 +245,12 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
     if (roundCounter == widget.numberOfRounds - 1) {
       // start endgame
-      kingdoms[kingdomTurnIndex].domino = kingdoms[kingdomTurnIndex].dominoInPurgatory!;
+      widget.kingdoms[kingdomTurnIndex].domino = widget.kingdoms[kingdomTurnIndex].dominoInPurgatory!;
       playerPlacementGrid = PlayerPlacementGrid(
         i: i,
         j: j,
-        kingdom: kingdoms[kingdomTurnIndex],
-        domino: kingdoms[kingdomTurnIndex].domino,
+        kingdom: widget.kingdoms[kingdomTurnIndex],
+        domino: widget.kingdoms[kingdomTurnIndex].domino,
         scoreTextWidget: scoreTextWidget,
       );
 
@@ -269,8 +263,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
               children: [
                 // if there's no domino selected there's no need to show all of the bells and whistles
                 playerPlacementGrid,
-                // kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
-                kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placePieceButton,
+                // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
+                widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placePieceButton,
               ],
             ),
           ),
@@ -280,7 +274,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
     if (roundCounter == widget.numberOfRounds) {
       return Center(
-        child: Text(getWinningKingdomColor(kingdoms)),
+        child: Text(getWinningKingdomColor(widget.kingdoms)),
       );
     }
 
@@ -341,8 +335,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
               children: [
                 // if there's no domino selected there's no need to show all of the bells and whistles
                 playerPlacementGrid,
-                // kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
-                kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placePieceButton,
+                // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
+                widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placePieceButton,
               ],
             ),
           ),

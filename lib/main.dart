@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kingdomino/dominoes.dart';
+import 'package:kingdomino/kingdoms.dart';
 import 'package:kingdomino/player_interaction_interface.dart';
 
 void main() {
@@ -9,8 +10,25 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  List<Kingdom> generateListOfNKingdoms(int n) {
+    List<String> colors = ['cyan', 'black', 'lime', 'red'];
+    List<Kingdom> kingdoms = [];
+    for (int i = 0; i < n; i++) {
+      kingdoms.add(Kingdom(colors[i]));
+    }
+    if (kingdoms.length == 2) {
+      kingdoms.addAll(kingdoms);
+    }
+    kingdoms.shuffle();
+    return kingdoms;
+  }
+
   @override
   Widget build(BuildContext context) {
+    int numberOfKingdoms = 4;
+    int numberOfRounds = 12;
+    List<Kingdom> kingdoms = generateListOfNKingdoms(numberOfKingdoms);
+    if (numberOfKingdoms == 2) numberOfRounds = 6;
     return MaterialApp(
       title: 'Kingdomino',
       home: Scaffold(
@@ -19,7 +37,8 @@ class MyApp extends StatelessWidget {
           color: Colors.black87,
           child: PlayerInteractionInterface(
             dominoesInTheBox: returnEveryDominoFunction(),
-            numberOfRounds: 12,
+            numberOfRounds: numberOfRounds,
+            kingdoms: kingdoms,
           ),
         ),
       ),

@@ -71,9 +71,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // when a piece is chosen,
   // 1. move the kingdom's selected pieces into the appropriate positions
   // 2. rebuild the interface (if necessary) to show the new grid
-  void onDominoChosenByActivePlayer(Domino domino) {
-    activePlayersSelectedDomino = domino;
-    showTextButton = false;
+  Kingdom onDominoChosenByActivePlayer(Domino domino) {
+    Kingdom kingdomToReturn = kingdoms[kingdomTurnIndex];
 
     setState(() {
       // if they don't need to place a piece
@@ -85,9 +84,11 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       }
 
       // if they do need to place a piece, move a domino up the queue
-      kingdoms[kingdomTurnIndex].domino = kingdoms[kingdomTurnIndex].dominoInPurgatory!;
-      kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
+      kingdomToReturn.domino = kingdomToReturn.dominoInPurgatory!;
+      kingdomToReturn.dominoInPurgatory = domino;
     });
+
+    return kingdomToReturn;
   }
 
   // when a piece is selected,
@@ -96,8 +97,16 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   void onDominoSelectedByActivePlayer(Domino domino) {
     setState(() {
       activePlayersSelectedDomino = domino;
-      showTextButton = true;
+      updateShowTextButton(true);
     });
+  }
+
+  void updateKingdomsList(List<Kingdom> newList) {
+    kingdoms = newList;
+  }
+
+  void updateShowTextButton(bool newTextButtonValue) {
+    showTextButton = newTextButtonValue;
   }
 
   bool dominoOptionsAreAllSelected(List<Domino> dominoOptions) {
@@ -109,7 +118,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   }
 
   // this function organizes the kingdoms list when a new round starts
-  void organizeKingdomsByColumnOrder(
+  List<Kingdom> organizeKingdomsByColumnOrder(
     List<Domino> dominoOptionsForSelectionColumnOne,
     List<Domino> dominoOptionsForSelectionColumnTwo,
   ) {
@@ -120,7 +129,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     } else if (dominoOptionsAreAllSelected(dominoOptionsForSelectionColumnTwo)) {
       workingDominoOptions = dominoOptionsForSelectionColumnTwo;
     } else {
-      return;
+      print("this shouldnt happen...");
+      return kingdoms;
     }
 
     // get the order of selections by collecting the colors, which we will soon use to
@@ -130,7 +140,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     }
 
     if (colorsInOrder.isEmpty) {
-      return;
+      return kingdoms;
     }
 
     List<Kingdom> newOrderOfKingdoms = [];
@@ -142,7 +152,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       }
     }
 
-    kingdoms = newOrderOfKingdoms;
+    return newOrderOfKingdoms;
   }
 
   // Building the game
@@ -160,6 +170,22 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       kingdom: kingdoms[kingdomTurnIndex],
       domino: kingdoms[kingdomTurnIndex].domino,
       scoreTextWidget: scoreTextWidget,
+    );
+
+    DominoSelectionInterface dominoSelectionInterface = DominoSelectionInterface(
+      kingdoms: kingdoms,
+      kingdomSelectingIndex: kingdomTurnIndex,
+      showTextButton: showTextButton,
+      activePlayersSelectedDomino: activePlayersSelectedDomino,
+      onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
+      onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,
+      organizeKingdomsByColumnOrder: organizeKingdomsByColumnOrder,
+      updateKingdomsList: updateKingdomsList,
+      updateShowTextButton: updateShowTextButton,
+      panelController: panelController,
+      dominoesInTheBox: dominoesInTheBox,
+      dominoOptionsForSelectionColumnOne: dominoOptionsForSelectionColumnOne,
+      dominoOptionsForSelectionColumnTwo: dominoOptionsForSelectionColumnTwo,
     );
 
     TextButton placePieceButton = TextButton(
@@ -216,20 +242,6 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       }
       return 'The $winningColor $endString';
     }
-
-    DominoSelectionInterface dominoSelectionInterface = DominoSelectionInterface(
-      kingdoms: kingdoms,
-      kingdomSelectingIndex: kingdomTurnIndex,
-      showTextButton: showTextButton,
-      activePlayersSelectedDomino: activePlayersSelectedDomino,
-      onDominoSelectedByActivePlayer: onDominoSelectedByActivePlayer,
-      onDominoChosenByActivePlayer: onDominoChosenByActivePlayer,
-      organizeKingdomsByColumnOrder: organizeKingdomsByColumnOrder,
-      panelController: panelController,
-      dominoesInTheBox: dominoesInTheBox,
-      dominoOptionsForSelectionColumnOne: dominoOptionsForSelectionColumnOne,
-      dominoOptionsForSelectionColumnTwo: dominoOptionsForSelectionColumnTwo,
-    );
 
     // this is purely for the UI
     BorderRadiusGeometry radius = const BorderRadius.only(

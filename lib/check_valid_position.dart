@@ -30,13 +30,19 @@ bool checkWithinBounds(Kingdom kingdom, Domino domino, int i, int j) {
   List rowsAndColumns = kingdom.getImportantRowsAndColumns(kingdom.newKingdomColors);
   rows = rowsAndColumns[0];
   // add the new row we would be moving the piece to (depending on if the piece is horizontal or now)
+  rows.add(i);
   rows.add(!domino.horizontal ? i + 1 : i);
   columns = rowsAndColumns[1];
   // do the same for the columns
+  columns.add(j);
   columns.add(domino.horizontal ? j + 1 : j);
   // don't let the difference between the greatest and least row and column be greater than 4
-  if (rows.reduce(max) - rows.reduce(min) > 4) return false;
-  if (columns.reduce(max) - columns.reduce(min) > 4) return false;
+  int difference = rows.reduce(max) - rows.reduce(min);
+  difference = difference.abs();
+  if (difference > 4) return false;
+  difference = columns.reduce(max) - columns.reduce(min);
+  difference = difference.abs();
+  if (difference > 4) return false;
   return true;
 }
 

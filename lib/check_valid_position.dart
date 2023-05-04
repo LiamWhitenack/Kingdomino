@@ -70,7 +70,7 @@ bool checkHasNeighbors(Kingdom kingdom, Domino domino, int i, int j) {
   }
 
   for (List pair in neighbors) {
-    if (kingdom.newKingdomColors[pair[0]][pair[1]] != 'white') return true;
+    if (kingdom.newKingdomColors[pair[0]][pair[1]] != 'noColor') return true;
   }
 
   // No neighbors were found

@@ -41,14 +41,14 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
         widget.dominoOptionsForSelection[_selectedIndex].revertToOriginalOrientation();
       }
 
-      // if the card is whiteIfPieceNotTakenElseColor, do nothing
-      if (widget.dominoOptionsForSelection[index].whiteIfPieceNotTakenElseColor != 'white') {
+      // if the card is noColorIfPieceNotTakenElseColor, do nothing
+      if (widget.dominoOptionsForSelection[index].noColorIfPieceNotTakenElseColor != 'noColor') {
         return;
       }
 
       for (Domino domino in widget.dominoOptionsForSelection) {
         if (!domino.taken) {
-          domino.whiteIfPieceNotTakenElseColor = 'white';
+          domino.noColorIfPieceNotTakenElseColor = 'noColor';
         }
       }
 
@@ -56,7 +56,7 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
       _selectedIndex = index;
       widget.activePlayersSelectedDomino = widget.dominoOptionsForSelection[_selectedIndex];
       // change the color of the backdrop to the color of the kingdom
-      widget.activePlayersSelectedDomino?.whiteIfPieceNotTakenElseColor = widget.kingdomSelecting.color;
+      widget.activePlayersSelectedDomino?.noColorIfPieceNotTakenElseColor = widget.kingdomSelecting.color;
       widget.onDominoSelectedByActivePlayer(widget.activePlayersSelectedDomino);
     });
   }
@@ -71,7 +71,7 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
         final Domino dominoOption = entry.value;
         Widget dominoDisplay = dominoOption.placed
             ? const SizedBox(height: 60)
-            : displayDominoInABox(dominoOption, colorOfTheBox: dominoOption.whiteIfPieceNotTakenElseColor);
+            : displayDominoInABox(dominoOption, colorOfTheBox: dominoOption.noColorIfPieceNotTakenElseColor);
 
         return dominoOption.placed
             ? const SizedBox()

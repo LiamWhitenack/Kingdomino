@@ -100,7 +100,7 @@ Widget displayDomino(Domino domino) {
   return Row(children: images);
 }
 
-Widget displayDominoInABox(Domino domino, {String colorOfTheBox = 'white'}) {
+Widget displayDominoInABox(Domino domino, {String colorOfTheBox = 'noColor'}) {
   // this just puts the domino display in a box of a certain color,
   // in this case a player's color
   List? color = colors[colorOfTheBox];

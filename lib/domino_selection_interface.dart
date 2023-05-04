@@ -206,7 +206,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
     return Container(
       height: 700,
-      color: Colors.white24,
+      color: Colors.white,
       child: Column(
         children: [
           const SizedBox(height: 100),

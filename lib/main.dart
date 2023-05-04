@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   List<Kingdom> generateListOfNKingdoms(int n) {
-    List<String> colors = ['cyan', 'black', 'lime', 'red'];
+    List<String> colors = ['navy', 'grey', 'forest', 'maroon'];
     List<Kingdom> kingdoms = [];
     for (int i = 0; i < n; i++) {
       kingdoms.add(Kingdom(colors[i]));

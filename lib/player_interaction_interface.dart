@@ -130,7 +130,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     // get the order of selections by collecting the colors, which we will soon use to
     List<String> colorsInOrder = [];
     for (Domino domino in workingDominoOptions) {
-      colorsInOrder.add(domino.whiteIfPieceNotTakenElseColor);
+      colorsInOrder.add(domino.noColorIfPieceNotTakenElseColor);
     }
 
     if (colorsInOrder.isEmpty) {
@@ -205,7 +205,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           panelController.open();
         }
 
-        // mark the domino as whiteIfPieceNotTakenElseColor so that it doesn't appear anymore
+        // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
         widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
 
         kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;

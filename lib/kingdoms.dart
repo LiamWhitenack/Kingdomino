@@ -27,7 +27,7 @@ class Kingdom {
   // initialize the kingdom as a 9x9 grid with one spot filled in
   Kingdom(this.color) {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
-    kingdomColors = List.generate(9, (_) => List.filled(9, 'white'));
+    kingdomColors = List.generate(9, (_) => List.filled(9, 'noColor'));
     kingdomCrowns[4][4] = 0;
     kingdomColors[4][4] = 'grey';
     fullyUpdated = true;
@@ -84,7 +84,7 @@ class Kingdom {
     // Check each row for partial completion
     for (int i = 0; i < 9; i++) {
       for (int j = 0; j < 9; j++) {
-        if (kingdomColors[i][j] != 'white') {
+        if (kingdomColors[i][j] != 'noColor') {
           rows.add(i);
           columns.add(j);
         }
@@ -130,8 +130,8 @@ class Kingdom {
       }
     }
 
-    // we don't need to score grey or white coordinates
-    colorCoors.remove('white');
+    // we don't need to score grey or noColor coordinates
+    colorCoors.remove('noColor');
     colorCoors.remove('grey');
 
     return colorCoors;
@@ -245,7 +245,7 @@ class Kingdom {
     // scoring
     for (int i = 0; i < importantKingdomColors.length; i++) {
       for (int j = 0; j < importantKingdomColors[i].length; j++) {
-        if (importantKingdomColors[i][j] != 'white' && (importantKingdomColors[i][j] != 'grey')) {
+        if (importantKingdomColors[i][j] != 'noColor' && (importantKingdomColors[i][j] != 'grey')) {
           unscoredCoordinates.add([i, j]);
         }
       }

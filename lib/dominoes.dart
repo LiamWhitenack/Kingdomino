@@ -3,7 +3,7 @@ class Domino {
   List<String> colors;
   late int value;
   bool horizontal;
-  String whiteIfPieceNotTakenElseColor;
+  String noColorIfPieceNotTakenElseColor;
   bool taken;
   bool placed;
   bool flipped;
@@ -11,7 +11,7 @@ class Domino {
     required this.crowns,
     required this.colors,
     this.horizontal = true,
-    this.whiteIfPieceNotTakenElseColor = 'white',
+    this.noColorIfPieceNotTakenElseColor = 'noColor',
     this.taken = false,
     this.placed = false,
     this.flipped = true,

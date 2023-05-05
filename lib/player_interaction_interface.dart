@@ -46,11 +46,6 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   //potential score increase of placing a piece in a given spot
   Widget scoreTextWidget = const Text('');
 
-  // these variables represent the row and column the domino is being placed in.
-  // they have a lot of instances and were probably executed poorly
-  int i = 5;
-  int j = 4;
-
   // this is used to open, close, and hide the sliding up panel for selecting
   // dominoes
   PanelController panelController = PanelController();
@@ -83,6 +78,26 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     });
 
     return kingdomToReturn;
+  }
+
+  void endTurn(Kingdom kingdom, PanelController panelController) async {
+    // bring back the selection interface
+    if (roundCounter < widget.numberOfRounds - 1) {
+      await panelController.show();
+      panelController.open();
+    }
+
+    // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
+    widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
+
+    kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+
+    // if this isn't included the same piece can be placed twice
+    widget.kingdoms[kingdomTurnIndex].domino = null;
+
+    if (kingdomTurnIndex == 0) roundCounter++;
+
+    setState(() {});
   }
 
   // when a piece is selected,
@@ -153,6 +168,22 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // ===========================================================================
   @override
   Widget build(BuildContext context) {
+    // these variables represent the row and column the domino is being placed in.
+    // they have a lot of instances and were probably executed poorly
+    int i = 5;
+    int j = 4;
+    if (widget.kingdoms[kingdomTurnIndex].domino != null) {
+      List<int> coordinates =
+          findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
+      if (coordinates.isEmpty) {
+        endTurn(widget.kingdoms[kingdomTurnIndex], panelController);
+        print('that domino will not fit on your kingdom');
+      } else {
+        i = coordinates[0];
+        j = coordinates[1];
+      }
+    }
+
     List<Domino> dominoesInTheBox = widget.dominoesInTheBox;
 
     scoreTextWidget = Text(

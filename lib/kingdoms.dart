@@ -29,7 +29,11 @@ class Kingdom {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     kingdomColors = List.generate(9, (_) => List.filled(9, 'noColor'));
     kingdomCrowns[4][4] = 0;
-    kingdomColors[4][4] = 'grey';
+    kingdomColors[4][4] = 'pink';
+    newKingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
+    newKingdomColors = List.generate(9, (_) => List.filled(9, 'noColor'));
+    newKingdomCrowns[4][4] = 0;
+    newKingdomColors[4][4] = 'pink';
     fullyUpdated = true;
   }
 
@@ -73,6 +77,11 @@ class Kingdom {
     kingdomCrowns = newKingdomCrowns;
     kingdomColors = newKingdomColors;
     fullyUpdated = false;
+  }
+
+  void updateIandJ(int i, int j) {
+    i = i;
+    j = j;
   }
 
   // this only returns the rows and columns that we care about as two separate

@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:kingdomino/check_valid_position.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'domino_selection_column.dart';
 import 'dominoes.dart';
@@ -186,7 +187,12 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
         // force the player to place their piece if they have a piece ready to place
         if (widget.kingdoms[widget.kingdomSelectingIndex].domino != null) {
-          widget.panelController.hide();
+          // if there is a space to put the piece, close the selection interface
+          if ((findTheFirstAvailableSpot(
+                  widget.kingdoms[widget.kingdomSelectingIndex], widget.kingdoms[widget.kingdomSelectingIndex].domino!))
+              .isNotEmpty) {
+            widget.panelController.hide();
+          }
         }
 
         // set the activePlayersSelectedDomino value to null since the kingdom will later need to select a new value

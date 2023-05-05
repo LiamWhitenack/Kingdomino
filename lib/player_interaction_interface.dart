@@ -100,6 +100,20 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     setState(() {});
   }
 
+  void endTurnWithoutPlacingAPiece(Kingdom kingdom, PanelController panelController) async {
+    // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
+    widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
+
+    kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+
+    // if this isn't included the same piece can be placed twice
+    widget.kingdoms[kingdomTurnIndex].domino = null;
+
+    if (kingdomTurnIndex == 0) roundCounter++;
+
+    setState(() {});
+  }
+
   // when a piece is selected,
   // 1. move the kingdom's selected pieces into the appropriate positions
   // 2. rebuild the interface (if necessary) to show the new grid
@@ -176,7 +190,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       List<int> coordinates =
           findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
-        endTurn(widget.kingdoms[kingdomTurnIndex], panelController);
+        endTurnWithoutPlacingAPiece(widget.kingdoms[kingdomTurnIndex], panelController);
         print('that domino will not fit on your kingdom');
       } else {
         i = coordinates[0];

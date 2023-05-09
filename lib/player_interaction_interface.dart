@@ -243,7 +243,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     List<Domino> dominoesInTheBox = widget.dominoesInTheBox;
 
     scoreTextWidget = Text(
-        '${widget.kingdoms[kingdomTurnIndex].score(widget.kingdoms[kingdomTurnIndex].kingdomCrowns, widget.kingdoms[kingdomTurnIndex].kingdomColors)}');
+      style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+      'Score: ${widget.kingdoms[kingdomTurnIndex].score(widget.kingdoms[kingdomTurnIndex].kingdomCrowns, widget.kingdoms[kingdomTurnIndex].kingdomColors)}',
+    );
 
     PlayerPlacementGrid playerPlacementGrid = PlayerPlacementGrid(
       i: i,
@@ -251,6 +253,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       kingdom: widget.kingdoms[kingdomTurnIndex],
       domino: widget.kingdoms[kingdomTurnIndex].domino,
       scoreTextWidget: scoreTextWidget,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
     );
 
     DominoSelectionInterface dominoSelectionInterface = DominoSelectionInterface(
@@ -283,7 +287,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
         // Update the score and the board
         scoreTextWidget = Text(
-            '${widget.kingdoms[kingdomTurnIndex].score(widget.kingdoms[kingdomTurnIndex].kingdomCrowns, widget.kingdoms[kingdomTurnIndex].kingdomColors)}');
+            style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+            'Score: ${widget.kingdoms[kingdomTurnIndex].score(widget.kingdoms[kingdomTurnIndex].kingdomCrowns, widget.kingdoms[kingdomTurnIndex].kingdomColors)}');
         widget.kingdoms[kingdomTurnIndex].updateBoard();
 
         endTurn(widget.kingdoms[kingdomTurnIndex], panelController);
@@ -358,13 +363,15 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         kingdom: widget.kingdoms[kingdomTurnIndex],
         domino: widget.kingdoms[kingdomTurnIndex].domino,
         scoreTextWidget: scoreTextWidget,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
       );
 
       return Column(
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height / 3.13),
+          SizedBox(height: MediaQuery.of(context).size.height / 5),
           SizedBox(
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height / 1.5,
             child: Column(
               children: [
                 // if there's no domino selected there's no need to show all of the bells and whistles
@@ -444,12 +451,11 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       // outside the panel
       body: Column(
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height / 3),
+          SizedBox(height: MediaQuery.of(context).size.height / 5),
           SizedBox(
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height / 1.5,
             child: Column(
               children: [
-                // if there's no domino selected there's no need to show all of the bells and whistles
                 playerPlacementGrid,
                 // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
                 widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placeDominoButton,

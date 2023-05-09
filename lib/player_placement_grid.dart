@@ -8,6 +8,8 @@ import 'show_domino_functions.dart';
 class PlayerPlacementGrid extends StatefulWidget {
   int i;
   int j;
+  double height;
+  double width;
   Domino? domino;
   Kingdom kingdom;
   Widget scoreTextWidget;
@@ -17,6 +19,8 @@ class PlayerPlacementGrid extends StatefulWidget {
     required this.kingdom,
     required this.domino,
     required this.scoreTextWidget,
+    required this.height,
+    required this.width,
     super.key,
   });
 
@@ -39,8 +43,10 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
       int numRows = crowns.length;
       int numColumns = crowns[0].length;
       // if no domino is selected, display the score as one part
-      widget.scoreTextWidget =
-          Text('${widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)}');
+      widget.scoreTextWidget = Text(
+        style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+        'Score: ${widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)}',
+      );
 
       return PlayerKingdomGrid(
         numColumns: numColumns,
@@ -48,6 +54,8 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
         crowns: crowns,
         colors: colors,
         scoreTextWidget: widget.scoreTextWidget,
+        height: widget.height,
+        width: widget.width,
       );
     }
 
@@ -63,7 +71,9 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
     int numColumns = crowns[0].length;
     // show the score as two parts this time
     widget.scoreTextWidget = Text(
-        '${widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)} + ${widget.kingdom.score(widget.kingdom.newKingdomCrowns, widget.kingdom.newKingdomColors) - widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)}');
+      style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
+      'Score: ${widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)} + ${widget.kingdom.score(widget.kingdom.newKingdomCrowns, widget.kingdom.newKingdomColors) - widget.kingdom.score(widget.kingdom.kingdomCrowns, widget.kingdom.kingdomColors)}',
+    );
 
     return GestureDetector(
       onHorizontalDragEnd: (details) {
@@ -124,6 +134,8 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
         crowns: crowns,
         colors: colors,
         scoreTextWidget: widget.scoreTextWidget,
+        height: widget.height,
+        width: widget.width,
       ),
     );
   }
@@ -133,6 +145,8 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
 class PlayerKingdomGrid extends StatelessWidget {
   int numColumns;
   int numRows;
+  double height;
+  double width;
   List<List<int>> crowns;
   List<List<String>> colors;
   Widget scoreTextWidget;
@@ -143,25 +157,29 @@ class PlayerKingdomGrid extends StatelessWidget {
     required this.crowns,
     required this.colors,
     required this.scoreTextWidget,
+    required this.height,
+    required this.width,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.topRight,
+    return Column(
       children: [
+        SizedBox(
+          height: 100,
+          child: Center(child: scoreTextWidget),
+        ),
         Container(
           color: const Color.fromRGBO(245, 245, 245, 0.1),
-          height: MediaQuery.of(context).size.height / 2.3,
+          height: height / 2.1,
           child: Center(
             child: SizedBox(
-              width: (MediaQuery.of(context).size.width / 1.3) * (numColumns / 5) + numColumns * 4,
-              height: (MediaQuery.of(context).size.width / 1.3) * (numRows / 5) + numRows * 4,
+              width: (width / 1.3) * (numColumns / 5) + numColumns * 4,
+              height: (width / 1.3) * (numRows / 5) + numRows * 4,
               child: Column(children: getImages(numRows, numColumns, crowns, colors)),
             ),
           ),
         ),
-        scoreTextWidget,
       ],
     );
   }

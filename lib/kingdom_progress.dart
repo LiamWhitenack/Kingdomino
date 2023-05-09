@@ -20,6 +20,8 @@ void showKingdomProgress(BuildContext context, List<Kingdom> kingdoms) {
       kingdom: kingdoms[i],
       domino: null,
       scoreTextWidget: const Text(''),
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
     );
     Color backgroundColor;
     List rgboValues = colors[kingdoms[i].color]!;

@@ -112,6 +112,8 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
         }
       },
       onDoubleTap: () {
+        if (widget.i == 8 && widget.domino!.horizontal) return;
+        if (widget.j == 8 && !widget.domino!.horizontal) return;
         setState(() {
           widget.domino!.rotate();
         });

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:kingdomino/player_placement_grid.dart';
@@ -12,12 +12,14 @@ import 'kingdoms.dart';
 class PlayerInteractionInterface extends StatefulWidget {
   final List<Domino> dominoesInTheBox;
   final int numberOfRounds;
+  final int numberOfUniqueKingdoms;
   List<Kingdom> kingdoms;
   PlayerInteractionInterface({
     super.key,
     required this.dominoesInTheBox,
     required this.numberOfRounds,
     required this.kingdoms,
+    required this.numberOfUniqueKingdoms,
   });
 
   @override
@@ -61,6 +63,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // 1. move the kingdom's selected pieces into the appropriate positions
   // 2. rebuild the interface (if necessary) to show the new grid
   Kingdom onDominoChosenByActivePlayer(Domino domino) {
+    int dominoesInPurgatoryMinimum = 1;
+    if (widget.numberOfUniqueKingdoms == 2) dominoesInPurgatoryMinimum = 2;
     Kingdom kingdomToReturn = widget.kingdoms[kingdomTurnIndex];
 
     setState(() {
@@ -68,16 +72,17 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       if (widget.kingdoms.length == 2) numberOfTurnsInARound = 4;
 
       // if they don't need to place a piece
-      if (widget.kingdoms[kingdomTurnIndex].dominoInPurgatory == null) {
-        widget.kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
+      if (widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory.length < dominoesInPurgatoryMinimum) {
+        widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory.add(domino);
         kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
         if (kingdomTurnIndex == 0) roundCounter++;
         return;
       }
 
       // if they do need to place a piece, move a domino up the queue
-      kingdomToReturn.domino = kingdomToReturn.dominoInPurgatory!;
-      kingdomToReturn.dominoInPurgatory = domino;
+      kingdomToReturn.domino = kingdomToReturn.dominoesInPurgatory[0];
+      kingdomToReturn.dominoesInPurgatory.remove(kingdomToReturn.dominoesInPurgatory[0]);
+      kingdomToReturn.dominoesInPurgatory.add(domino);
 
       List<int> coordinates =
           findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
@@ -190,8 +195,13 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       for (Kingdom kingdom in widget.kingdoms) {
         if (kingdom.color == color) {
           newOrderOfKingdoms.add(kingdom);
+          break;
         }
       }
+    }
+
+    for (Kingdom kingdom in newOrderOfKingdoms) {
+      kingdom.dominoesInPurgatory.sort((a, b) => a.value.compareTo(b.value));
     }
 
     return newOrderOfKingdoms;
@@ -293,7 +303,10 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
     if (roundCounter == widget.numberOfRounds - 1) {
       // start endgame
-      widget.kingdoms[kingdomTurnIndex].domino = widget.kingdoms[kingdomTurnIndex].dominoInPurgatory!;
+      widget.kingdoms[kingdomTurnIndex].domino = widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory[0];
+      // remove the domino from purgatory
+      widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory
+          .remove(widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory[0]);
       playerPlacementGrid = PlayerPlacementGrid(
         i: i,
         j: j,

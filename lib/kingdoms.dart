@@ -14,7 +14,7 @@ class Kingdom {
   late List<List<String>> newKingdomColors;
   // these are the dominoes in the kingdom's queue
   Domino? domino;
-  Domino? dominoInPurgatory;
+  List<Domino> dominoesInPurgatory = [];
   // this is true if the newKingdomCrowns == kingdomCrowns
   late bool fullyUpdated;
   // these are the coordinates the piece is being placed at

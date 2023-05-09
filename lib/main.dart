@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       kingdoms.add(Kingdom(colors[i]));
     }
     if (kingdoms.length == 2) {
-      kingdoms.addAll(kingdoms);
+      kingdoms.addAll([...kingdoms]);
     }
     kingdoms.shuffle();
     return kingdoms;
@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int numberOfKingdoms = 3;
+    int numberOfKingdoms = 2;
     int numberOfRounds = 13;
     List<Kingdom> kingdoms = generateListOfNKingdoms(numberOfKingdoms);
-    // if (numberOfKingdoms == 2) numberOfRounds = 7;
+    if (numberOfKingdoms == 2) numberOfRounds = 7;
     return MaterialApp(
       title: 'Kingdomino',
       home: Scaffold(
@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
             dominoesInTheBox: returnEveryDominoFunction(),
             numberOfRounds: numberOfRounds,
             kingdoms: kingdoms,
+            numberOfUniqueKingdoms: numberOfKingdoms,
           ),
         ),
       ),

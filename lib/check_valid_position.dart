@@ -3,8 +3,8 @@ import 'package:kingdomino/kingdoms.dart';
 import 'dart:math';
 
 String checkValidPlacementAtPositionIJ(Kingdom kingdom, Domino domino, int i, int j) {
-  if (!checkPlacedInEmptySpot(kingdom, domino, i, j)) return 'The piece must be placed in an empty spot!';
   if (!checkWithinBounds(kingdom, domino, i, j)) return 'The piece must be placed within a 5x5 grid!';
+  if (!checkPlacedInEmptySpot(kingdom, domino, i, j)) return 'The piece must be placed in an empty spot!';
   if (!checkHasNeighbors(kingdom, domino, i, j)) return 'The piece does not have any neighbors!';
   if (!checkHasSameColorNeighbors(kingdom, domino, i, j)) {
     return 'The piece does not have any neighbors of the same type!';
@@ -44,7 +44,9 @@ bool checkWithinBounds(Kingdom kingdom, Domino domino, int i, int j) {
   }
   difference = columns.reduce(max) - columns.reduce(min);
   difference = difference.abs();
-  if (difference > 4) return false;
+  if (difference > 4) {
+    return false;
+  }
   return true;
 }
 
@@ -52,19 +54,19 @@ bool checkHasNeighbors(Kingdom kingdom, Domino domino, int i, int j) {
   List neighbors = [];
 
   if (!domino.horizontal) {
-    neighbors.add([i - 1, j]); // west
-    neighbors.add([i - 1, j + 1]); // west south
-    neighbors.add([i, j - 1]); // north
-    neighbors.add([i, j + 2]); // east east
-    neighbors.add([i + 1, j]); // east
+    neighbors.add([i, j - 1]); // west
+    neighbors.add([i + 1, j - 1]); // west south
+    neighbors.add([i - 1, j]); // north
+    neighbors.add([i + 2, j]); // east east
+    neighbors.add([i, j + 1]); // east
     neighbors.add([i + 1, j + 1]); // east south
   } else {
-    neighbors.add([i - 1, j]); // west
-    neighbors.add([i, j - 1]); // north
-    neighbors.add([i, j + 1]); // south
-    neighbors.add([i + 1, j - 1]); // east north
+    neighbors.add([i, j - 1]); // west
+    neighbors.add([i - 1, j]); // north
+    neighbors.add([i + 1, j]); // south
+    neighbors.add([i - 1, j + 1]); // east north
     neighbors.add([i + 1, j + 1]); // east south
-    neighbors.add([i + 2, j]); // east east
+    neighbors.add([i, j + 2]); // east east
   }
 
   List deleteList = [];
@@ -139,11 +141,15 @@ bool checkPlacedInEmptySpot(Kingdom kingdom, Domino domino, int i, int j) {
 }
 
 List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
+  // I'm not sure why this needs to be here, but sometimes I have
+  // newKingdomColors that are mysteriously different than their correct value
+  kingdom.newKingdomColors = kingdom.kingdomColors;
+  kingdom.newKingdomCrowns = kingdom.kingdomCrowns;
+
+  // record the important rows and columns
   List rowsAndColumns = kingdom.getImportantRowsAndColumns(kingdom.newKingdomColors);
   List<int> rows = rowsAndColumns[0];
   List<int> columns = rowsAndColumns[1];
-
-  if (rows.isEmpty || columns.isEmpty) return [5, 4];
 
   int maxRow = rows.reduce(max);
   int minRow = rows.reduce(min);
@@ -154,7 +160,6 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
   for (int i = minRow - 1; i < maxRow + 1; i++) {
     for (int j = minColumn - 2; j < maxColumn + 1; j++) {
       if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
-        // domino.revertToOriginalOrientation();
         return [i, j];
       }
     }
@@ -165,7 +170,6 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
   for (int i = minRow - 2; i < maxRow + 1; i++) {
     for (int j = minColumn - 1; j < maxColumn + 1; j++) {
       if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
-        // domino.revertToOriginalOrientation();
         return [i, j];
       }
     }
@@ -176,7 +180,6 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
   for (int i = minRow - 1; i < maxRow + 1; i++) {
     for (int j = minColumn - 2; j < maxColumn + 1; j++) {
       if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
-        // domino.revertToOriginalOrientation();
         return [i, j];
       }
     }
@@ -186,7 +189,6 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
   for (int i = minRow - 2; i < maxRow + 1; i++) {
     for (int j = minColumn - 1; j < maxColumn + 1; j++) {
       if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
-        // domino.revertToOriginalOrientation();
         return [i, j];
       }
     }

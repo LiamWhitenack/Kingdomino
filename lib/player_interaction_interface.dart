@@ -75,6 +75,13 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       // if they do need to place a piece, move a domino up the queue
       kingdomToReturn.domino = kingdomToReturn.dominoInPurgatory!;
       kingdomToReturn.dominoInPurgatory = domino;
+
+      List<int> coordinates =
+          findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
+      if (coordinates.isEmpty) {
+        endTurnWithoutPlacingAPiece(widget.kingdoms[kingdomTurnIndex], panelController);
+        print('that domino will not fit on your kingdom');
+      }
     });
 
     return kingdomToReturn;
@@ -102,7 +109,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
   void endTurnWithoutPlacingAPiece(Kingdom kingdom, PanelController panelController) async {
     // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
-    widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
+    kingdom.domino!.placed = true;
 
     kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
 
@@ -110,6 +117,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     widget.kingdoms[kingdomTurnIndex].domino = null;
 
     if (kingdomTurnIndex == 0) roundCounter++;
+
+    kingdom.newKingdomColors = kingdom.kingdomColors;
+    kingdom.newKingdomCrowns = kingdom.kingdomCrowns;
 
     setState(() {});
   }
@@ -152,14 +162,15 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     } else if (dominoOptionsAreAllSelected(dominoOptionsForSelectionColumnTwo)) {
       workingDominoOptions = dominoOptionsForSelectionColumnTwo;
     } else {
-      print("this shouldnt happen...");
       return widget.kingdoms;
     }
 
     // get the order of selections by collecting the colors, which we will soon use to
     List<String> colorsInOrder = [];
     for (Domino domino in workingDominoOptions) {
-      colorsInOrder.add(domino.noColorIfPieceNotTakenElseColor);
+      if (!domino.placed) {
+        colorsInOrder.add(domino.noColorIfPieceNotTakenElseColor);
+      }
     }
 
     if (colorsInOrder.isEmpty) {
@@ -190,7 +201,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       List<int> coordinates =
           findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
-        endTurnWithoutPlacingAPiece(widget.kingdoms[kingdomTurnIndex], panelController);
+        // endTurnWithoutPlacingAPiece(widget.kingdoms[kingdomTurnIndex], panelController);
         print('that domino will not fit on your kingdom');
       } else {
         i = coordinates[0];
@@ -244,23 +255,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
             '${widget.kingdoms[kingdomTurnIndex].score(widget.kingdoms[kingdomTurnIndex].kingdomCrowns, widget.kingdoms[kingdomTurnIndex].kingdomColors)}');
         widget.kingdoms[kingdomTurnIndex].updateBoard();
 
-        // bring back the selection interface
-        if (roundCounter < widget.numberOfRounds - 1) {
-          await panelController.show();
-          panelController.open();
-        }
-
-        // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
-        widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
-
-        kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
-
-        // if this isn't included the same piece can be placed twice
-        widget.kingdoms[kingdomTurnIndex].domino = null;
-
-        if (kingdomTurnIndex == 0) roundCounter++;
-
-        setState(() {});
+        endTurn(widget.kingdoms[kingdomTurnIndex], panelController);
       },
       child: const Text("Place"),
     );

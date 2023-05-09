@@ -70,8 +70,6 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       // fill the column
       dominoOptionsForSelectionColumnTwo.addAll(dominoesToAdd);
       return;
-    } else {
-      print('there were no empty columns!');
     }
   }
 

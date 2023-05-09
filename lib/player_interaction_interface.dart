@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:kingdomino/colors.dart';
 import 'package:kingdomino/player_placement_grid.dart';
 import 'package:kingdomino/show_alert_dialogue.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
@@ -76,7 +77,11 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       if (widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory.length < dominoesInPurgatoryMinimum) {
         widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory.add(domino);
         kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
-        if (kingdomTurnIndex == 0) roundCounter++;
+        if (kingdomTurnIndex == 0) {
+          roundCounter++;
+          widget.kingdoms =
+              organizeKingdomsByColumnOrder(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+        }
         return;
       }
 
@@ -114,7 +119,11 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     // if this isn't included the same domino can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
 
-    if (kingdomTurnIndex == 0) roundCounter++;
+    if (kingdomTurnIndex == 0) {
+      roundCounter++;
+      widget.kingdoms =
+          organizeKingdomsByColumnOrder(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+    }
 
     setState(() {});
   }
@@ -128,7 +137,11 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     // if this isn't included the same domino can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
 
-    if (kingdomTurnIndex == 0) roundCounter++;
+    if (kingdomTurnIndex == 0) {
+      roundCounter++;
+      widget.kingdoms =
+          organizeKingdomsByColumnOrder(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
+    }
 
     setState(() {});
   }
@@ -367,6 +380,15 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       );
     }
 
+    Color backgroundColor;
+    List rgboValues = colors[widget.kingdoms[kingdomTurnIndex].color]!;
+    backgroundColor = Color.fromRGBO(
+      rgboValues[0],
+      rgboValues[1],
+      rgboValues[2],
+      1.0,
+    );
+
     return SlidingUpPanel(
       defaultPanelState: PanelState.OPEN,
       collapsed: Container(
@@ -384,17 +406,18 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       minHeight: 75,
       maxHeight: MediaQuery.of(context).size.height,
       controller: panelController,
-      borderRadius: radius,
+      // borderRadius: radius,
 
       // inside the panel
       panelBuilder: (scrollController) => Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(24.0)),
           boxShadow: [
             BoxShadow(
-              blurRadius: 20.0,
-              color: Colors.grey,
+              blurRadius: 15.0,
+              spreadRadius: 7.0,
+              color: backgroundColor,
+              blurStyle: BlurStyle.normal,
             ),
           ],
         ),

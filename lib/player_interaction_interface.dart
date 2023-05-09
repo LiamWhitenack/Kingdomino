@@ -279,17 +279,25 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     );
 
     String getWinningKingdomColor(List<Kingdom> kingdoms) {
+      List<Kingdom> kingdomsListWithoutDuplicates = [];
+      for (Kingdom kingdom in kingdoms) {
+        if (!kingdomsListWithoutDuplicates.contains(kingdom)) {
+          kingdomsListWithoutDuplicates.add(kingdom);
+        }
+      }
+      kingdoms = kingdomsListWithoutDuplicates;
       int maxScore = 0;
-      String winningColor = 'none';
+      //
+      String winningColor = '';
       String endString = 'kingdom wins!!!';
       for (int i = 0; i < kingdoms.length; i++) {
         if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) > maxScore) {
           maxScore = kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors);
-          winningColor = widget.kingdoms[i].color;
+          winningColor = kingdoms[i].color;
           endString = 'kingdom wins!!!';
         } else if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) == maxScore) {
           winningColor = '$winningColor and ${kingdoms[i].color}';
-          endString = 'widget.kingdoms win!!!';
+          endString = 'kingdoms win!!!';
         }
       }
       return 'The $winningColor $endString';

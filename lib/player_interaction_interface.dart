@@ -216,7 +216,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
         // endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
-        print('that domino will not fit on your kingdom');
+        showAlertDialog(context, 'Domino Lost', 'That domino will not fit on your kingdom');
       } else {
         i = coordinates[0];
         j = coordinates[1];
@@ -328,7 +328,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
             findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
         if (coordinates.isEmpty) {
           endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
-          print('that domino will not fit on your kingdom');
+          showAlertDialog(context, 'Domino Lost', 'That domino will not fit on your kingdom');
         } else {
           i = coordinates[0];
           j = coordinates[1];

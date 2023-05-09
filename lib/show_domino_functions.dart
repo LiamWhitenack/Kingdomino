@@ -108,12 +108,11 @@ Widget displayDominoInABox(Domino domino, double interfaceHeight, double interfa
   int r = color![0];
   int g = color[1];
   int b = color[2];
-  double opacity = color[3];
 
   return Container(
     height: interfaceHeight / 8.7,
     width: interfaceWidth / 3.15,
-    color: Color.fromRGBO(r, g, b, opacity),
+    color: Color.fromRGBO(r, g, b, 0.5),
     child: Center(
       child: SizedBox(
         width: interfaceWidth / 3.15,
@@ -125,7 +124,15 @@ Widget displayDominoInABox(Domino domino, double interfaceHeight, double interfa
 
 Widget showDominoSection(String color, double size) {
   // this shows ONE PART of a domino
+  double opacity = 1.0;
   List rgboValues = colors[color]!;
+  int counter = 0;
+  for (int value in rgboValues) {
+    if (value == 255) {
+      counter++;
+    }
+  }
+  if (counter == 3) opacity = 0.0;
   return Container(
     width: size,
     height: size,
@@ -134,7 +141,7 @@ Widget showDominoSection(String color, double size) {
         rgboValues[0], // R
         rgboValues[1], // G
         rgboValues[2], // B
-        rgboValues[3], // O
+        opacity, // O
       ),
     ),
   );

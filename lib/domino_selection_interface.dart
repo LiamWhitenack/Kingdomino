@@ -49,12 +49,14 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     List<Domino> dominoOptionsForSelectionColumnOne,
     List<Domino> dominoOptionsForSelectionColumnTwo,
   ) {
+    int numberOfDominoesToDraw = widget.kingdoms.length;
+    if (widget.kingdoms.length == 2) numberOfDominoesToDraw = 4;
     bool allPiecesPlaced = true;
     for (Domino domino in dominoOptionsForSelectionColumnOne) {
       if (!domino.placed) allPiecesPlaced = false;
     }
     if (allPiecesPlaced) {
-      List<Domino> dominoesToAdd = drawNSortedDominoes(4, widget.dominoesInTheBox);
+      List<Domino> dominoesToAdd = drawNSortedDominoes(numberOfDominoesToDraw, widget.dominoesInTheBox);
       // fill the column
       dominoOptionsForSelectionColumnOne.addAll(dominoesToAdd);
       return;
@@ -64,7 +66,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       if (!domino.placed) allPiecesPlaced = false;
     }
     if (allPiecesPlaced) {
-      List<Domino> dominoesToAdd = drawNSortedDominoes(4, widget.dominoesInTheBox);
+      List<Domino> dominoesToAdd = drawNSortedDominoes(numberOfDominoesToDraw, widget.dominoesInTheBox);
       // fill the column
       dominoOptionsForSelectionColumnTwo.addAll(dominoesToAdd);
       return;

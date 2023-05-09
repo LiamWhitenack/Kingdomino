@@ -64,10 +64,13 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     Kingdom kingdomToReturn = widget.kingdoms[kingdomTurnIndex];
 
     setState(() {
+      int numberOfTurnsInARound = widget.kingdoms.length;
+      if (widget.kingdoms.length == 2) numberOfTurnsInARound = 4;
+
       // if they don't need to place a piece
       if (widget.kingdoms[kingdomTurnIndex].dominoInPurgatory == null) {
         widget.kingdoms[kingdomTurnIndex].dominoInPurgatory = domino;
-        kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+        kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
         if (kingdomTurnIndex == 0) roundCounter++;
         return;
       }
@@ -88,6 +91,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   }
 
   void endTurn(Kingdom kingdom, PanelController panelController) async {
+    int numberOfTurnsInARound = widget.kingdoms.length;
+    if (widget.kingdoms.length == 2) numberOfTurnsInARound = 4;
+
     // bring back the selection interface
     if (roundCounter < widget.numberOfRounds - 1) {
       await panelController.show();
@@ -97,7 +103,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
     widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
 
-    kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+    kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
 
     // if this isn't included the same piece can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
@@ -108,10 +114,12 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   }
 
   void endTurnWithoutPlacingAPiece(Kingdom kingdom, PanelController panelController) async {
+    int numberOfTurnsInARound = widget.kingdoms.length;
+    if (widget.kingdoms.length == 2) numberOfTurnsInARound = 4;
     // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
     kingdom.domino!.placed = true;
 
-    kingdomTurnIndex = (kingdomTurnIndex + 1) % 4;
+    kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
 
     // if this isn't included the same piece can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
@@ -147,7 +155,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     for (Domino domino in dominoOptions) {
       if (domino.taken && !domino.placed) numberOfSelectedButNotPlacedDominoes++;
     }
-    return numberOfSelectedButNotPlacedDominoes == 4;
+    return numberOfSelectedButNotPlacedDominoes == widget.kingdoms.length;
   }
 
   // this function organizes the widget.kingdoms list when a new round starts
@@ -196,7 +204,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     // these variables represent the row and column the domino is being placed in.
     // they have a lot of instances and were probably executed poorly
     int i = 5;
-    int j = 4;
+    int j = widget.kingdoms.length;
     if (widget.kingdoms[kingdomTurnIndex].domino != null) {
       List<int> coordinates =
           findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);

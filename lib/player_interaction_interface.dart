@@ -16,12 +16,16 @@ class PlayerInteractionInterface extends StatefulWidget {
   final int numberOfRounds;
   final int numberOfUniqueKingdoms;
   List<Kingdom> kingdoms;
+  final double interfaceHeight;
+  final double interfaceWidth;
   PlayerInteractionInterface({
     super.key,
     required this.dominoesInTheBox,
     required this.numberOfRounds,
     required this.kingdoms,
     required this.numberOfUniqueKingdoms,
+    required this.interfaceHeight,
+    required this.interfaceWidth,
   });
 
   @override

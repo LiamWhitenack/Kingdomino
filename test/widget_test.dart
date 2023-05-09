@@ -7,16 +7,7 @@
 
 // ignore_for_file: avoid_print
 
-void main() {
-  List<int> testList = [1, 2, 3, 4];
-
-  for (int i in testList) {
-    if (!testList.contains(5)) {
-      testList.add(5);
-    }
-    print(i);
-  }
-}
+void main() {}
 
 List<List<int>> getImportantRowsAndColumns(List<List<int>> grid) {
   List<int> rows = [];

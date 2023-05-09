@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kingdomino/check_valid_position.dart';
+import 'package:kingdomino/kingdom_progress.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'domino_selection_column.dart';
 import 'dominoes.dart';
@@ -210,6 +211,19 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       ),
     );
 
+    TextButton showKingdomProgressButton = TextButton(
+      onPressed: () {
+        showKingdomProgress(context, widget.kingdoms);
+      },
+      child: const Text(
+        'Show Kingdoms',
+        style: TextStyle(
+          color: Colors.blueAccent,
+          fontSize: 20,
+        ),
+      ),
+    );
+
     return Container(
       height: 700,
       color: Colors.white,
@@ -231,6 +245,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
           ),
           const SizedBox(height: 50),
           widget.showTextButton ? selectDominoTextButton : const SizedBox(),
+          showKingdomProgressButton,
         ],
       ),
     );

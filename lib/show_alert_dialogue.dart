@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-showAlertDialog(BuildContext context, String title, String message) {
+void showAlertDialog(BuildContext context, String title, String message) {
   // set up the button
   Widget okButton = TextButton(
     child: const Text("OK"),

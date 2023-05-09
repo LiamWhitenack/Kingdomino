@@ -4,14 +4,24 @@ import 'package:kingdomino/kingdoms.dart';
 import 'package:kingdomino/player_interaction_interface.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const HomeScreen());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+// this is where you should be able to set up a game with custom settings
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const PlayGame();
+  }
+}
+
+class PlayGame extends StatelessWidget {
+  const PlayGame({super.key});
 
   List<Kingdom> generateListOfNKingdoms(int n) {
-    List<String> colors = ['navy', 'grey', 'forest', 'maroon'];
+    List<String> colors = ['navy', 'dark_grey', 'forest', 'maroon'];
     List<Kingdom> kingdoms = [];
     for (int i = 0; i < n; i++) {
       kingdoms.add(Kingdom(colors[i]));
@@ -33,15 +43,39 @@ class MyApp extends StatelessWidget {
       title: 'Kingdomino',
       home: Scaffold(
         // ignore: avoid_unnecessary_containers
-        body: Container(
-          color: Colors.black87,
-          child: PlayerInteractionInterface(
-            dominoesInTheBox: returnEveryDominoFunction(),
-            numberOfRounds: numberOfRounds,
-            kingdoms: kingdoms,
-            numberOfUniqueKingdoms: numberOfKingdoms,
-          ),
+        body: PlayGameScreen(
+          kingdoms: kingdoms,
+          numberOfKingdoms: numberOfKingdoms,
+          numberOfRounds: numberOfRounds,
         ),
+      ),
+    );
+  }
+}
+
+// I don't think this has to be the way I did it, but I needed to make this
+// class to get the screen height now that a MaterialApp has already been made
+class PlayGameScreen extends StatelessWidget {
+  final int numberOfRounds;
+
+  final List<Kingdom> kingdoms;
+
+  final int numberOfKingdoms;
+
+  const PlayGameScreen(
+      {super.key, required this.numberOfRounds, required this.kingdoms, required this.numberOfKingdoms});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black87,
+      child: PlayerInteractionInterface(
+        dominoesInTheBox: returnEveryDominoFunction(),
+        numberOfRounds: numberOfRounds,
+        kingdoms: kingdoms,
+        numberOfUniqueKingdoms: numberOfKingdoms,
+        interfaceHeight: MediaQuery.of(context).size.height,
+        interfaceWidth: MediaQuery.of(context).size.width,
       ),
     );
   }

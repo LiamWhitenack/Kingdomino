@@ -225,12 +225,12 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     );
 
     return Container(
-      height: 700,
+      height: MediaQuery.of(context).size.height / 1.119,
       color: Colors.white,
       margin: const EdgeInsets.all(12.0),
       child: Column(
         children: [
-          const SizedBox(height: 100),
+          SizedBox(height: MediaQuery.of(context).size.height / 7.83),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -238,12 +238,12 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
               // add a gap if there's two columns
               (dominoSelectionColumnOne.dominoOptionsForSelection.isNotEmpty &&
                       dominoSelectionColumnTwo.dominoOptionsForSelection.isNotEmpty)
-                  ? const SizedBox(width: 10)
+                  ? SizedBox(width: MediaQuery.of(context).size.width / 39)
                   : const SizedBox(width: 0),
               dominoSelectionColumnTwo,
             ],
           ),
-          const SizedBox(height: 50),
+          SizedBox(height: MediaQuery.of(context).size.height / 16),
           widget.showTextButton ? selectDominoTextButton : const SizedBox(),
           showKingdomProgressButton,
         ],

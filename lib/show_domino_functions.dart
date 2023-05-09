@@ -100,7 +100,8 @@ Widget displayDomino(Domino domino) {
   return Row(children: images);
 }
 
-Widget displayDominoInABox(Domino domino, {String colorOfTheBox = 'noColor'}) {
+Widget displayDominoInABox(Domino domino, double interfaceHeight, double interfaceWidth,
+    {String colorOfTheBox = 'noColor'}) {
   // this just puts the domino display in a box of a certain color,
   // in this case a player's color
   List? color = colors[colorOfTheBox];
@@ -110,12 +111,12 @@ Widget displayDominoInABox(Domino domino, {String colorOfTheBox = 'noColor'}) {
   double opacity = color[3];
 
   return Container(
-    height: 90,
-    width: 120,
+    height: interfaceHeight / 8.7,
+    width: interfaceWidth / 3.15,
     color: Color.fromRGBO(r, g, b, opacity),
     child: Center(
       child: SizedBox(
-        width: 124,
+        width: interfaceWidth / 3.15,
         child: displayDomino(domino),
       ),
     ),

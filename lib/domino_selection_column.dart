@@ -70,8 +70,9 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
         final int index = entry.key;
         final Domino dominoOption = entry.value;
         Widget dominoDisplay = dominoOption.placed
-            ? const SizedBox(height: 60)
-            : displayDominoInABox(dominoOption, colorOfTheBox: dominoOption.noColorIfDominoNotTakenElseColor);
+            ? SizedBox(height: (MediaQuery.of(context).size.height / 13))
+            : displayDominoInABox(dominoOption, MediaQuery.of(context).size.height, MediaQuery.of(context).size.width,
+                colorOfTheBox: dominoOption.noColorIfDominoNotTakenElseColor);
 
         return dominoOption.placed
             ? const SizedBox()
@@ -82,12 +83,12 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
                       _onCardTapped(index);
                     },
                     child: SizedBox(
-                      width: 160,
+                      width: MediaQuery.of(context).size.width / 2.45,
                       child: dominoDisplay,
                     ),
                   ),
-                  const SizedBox(
-                    height: 25,
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 31,
                   ),
                 ],
               );

@@ -362,9 +362,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
       return Column(
         children: [
-          const SizedBox(height: 250),
+          SizedBox(height: MediaQuery.of(context).size.height / 3.13),
           SizedBox(
-            height: 400,
+            height: MediaQuery.of(context).size.height / 2,
             child: Column(
               children: [
                 // if there's no domino selected there's no need to show all of the bells and whistles
@@ -398,7 +398,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       collapsed: Container(
         decoration: BoxDecoration(borderRadius: radius, color: Colors.white),
         margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 0.0),
-        height: 75,
+        height: MediaQuery.of(context).size.height / 10,
         child: const Center(
           child: Icon(
             Icons.keyboard_arrow_up_rounded,
@@ -430,9 +430,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           alignment: Alignment.topCenter,
           children: [
             dominoSelectionInterface,
-            const SizedBox(
-              height: 75,
-              child: Icon(
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 10,
+              child: const Icon(
                 Icons.keyboard_arrow_down_rounded,
                 color: Colors.grey,
               ),
@@ -444,9 +444,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       // outside the panel
       body: Column(
         children: [
-          const SizedBox(height: 250),
+          SizedBox(height: MediaQuery.of(context).size.height / 3),
           SizedBox(
-            height: 400,
+            height: MediaQuery.of(context).size.height / 2,
             child: Column(
               children: [
                 // if there's no domino selected there's no need to show all of the bells and whistles

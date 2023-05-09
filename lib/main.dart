@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int numberOfKingdoms = 2;
+    int numberOfKingdoms = 7;
     int numberOfRounds = 13;
     List<Kingdom> kingdoms = generateListOfNKingdoms(numberOfKingdoms);
-    if (numberOfKingdoms == 2) numberOfRounds = 3;
+    if (numberOfKingdoms == 2) numberOfRounds = 2;
     return MaterialApp(
       title: 'Kingdomino',
       home: Scaffold(

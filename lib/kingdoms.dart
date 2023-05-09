@@ -29,11 +29,11 @@ class Kingdom {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     kingdomColors = List.generate(9, (_) => List.filled(9, 'noColor'));
     kingdomCrowns[4][4] = 0;
-    kingdomColors[4][4] = 'grey';
+    kingdomColors[4][4] = 'purple';
     newKingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     newKingdomColors = List.generate(9, (_) => List.filled(9, 'noColor'));
     newKingdomCrowns[4][4] = 0;
-    newKingdomColors[4][4] = 'grey';
+    newKingdomColors[4][4] = 'purple';
     fullyUpdated = true;
   }
 

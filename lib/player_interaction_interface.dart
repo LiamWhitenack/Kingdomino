@@ -119,20 +119,15 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   }
 
   void endTurnWithoutPlacingAPiece(Kingdom kingdom, PanelController panelController) async {
-    int numberOfTurnsInARound = widget.kingdoms.length;
-    if (widget.kingdoms.length == 2) numberOfTurnsInARound = 4;
     // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
     kingdom.domino!.placed = true;
 
-    kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
+    kingdomTurnIndex = (kingdomTurnIndex + 1) % widget.kingdoms.length;
 
     // if this isn't included the same piece can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
 
     if (kingdomTurnIndex == 0) roundCounter++;
-
-    kingdom.newKingdomColors = kingdom.kingdomColors;
-    kingdom.newKingdomCrowns = kingdom.kingdomCrowns;
 
     setState(() {});
   }
@@ -310,11 +305,35 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     );
 
     if (roundCounter == widget.numberOfRounds - 1) {
+      List<int> coordinates = [];
       // start endgame
-      widget.kingdoms[kingdomTurnIndex].domino = widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory[0];
-      // remove the domino from purgatory
-      widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory
-          .remove(widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory[0]);
+
+      while (coordinates.isEmpty) {
+        if (widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory.isNotEmpty) {
+          widget.kingdoms[kingdomTurnIndex].domino = widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory[0];
+
+          // remove the domino from purgatory
+          widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory
+              .remove(widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory[0]);
+        } else {
+          return Center(
+            child: Text(
+              getWinningKingdomColor(widget.kingdoms),
+            ),
+          );
+        }
+
+        coordinates =
+            findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
+        if (coordinates.isEmpty) {
+          endTurnWithoutPlacingAPiece(widget.kingdoms[kingdomTurnIndex], panelController);
+          print('that domino will not fit on your kingdom');
+        } else {
+          i = coordinates[0];
+          j = coordinates[1];
+        }
+      }
+
       playerPlacementGrid = PlayerPlacementGrid(
         i: i,
         j: j,

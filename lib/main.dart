@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int numberOfKingdoms = 4;
+    int numberOfKingdoms = 3;
     int numberOfRounds = 13;
     List<Kingdom> kingdoms = generateListOfNKingdoms(numberOfKingdoms);
     if (numberOfKingdoms == 2) numberOfRounds = 7;

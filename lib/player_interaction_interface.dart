@@ -285,15 +285,15 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       int maxScore = 0;
       //
       String winningColor = '';
-      String endString = 'kingdom wins!!!';
+      String endString = 'kingdom wins!!';
       for (int i = 0; i < kingdoms.length; i++) {
         if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) > maxScore) {
           maxScore = kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors);
           winningColor = kingdoms[i].color;
-          endString = 'kingdom wins!!!';
+          endString = 'kingdom wins!!';
         } else if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) == maxScore) {
           winningColor = '$winningColor and ${kingdoms[i].color}';
-          endString = 'kingdoms win!!!';
+          endString = 'kingdoms win!!';
         }
       }
       return 'The $winningColor $endString';

@@ -169,7 +169,7 @@ class Kingdom {
   // this function also gets around memory problems like before
   List<List<int>> removeCoordinateFromListOfCoordinates(List<List<int>> listOfCoordinates, List<int> element) {
     // if (!containsCoordinate(listOfCoordinates, element)) {
-    //   print('no element in list!');
+    //   print('no element in list');
     // }
     List<List<int>> newListOfCoordinates = [];
     for (List<int> coordinates in listOfCoordinates) {

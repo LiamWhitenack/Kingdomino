@@ -152,9 +152,9 @@ class kingdom:
         if m < 0:
             for row in range(5):
                 if kingdom_crowns[row][4] != '':
-                    raise IndexError('Not a valid position!')
+                    raise IndexError('Not a valid position')
                 if kingdom_crowns[row][3] != '' and m == -2:
-                    raise IndexError('Not a valid position!')
+                    raise IndexError('Not a valid position')
             for row in range(5):
                 for col in range(5 + m):
                     kingdom_crowns[row][col - m] = self.kingdom_crowns[row][col]
@@ -171,9 +171,9 @@ class kingdom:
         if n < 0:
             for col in range(5):
                 if kingdom_crowns[4][col] != '':
-                    raise IndexError('Not a valid position!')
+                    raise IndexError('Not a valid position')
                 if kingdom_crowns[3][col] != '' and n == -2:
-                    raise IndexError('Not a valid position!')
+                    raise IndexError('Not a valid position')
             for row in range(5 + n):
                 kingdom_crowns[row - n] = self.kingdom_crowns[row]
                 kingdom_colors[row - n] = self.kingdom_colors[row]

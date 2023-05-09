@@ -3,17 +3,17 @@ import 'package:kingdomino/kingdoms.dart';
 import 'dart:math';
 
 String checkValidPlacementAtPositionIJ(Kingdom kingdom, Domino domino, int i, int j) {
-  if (!checkWithinBounds(kingdom, domino, i, j)) return 'The domino must be placed within a 5x5 grid!';
-  if (!checkPlacedInEmptySpot(kingdom, domino, i, j)) return 'The domino must be placed in an empty spot!';
-  if (!checkHasNeighbors(kingdom, domino, i, j)) return 'The domino does not have any neighbors!';
+  if (!checkWithinBounds(kingdom, domino, i, j)) return 'The domino must be placed within a 5x5 grid';
+  if (!checkPlacedInEmptySpot(kingdom, domino, i, j)) return 'The domino must be placed in an empty spot';
+  if (!checkHasNeighbors(kingdom, domino, i, j)) return 'The domino does not have any neighbors';
   if (!checkHasSameColorNeighbors(kingdom, domino, i, j)) {
-    return 'The domino does not have any neighbors of the same type!';
+    return 'The domino does not have any neighbors of the same type';
   }
   return '';
 }
 
 String checkValidMovementAtPositionIJ(Kingdom kingdom, Domino domino, int i, int j) {
-  if (!checkWithinBounds(kingdom, domino, i, j)) return 'The domino must be placed within a 5x5 grid!';
+  if (!checkWithinBounds(kingdom, domino, i, j)) return 'The domino must be placed within a 5x5 grid';
   return '';
 }
 

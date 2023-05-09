@@ -54,7 +54,7 @@ class _PlayerPlacementGridState extends State<PlayerPlacementGrid> {
     // otherwise, let's get this party started:
     // check to make sure the placement is valid
     String validPositionMessage;
-    kingdom.placePiece(widget.domino!, widget.i, widget.j);
+    kingdom.placeDomino(widget.domino!, widget.i, widget.j);
     // show the results of the new placement
     List temp = kingdom.kingdomDisplay(kingdom.newKingdomCrowns, kingdom.newKingdomColors);
     List<List<int>> crowns = temp[0];

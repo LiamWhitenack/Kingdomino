@@ -3,17 +3,17 @@ import 'package:kingdomino/kingdoms.dart';
 import 'dart:math';
 
 String checkValidPlacementAtPositionIJ(Kingdom kingdom, Domino domino, int i, int j) {
-  if (!checkWithinBounds(kingdom, domino, i, j)) return 'The piece must be placed within a 5x5 grid!';
-  if (!checkPlacedInEmptySpot(kingdom, domino, i, j)) return 'The piece must be placed in an empty spot!';
-  if (!checkHasNeighbors(kingdom, domino, i, j)) return 'The piece does not have any neighbors!';
+  if (!checkWithinBounds(kingdom, domino, i, j)) return 'The domino must be placed within a 5x5 grid!';
+  if (!checkPlacedInEmptySpot(kingdom, domino, i, j)) return 'The domino must be placed in an empty spot!';
+  if (!checkHasNeighbors(kingdom, domino, i, j)) return 'The domino does not have any neighbors!';
   if (!checkHasSameColorNeighbors(kingdom, domino, i, j)) {
-    return 'The piece does not have any neighbors of the same type!';
+    return 'The domino does not have any neighbors of the same type!';
   }
   return '';
 }
 
 String checkValidMovementAtPositionIJ(Kingdom kingdom, Domino domino, int i, int j) {
-  if (!checkWithinBounds(kingdom, domino, i, j)) return 'The piece must be placed within a 5x5 grid!';
+  if (!checkWithinBounds(kingdom, domino, i, j)) return 'The domino must be placed within a 5x5 grid!';
   return '';
 }
 
@@ -29,7 +29,7 @@ bool checkWithinBounds(Kingdom kingdom, Domino domino, int i, int j) {
   // see how many rows (m) and columns (n) we need to display (minimum one)
   List rowsAndColumns = kingdom.getImportantRowsAndColumns(kingdom.newKingdomColors);
   rows = rowsAndColumns[0];
-  // add the new row we would be moving the piece to (depending on if the piece is horizontal or now)
+  // add the new row we would be moving the domino to (depending on if the domino is horizontal or now)
   rows.add(i);
   rows.add(!domino.horizontal ? i + 1 : i);
   columns = rowsAndColumns[1];
@@ -194,7 +194,7 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
     }
   }
 
-  // if none of the spots work, the piece needs to be discarded.
+  // if none of the spots work, the domino needs to be discarded.
   // For now just return an empty list
   return [];
 }

@@ -81,7 +81,7 @@ class domino:
             if crowns[row][col] != '':
                 return
             
-        raise IndexError("The piece must be placed orthogonally adjacent to another piece")
+        raise IndexError("The domino must be placed orthogonally adjacent to another domino")
 
     def check_has_same_color_neighbors(self, colors:list, position:tuple):
 
@@ -117,18 +117,18 @@ class domino:
             if 5 in (col, row) or -1 in (col, row):
                 continue
             if colors[row][col] == self.colors[1]:
-                print(f'neighbor: {row, col}, neighbor color: {colors[row][col]}, part color: {self.colors[0]}, piece section: {1}')
+                print(f'neighbor: {row, col}, neighbor color: {colors[row][col]}, part color: {self.colors[0]}, domino section: {1}')
                 return
             if colors[row][col] == 'on_light_grey':
-                print(f'neighbor: {row, col}, neighbor color: {colors[row][col]}, part color: {self.colors[0]}, piece section: {1}')
+                print(f'neighbor: {row, col}, neighbor color: {colors[row][col]}, part color: {self.colors[0]}, domino section: {1}')
                 return
             
-        raise IndexError("The piece must be placed orthogonally adjacent to another piece of the same color")
+        raise IndexError("The domino must be placed orthogonally adjacent to another domino of the same color")
 
 
 class kingdom:
 
-    '''each kingdom has a kingdom (which can be up to 5 by 5) and the ability to pick pieces and place them in the kingdom'''
+    '''each kingdom has a kingdom (which can be up to 5 by 5) and the ability to pick dominos and place them in the kingdom'''
 
     def __init__(self) -> None:
         self.kingdom_crowns = [['' for _ in range(5)] for __ in range(5)]
@@ -136,7 +136,7 @@ class kingdom:
         self.kingdom_crowns[0][0] = '+'
         self.kingdom_colors[0][0] = 'on_light_grey'
 
-    def place_piece(self, domino:domino, position:tuple) -> tuple:
+    def place_domino(self, domino:domino, position:tuple) -> tuple:
         '''returns the value of a domino if it were to be placed at the 
         given position exppressed as the m, n distance from the top left 
         corner (positions can be negative)'''

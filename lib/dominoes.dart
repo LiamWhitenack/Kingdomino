@@ -3,7 +3,7 @@ class Domino {
   List<String> colors;
   late int value;
   bool horizontal;
-  String noColorIfPieceNotTakenElseColor;
+  String noColorIfDominoNotTakenElseColor;
   bool taken;
   bool placed;
   bool flipped;
@@ -11,7 +11,7 @@ class Domino {
     required this.crowns,
     required this.colors,
     this.horizontal = true,
-    this.noColorIfPieceNotTakenElseColor = 'noColor',
+    this.noColorIfDominoNotTakenElseColor = 'noColor',
     this.taken = false,
     this.placed = false,
     this.flipped = true,
@@ -43,7 +43,7 @@ class Domino {
 
 // this is the list of every domino in the Kingdomino board game. It could be
 // really interesting if there was some randomization involved with making
-// pieces, especially because this is not a possibility in the physical game
+// dominos, especially because this is not a possibility in the physical game
 List<Domino> returnEveryDominoFunction() {
   List<Domino> dominoes = [
     Domino(crowns: [0, 0], colors: ['yellow', 'yellow']),

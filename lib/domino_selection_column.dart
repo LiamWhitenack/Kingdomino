@@ -36,27 +36,27 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
 
   void _onCardTapped(int index) {
     setState(() {
-      // rotate the old selected piece to its original orientation
+      // rotate the old selected domino to its original orientation
       if (_selectedIndex >= 0) {
         widget.dominoOptionsForSelection[_selectedIndex].revertToOriginalOrientation();
       }
 
-      // if the card is noColorIfPieceNotTakenElseColor, do nothing
-      if (widget.dominoOptionsForSelection[index].noColorIfPieceNotTakenElseColor != 'noColor') {
+      // if the card is noColorIfDominoNotTakenElseColor, do nothing
+      if (widget.dominoOptionsForSelection[index].noColorIfDominoNotTakenElseColor != 'noColor') {
         return;
       }
 
       for (Domino domino in widget.dominoOptionsForSelection) {
         if (!domino.taken) {
-          domino.noColorIfPieceNotTakenElseColor = 'noColor';
+          domino.noColorIfDominoNotTakenElseColor = 'noColor';
         }
       }
 
-      // select and use the tapped piece
+      // select and use the tapped domino
       _selectedIndex = index;
       widget.activePlayersSelectedDomino = widget.dominoOptionsForSelection[_selectedIndex];
       // change the color of the backdrop to the color of the kingdom
-      widget.activePlayersSelectedDomino?.noColorIfPieceNotTakenElseColor = widget.kingdomSelecting.color;
+      widget.activePlayersSelectedDomino?.noColorIfDominoNotTakenElseColor = widget.kingdomSelecting.color;
       widget.onDominoSelectedByActivePlayer(widget.activePlayersSelectedDomino);
     });
   }
@@ -71,7 +71,7 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
         final Domino dominoOption = entry.value;
         Widget dominoDisplay = dominoOption.placed
             ? const SizedBox(height: 60)
-            : displayDominoInABox(dominoOption, colorOfTheBox: dominoOption.noColorIfPieceNotTakenElseColor);
+            : displayDominoInABox(dominoOption, colorOfTheBox: dominoOption.noColorIfDominoNotTakenElseColor);
 
         return dominoOption.placed
             ? const SizedBox()

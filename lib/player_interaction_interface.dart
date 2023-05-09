@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kingdomino/player_placement_grid.dart';
+import 'package:kingdomino/show_alert_dialogue.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'check_valid_position.dart';
@@ -31,8 +32,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // ===========================================================================
 
   // this value counts the round number. It starts at zero because a round is
-  // (for the purpose of programming) the part where a piece is placed and no
-  // pieces are placed on the first rotation.
+  // (for the purpose of programming) the part where a domino is placed and no
+  // dominos are placed on the first rotation.
   int roundCounter = 0;
 
   // this is the domino selected (but not chosen) by the current player
@@ -45,7 +46,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   int kingdomTurnIndex = 0;
 
   // this widget (which will immediately change) displays the score and the
-  //potential score increase of placing a piece in a given spot
+  //potential score increase of placing a domino in a given spot
   Widget scoreTextWidget = const Text('');
 
   // this is used to open, close, and hide the sliding up panel for selecting
@@ -59,8 +60,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // PlayerInteractionInterface functions!!
   // ===========================================================================
 
-  // when a piece is chosen,
-  // 1. move the kingdom's selected pieces into the appropriate positions
+  // when a domino is chosen,
+  // 1. move the kingdom's selected dominos into the appropriate positions
   // 2. rebuild the interface (if necessary) to show the new grid
   Kingdom onDominoChosenByActivePlayer(Domino domino) {
     int dominoesInPurgatoryMinimum = 1;
@@ -71,7 +72,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       int numberOfTurnsInARound = widget.kingdoms.length;
       if (widget.kingdoms.length == 2) numberOfTurnsInARound = 4;
 
-      // if they don't need to place a piece
+      // if they don't need to place a domino
       if (widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory.length < dominoesInPurgatoryMinimum) {
         widget.kingdoms[kingdomTurnIndex].dominoesInPurgatory.add(domino);
         kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
@@ -79,7 +80,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         return;
       }
 
-      // if they do need to place a piece, move a domino up the queue
+      // if they do need to place a domino, move a domino up the queue
       kingdomToReturn.domino = kingdomToReturn.dominoesInPurgatory[0];
       kingdomToReturn.dominoesInPurgatory.remove(kingdomToReturn.dominoesInPurgatory[0]);
       kingdomToReturn.dominoesInPurgatory.add(domino);
@@ -87,8 +88,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       List<int> coordinates =
           findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
-        endTurnWithoutPlacingAPiece(widget.kingdoms[kingdomTurnIndex], panelController);
-        print('that domino will not fit on your kingdom');
+        endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
+        showAlertDialog(context, 'Domino Lost', 'That domino will not fit on your kingdom');
       }
     });
 
@@ -105,12 +106,12 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       panelController.open();
     }
 
-    // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
+    // mark the domino as noColorIfDominoNotTakenElseColor so that it doesn't appear anymore
     widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
 
     kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
 
-    // if this isn't included the same piece can be placed twice
+    // if this isn't included the same domino can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
 
     if (kingdomTurnIndex == 0) roundCounter++;
@@ -118,13 +119,13 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     setState(() {});
   }
 
-  void endTurnWithoutPlacingAPiece(Kingdom kingdom, PanelController panelController) async {
-    // mark the domino as noColorIfPieceNotTakenElseColor so that it doesn't appear anymore
+  void endTurnWithoutPlacingADomino(Kingdom kingdom, PanelController panelController) async {
+    // mark the domino as noColorIfDominoNotTakenElseColor so that it doesn't appear anymore
     kingdom.domino!.placed = true;
 
     kingdomTurnIndex = (kingdomTurnIndex + 1) % widget.kingdoms.length;
 
-    // if this isn't included the same piece can be placed twice
+    // if this isn't included the same domino can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
 
     if (kingdomTurnIndex == 0) roundCounter++;
@@ -132,8 +133,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     setState(() {});
   }
 
-  // when a piece is selected,
-  // 1. move the kingdom's selected pieces into the appropriate positions
+  // when a domino is selected,
+  // 1. move the kingdom's selected dominos into the appropriate positions
   // 2. rebuild the interface (if necessary) to show the new grid
   void onDominoSelectedByActivePlayer(Domino domino) {
     setState(() {
@@ -177,7 +178,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     List<String> colorsInOrder = [];
     for (Domino domino in workingDominoOptions) {
       if (!domino.placed) {
-        colorsInOrder.add(domino.noColorIfPieceNotTakenElseColor);
+        colorsInOrder.add(domino.noColorIfDominoNotTakenElseColor);
       }
     }
 
@@ -214,7 +215,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       List<int> coordinates =
           findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
-        // endTurnWithoutPlacingAPiece(widget.kingdoms[kingdomTurnIndex], panelController);
+        // endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
         print('that domino will not fit on your kingdom');
       } else {
         i = coordinates[0];
@@ -251,15 +252,15 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       dominoOptionsForSelectionColumnTwo: dominoOptionsForSelectionColumnTwo,
     );
 
-    TextButton placePieceButton = TextButton(
+    TextButton placeDominoButton = TextButton(
       onPressed: () async {
         i = widget.kingdoms[kingdomTurnIndex].i;
         j = widget.kingdoms[kingdomTurnIndex].j;
-        // make sure that the placement of the piece is legitimate, otherwise show message explaining what went wrong
+        // make sure that the placement of the domino is legitimate, otherwise show message explaining what went wrong
         String errorMessage = checkValidPlacementAtPositionIJ(
             widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!, i, j);
         if (errorMessage != '') {
-          print(errorMessage);
+          showAlertDialog(context, 'Invalid Position', errorMessage);
           return;
         }
 
@@ -326,7 +327,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         coordinates =
             findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
         if (coordinates.isEmpty) {
-          endTurnWithoutPlacingAPiece(widget.kingdoms[kingdomTurnIndex], panelController);
+          endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
           print('that domino will not fit on your kingdom');
         } else {
           i = coordinates[0];
@@ -352,7 +353,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
                 // if there's no domino selected there's no need to show all of the bells and whistles
                 playerPlacementGrid,
                 // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
-                widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placePieceButton,
+                widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placeDominoButton,
               ],
             ),
           ),
@@ -424,7 +425,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
                 // if there's no domino selected there's no need to show all of the bells and whistles
                 playerPlacementGrid,
                 // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
-                widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placePieceButton,
+                widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placeDominoButton,
               ],
             ),
           ),

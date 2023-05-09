@@ -17,7 +17,7 @@ class Kingdom {
   List<Domino> dominoesInPurgatory = [];
   // this is true if the newKingdomCrowns == kingdomCrowns
   late bool fullyUpdated;
-  // these are the coordinates the piece is being placed at
+  // these are the coordinates the domino is being placed at
   late int i;
   late int j;
   // Every kingdom needs a unique color to choose from to distinguish themselves
@@ -29,11 +29,11 @@ class Kingdom {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     kingdomColors = List.generate(9, (_) => List.filled(9, 'noColor'));
     kingdomCrowns[4][4] = 0;
-    kingdomColors[4][4] = 'purple';
+    kingdomColors[4][4] = 'grey';
     newKingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     newKingdomColors = List.generate(9, (_) => List.filled(9, 'noColor'));
     newKingdomCrowns[4][4] = 0;
-    newKingdomColors[4][4] = 'purple';
+    newKingdomColors[4][4] = 'grey';
     fullyUpdated = true;
   }
 
@@ -47,9 +47,9 @@ class Kingdom {
     return source.map((e) => e.toList()).toList();
   }
 
-  // this is used to put a piece at a particular position and change only the
+  // this is used to put a domino at a particular position and change only the
   // newKingdomCrowns and Colors
-  void placePiece(Domino domino, int i, int j) {
+  void placeDomino(Domino domino, int i, int j) {
     fullyUpdated = false;
     this.i = i;
     this.j = j;
@@ -286,7 +286,7 @@ class ScoringInfo {
   List<List<String>> importantKingdomColors;
   // all the coordinates that haven't been scored yet
   List<List<int>> unscoredCoordinates;
-  // the value of the pieces of one group
+  // the value of the dominos of one group
   int groupScore;
   // the size of given group
   int groupSize;

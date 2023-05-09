@@ -51,21 +51,21 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
   ) {
     int numberOfDominoesToDraw = widget.kingdoms.length;
     if (widget.kingdoms.length == 2) numberOfDominoesToDraw = 4;
-    bool allPiecesPlaced = true;
+    bool allDominosPlaced = true;
     for (Domino domino in dominoOptionsForSelectionColumnOne) {
-      if (!domino.placed) allPiecesPlaced = false;
+      if (!domino.placed) allDominosPlaced = false;
     }
-    if (allPiecesPlaced) {
+    if (allDominosPlaced) {
       List<Domino> dominoesToAdd = drawNSortedDominoes(numberOfDominoesToDraw, widget.dominoesInTheBox);
       // fill the column
       dominoOptionsForSelectionColumnOne.addAll(dominoesToAdd);
       return;
     }
-    allPiecesPlaced = true;
+    allDominosPlaced = true;
     for (Domino domino in dominoOptionsForSelectionColumnTwo) {
-      if (!domino.placed) allPiecesPlaced = false;
+      if (!domino.placed) allDominosPlaced = false;
     }
-    if (allPiecesPlaced) {
+    if (allDominosPlaced) {
       List<Domino> dominoesToAdd = drawNSortedDominoes(numberOfDominoesToDraw, widget.dominoesInTheBox);
       // fill the column
       dominoOptionsForSelectionColumnTwo.addAll(dominoesToAdd);
@@ -75,9 +75,9 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     }
   }
 
-  bool allPiecesTakenOrPlaced(dominoOptionsForSelectionColumn) {
+  bool allDominosTakenOrPlaced(dominoOptionsForSelectionColumn) {
     for (Domino domino in dominoOptionsForSelectionColumn) {
-      // if the piece hasn't been taken AND hasn't been placed
+      // if the domino hasn't been taken AND hasn't been placed
       if (!domino.taken && !domino.placed) {
         return false;
       }
@@ -85,9 +85,9 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     return true;
   }
 
-  bool allPiecesTaken(dominoOptionsForSelectionColumn) {
+  bool allDominosTaken(dominoOptionsForSelectionColumn) {
     for (Domino domino in dominoOptionsForSelectionColumn) {
-      // if the piece hasn't been taken AND hasn't been placed
+      // if the domino hasn't been taken AND hasn't been placed
       if (!domino.taken) {
         return false;
       }
@@ -95,9 +95,9 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     return true;
   }
 
-  bool allPiecesPlaced(dominoOptionsForSelectionColumn) {
+  bool allDominosPlaced(dominoOptionsForSelectionColumn) {
     for (Domino domino in dominoOptionsForSelectionColumn) {
-      // if the piece hasn't been taken AND hasn't been placed
+      // if the domino hasn't been taken AND hasn't been placed
       if (!domino.placed) {
         return false;
       }
@@ -109,15 +109,15 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     List<Domino> dominoOptionsForSelectionColumnOne,
     List<Domino> dominoOptionsForSelectionColumnTwo,
   ) {
-    // a column only needs to be refilled when one row has all pieces selected
-    // and the other has all pieces taken
+    // a column only needs to be refilled when one row has all dominos selected
+    // and the other has all dominos taken
 
     // check to see if column one needs to be replaced:
-    if (allPiecesTaken(dominoOptionsForSelectionColumnOne) && allPiecesPlaced(dominoOptionsForSelectionColumnTwo)) {
+    if (allDominosTaken(dominoOptionsForSelectionColumnOne) && allDominosPlaced(dominoOptionsForSelectionColumnTwo)) {
       return true;
       // now column two:
-    } else if (allPiecesPlaced(dominoOptionsForSelectionColumnOne) &&
-        allPiecesTaken(dominoOptionsForSelectionColumnTwo)) {
+    } else if (allDominosPlaced(dominoOptionsForSelectionColumnOne) &&
+        allDominosTaken(dominoOptionsForSelectionColumnTwo)) {
       return true;
       // if neither, return false:
     } else {
@@ -132,11 +132,11 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     // the kingdoms need to be resorted when a column is filled in
 
     // check to see if column one needs to be replaced:
-    if (allPiecesTaken(dominoOptionsForSelectionColumnOne) && allPiecesPlaced(dominoOptionsForSelectionColumnTwo)) {
+    if (allDominosTaken(dominoOptionsForSelectionColumnOne) && allDominosPlaced(dominoOptionsForSelectionColumnTwo)) {
       return true;
       // now column two:
-    } else if (allPiecesPlaced(dominoOptionsForSelectionColumnOne) &&
-        allPiecesTaken(dominoOptionsForSelectionColumnTwo)) {
+    } else if (allDominosPlaced(dominoOptionsForSelectionColumnOne) &&
+        allDominosTaken(dominoOptionsForSelectionColumnTwo)) {
       return true;
       // if neither, return false:
     } else {
@@ -179,7 +179,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       panelController: widget.panelController,
     );
 
-    TextButton selectPieceTextButton = TextButton(
+    TextButton selectDominoTextButton = TextButton(
       onPressed: () {
         Domino? activePlayersSelectedDomino = widget.activePlayersSelectedDomino;
 
@@ -187,9 +187,9 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
         widget.kingdoms[widget.kingdomSelectingIndex] =
             widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
 
-        // force the player to place their piece if they have a piece ready to place
+        // force the player to place their domino if they have a domino ready to place
         if (widget.kingdoms[widget.kingdomSelectingIndex].domino != null) {
-          // if there is a space to put the piece, close the selection interface
+          // if there is a space to put the domino, close the selection interface
           if ((findTheFirstAvailableSpot(
                   widget.kingdoms[widget.kingdomSelectingIndex], widget.kingdoms[widget.kingdomSelectingIndex].domino!))
               .isNotEmpty) {
@@ -231,7 +231,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
             ],
           ),
           const SizedBox(height: 50),
-          widget.showTextButton ? selectPieceTextButton : const SizedBox(),
+          widget.showTextButton ? selectDominoTextButton : const SizedBox(),
         ],
       ),
     );

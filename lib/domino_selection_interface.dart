@@ -3,9 +3,12 @@
 import 'package:flutter/material.dart';
 import 'package:kingdomino/check_valid_position.dart';
 import 'package:kingdomino/kingdom_progress.dart';
+import 'package:kingdomino/player_placement_grid.dart';
+import 'package:kingdomino/show_domino_functions.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'domino_selection_column.dart';
 import 'dominoes.dart';
+import 'icons.dart';
 import 'kingdoms.dart';
 
 // ignore:, must_be_immutable
@@ -143,6 +146,28 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     }
   }
 
+  void selectPieceAction() {
+    Domino? activePlayersSelectedDomino = widget.activePlayersSelectedDomino;
+
+    activePlayersSelectedDomino!.taken = true;
+    widget.kingdoms[widget.kingdomSelectingIndex] = widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
+
+    // force the player to place their domino if they have a domino ready to place
+    if (widget.kingdoms[widget.kingdomSelectingIndex].domino != null) {
+      // if there is a space to put the domino, close the selection interface
+      if ((findTheFirstAvailableSpot(
+              widget.kingdoms[widget.kingdomSelectingIndex], widget.kingdoms[widget.kingdomSelectingIndex].domino!))
+          .isNotEmpty) {
+        widget.panelController.hide();
+      }
+    }
+
+    // set the activePlayersSelectedDomino value to null since the kingdom will later need to select a new value
+    activePlayersSelectedDomino = null;
+
+    widget.updateShowTextButton(false);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Domino> dominoOptionsForSelectionColumnOne = widget.dominoOptionsForSelectionColumnOne;
@@ -178,74 +203,83 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       panelController: widget.panelController,
     );
 
-    TextButton selectDominoTextButton = TextButton(
+    FloatingActionButton selectDominoTextButton = FloatingActionButton(
+      backgroundColor: Colors.grey,
       onPressed: () {
-        Domino? activePlayersSelectedDomino = widget.activePlayersSelectedDomino;
-
-        activePlayersSelectedDomino!.taken = true;
-        widget.kingdoms[widget.kingdomSelectingIndex] =
-            widget.onDominoChosenByActivePlayer(activePlayersSelectedDomino);
-
-        // force the player to place their domino if they have a domino ready to place
-        if (widget.kingdoms[widget.kingdomSelectingIndex].domino != null) {
-          // if there is a space to put the domino, close the selection interface
-          if ((findTheFirstAvailableSpot(
-                  widget.kingdoms[widget.kingdomSelectingIndex], widget.kingdoms[widget.kingdomSelectingIndex].domino!))
-              .isNotEmpty) {
-            widget.panelController.hide();
-          }
-        }
-
-        // set the activePlayersSelectedDomino value to null since the kingdom will later need to select a new value
-        activePlayersSelectedDomino = null;
-
-        widget.updateShowTextButton(false);
+        selectPieceAction();
         setState(() {});
       },
       child: const Text(
-        'Select',
-        style: TextStyle(
-          color: Colors.blueAccent,
-          fontSize: 20,
-        ),
+        '+',
+        style: TextStyle(color: Colors.white, fontSize: 32),
       ),
     );
 
-    TextButton showKingdomProgressButton = TextButton(
-      onPressed: () {
-        showKingdomProgress(context, widget.kingdoms);
-      },
-      child: const Text(
-        'Show Kingdoms',
-        style: TextStyle(
-          color: Colors.blueAccent,
-          fontSize: 20,
-        ),
+    Widget showKingdomProgressButton = SizedBox(
+      width: 77,
+      height: 77,
+      child: IconButton(
+        onPressed: () {
+          showKingdomProgress(context, widget.kingdoms);
+        },
+        icon: grey2x2Grid(30),
+      ),
+    );
+
+    Widget showDominoes = SizedBox(
+      width: 77,
+      child: IconButton(
+        onPressed: () {},
+        icon: grey2x1Grid(30),
       ),
     );
 
     return Container(
-      height: MediaQuery.of(context).size.height / 1.119,
+      height: MediaQuery.of(context).size.height / 1.0,
       color: Colors.white,
       margin: const EdgeInsets.all(12.0),
-      child: Column(
+      child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height / 7.83),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
             children: [
-              dominoSelectionColumnOne,
-              // add a gap if there's two columns
-              (dominoSelectionColumnOne.dominoOptionsForSelection.isNotEmpty &&
-                      dominoSelectionColumnTwo.dominoOptionsForSelection.isNotEmpty)
-                  ? SizedBox(width: MediaQuery.of(context).size.width / 39)
-                  : const SizedBox(width: 0),
-              dominoSelectionColumnTwo,
+              SizedBox(height: MediaQuery.of(context).size.height / 7.83),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  dominoSelectionColumnOne,
+                  // add a gap if there's two columns
+                  (dominoSelectionColumnOne.dominoOptionsForSelection.isNotEmpty &&
+                          dominoSelectionColumnTwo.dominoOptionsForSelection.isNotEmpty)
+                      ? SizedBox(width: MediaQuery.of(context).size.width / 39)
+                      : const SizedBox(width: 0),
+                  dominoSelectionColumnTwo,
+                ],
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height / 16),
             ],
           ),
-          SizedBox(height: MediaQuery.of(context).size.height / 16),
-          widget.showTextButton ? selectDominoTextButton : const SizedBox(),
-          showKingdomProgressButton,
+          SizedBox(
+            width: 300,
+            height: 100,
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  showKingdomProgressButton,
+                  SizedBox(
+                    width: 300 - (77 * 2),
+                    child: widget.showTextButton
+                        ? selectDominoTextButton
+                        : const SizedBox(
+                            width: 200 - (57 * 2),
+                          ),
+                  ),
+                  showDominoes
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );

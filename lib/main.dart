@@ -21,7 +21,7 @@ class PlayGame extends StatelessWidget {
   const PlayGame({super.key});
 
   List<Kingdom> generateListOfNKingdoms(int n) {
-    List<String> colors = ['navy', 'forest', 'maroon', 'black'];
+    List<String> colors = ['navy', 'forest', 'maroon', 'yellow'];
     List<Kingdom> kingdoms = [];
     for (int i = 0; i < n; i++) {
       kingdoms.add(Kingdom(colors[i]));
@@ -35,7 +35,7 @@ class PlayGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int numberOfKingdoms = 3;
+    int numberOfKingdoms = 4;
     int numberOfRounds = 13;
     List<Kingdom> kingdoms = generateListOfNKingdoms(numberOfKingdoms);
     if (numberOfKingdoms == 2) numberOfRounds = 7;

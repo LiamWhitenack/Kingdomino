@@ -118,10 +118,10 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     // mark the domino as noColorIfDominoNotTakenElseColor so that it doesn't appear anymore
     widget.kingdoms[kingdomTurnIndex].domino!.placed = true;
 
-    kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
-
     // if this isn't included the same domino can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
+
+    kingdomTurnIndex = (kingdomTurnIndex + 1) % numberOfTurnsInARound;
 
     if (kingdomTurnIndex == 0) {
       roundCounter++;
@@ -136,10 +136,10 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     // mark the domino as noColorIfDominoNotTakenElseColor so that it doesn't appear anymore
     kingdom.domino!.placed = true;
 
-    kingdomTurnIndex = (kingdomTurnIndex + 1) % widget.kingdoms.length;
-
     // if this isn't included the same domino can be placed twice
     widget.kingdoms[kingdomTurnIndex].domino = null;
+
+    kingdomTurnIndex = (kingdomTurnIndex + 1) % widget.kingdoms.length;
 
     if (kingdomTurnIndex == 0) {
       roundCounter++;

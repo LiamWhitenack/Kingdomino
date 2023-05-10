@@ -2,6 +2,7 @@ Map<String, List<int>> colors = {
   'noColor': [255, 255, 255],
   'purple': [149, 107, 169],
   'yellow': [251, 190, 129],
+  'gold': [204, 204, 0],
   'swamp_green': [132, 132, 99],
   'pink': [251, 150, 138],
   'baby_blue': [160, 197, 196],
@@ -10,6 +11,6 @@ Map<String, List<int>> colors = {
   'dark_grey': [100, 100, 100],
   'maroon': [128, 0, 0],
   'black': [0, 0, 0],
-  'green': [0, 128, 0],
-  'blue': [0, 0, 128],
+  'forest': [0, 128, 0],
+  'navy': [0, 0, 128],
 };

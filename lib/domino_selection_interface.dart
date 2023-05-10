@@ -6,6 +6,7 @@ import 'package:kingdomino/kingdom_progress.dart';
 import 'package:kingdomino/player_placement_grid.dart';
 import 'package:kingdomino/show_domino_functions.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'colors.dart';
 import 'domino_selection_column.dart';
 import 'dominoes.dart';
 import 'icons.dart';
@@ -203,8 +204,12 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       panelController: widget.panelController,
     );
 
+    List<int> backgroundColorInfo = colors[widget.kingdoms[widget.kingdomSelectingIndex].color]!;
+
     FloatingActionButton selectDominoTextButton = FloatingActionButton(
-      backgroundColor: Colors.grey,
+      backgroundColor: Color.fromRGBO(backgroundColorInfo[0], backgroundColorInfo[1], backgroundColorInfo[2], 0.6),
+      elevation: 0.0,
+      autofocus: true,
       onPressed: () {
         selectPieceAction();
         setState(() {});

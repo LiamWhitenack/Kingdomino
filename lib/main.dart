@@ -21,7 +21,7 @@ class PlayGame extends StatelessWidget {
   const PlayGame({super.key});
 
   List<Kingdom> generateListOfNKingdoms(int n) {
-    List<String> colors = ['navy', 'forest', 'maroon', 'yellow'];
+    List<String> colors = ['navy', 'forest', 'maroon', 'gold'];
     List<Kingdom> kingdoms = [];
     for (int i = 0; i < n; i++) {
       kingdoms.add(Kingdom(colors[i]));

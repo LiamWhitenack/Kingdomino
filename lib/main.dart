@@ -35,8 +35,8 @@ class PlayGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int numberOfKingdoms = 4;
-    int numberOfRounds = 13;
+    int numberOfKingdoms = 3;
+    int numberOfRounds = 3;
     List<Kingdom> kingdoms = generateListOfNKingdoms(numberOfKingdoms);
     if (numberOfKingdoms == 2) numberOfRounds = 7;
     return MaterialApp(

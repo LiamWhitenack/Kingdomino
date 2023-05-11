@@ -157,8 +157,8 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
   int minColumn = columns.reduce(min);
 
   // first assume that the domino is oriented horizontally and try to find a spot
-  for (int i = minRow - 1; i < maxRow + 1; i++) {
-    for (int j = minColumn - 2; j < maxColumn + 1; j++) {
+  for (int i = minRow - 1; i < maxRow + 2; i++) {
+    for (int j = minColumn - 2; j < maxColumn + 2; j++) {
       if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
         return [i, j];
       }
@@ -167,8 +167,8 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
 
   domino.rotate();
   // then assume that the domino is oriented vertically and try to find a spot
-  for (int i = minRow - 2; i < maxRow + 1; i++) {
-    for (int j = minColumn - 1; j < maxColumn + 1; j++) {
+  for (int i = minRow - 2; i < maxRow + 2; i++) {
+    for (int j = minColumn - 1; j < maxColumn + 2; j++) {
       if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
         return [i, j];
       }
@@ -177,8 +177,8 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
 
   // keep going with every orientation
   domino.rotate();
-  for (int i = minRow - 1; i < maxRow + 1; i++) {
-    for (int j = minColumn - 2; j < maxColumn + 1; j++) {
+  for (int i = minRow - 1; i < maxRow + 2; i++) {
+    for (int j = minColumn - 2; j < maxColumn + 2; j++) {
       if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
         return [i, j];
       }
@@ -186,8 +186,8 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
   }
 
   domino.rotate();
-  for (int i = minRow - 2; i < maxRow + 1; i++) {
-    for (int j = minColumn - 1; j < maxColumn + 1; j++) {
+  for (int i = minRow - 2; i < maxRow + 2; i++) {
+    for (int j = minColumn - 1; j < maxColumn + 2; j++) {
       if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
         return [i, j];
       }

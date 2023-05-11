@@ -208,8 +208,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
 
     FloatingActionButton selectDominoTextButton = FloatingActionButton(
       backgroundColor: Color.fromRGBO(backgroundColorInfo[0], backgroundColorInfo[1], backgroundColorInfo[2], 0.6),
-      elevation: 0.0,
-      autofocus: true,
+      elevation: 0,
       onPressed: () {
         selectPieceAction();
         setState(() {});

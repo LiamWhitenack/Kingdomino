@@ -98,6 +98,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
         endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
+        setState(() {});
         showAlertDialog(context, 'Domino Lost', 'That domino will not fit on your kingdom');
       }
     });
@@ -146,8 +147,6 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       widget.kingdoms =
           organizeKingdomsByColumnOrder(dominoOptionsForSelectionColumnOne, dominoOptionsForSelectionColumnTwo);
     }
-
-    setState(() {});
   }
 
   // when a domino is selected,
@@ -460,10 +459,10 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           children: [
             SizedBox(height: MediaQuery.of(context).size.height / 5),
             SizedBox(
-              height: MediaQuery.of(context).size.height / 1.5,
               child: Column(
                 children: [
                   playerPlacementGrid,
+                  const SizedBox(height: 40),
                   // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
                   widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placeDominoButton,
                 ],

@@ -67,16 +67,13 @@ class PlayGameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black87,
-      child: PlayerInteractionInterface(
-        dominoesInTheBox: returnEveryDominoFunction(),
-        numberOfRounds: numberOfRounds,
-        kingdoms: kingdoms,
-        numberOfUniqueKingdoms: numberOfKingdoms,
-        interfaceHeight: MediaQuery.of(context).size.height,
-        interfaceWidth: MediaQuery.of(context).size.width,
-      ),
+    return PlayerInteractionInterface(
+      dominoesInTheBox: returnEveryDominoFunction(),
+      numberOfRounds: numberOfRounds,
+      kingdoms: kingdoms,
+      numberOfUniqueKingdoms: numberOfKingdoms,
+      interfaceHeight: MediaQuery.of(context).size.height,
+      interfaceWidth: MediaQuery.of(context).size.width,
     );
   }
 }

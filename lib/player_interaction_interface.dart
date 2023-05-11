@@ -293,7 +293,13 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
         endTurn(widget.kingdoms[kingdomTurnIndex], panelController);
       },
-      child: const Text("Place"),
+      child: const Text(
+        'Place',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 28,
+        ),
+      ),
     );
 
     String getWinningKingdomColor(List<Kingdom> kingdoms) {
@@ -391,9 +397,8 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       );
     }
 
-    Color backgroundColor;
     List rgboValues = colors[widget.kingdoms[kingdomTurnIndex].color]!;
-    backgroundColor = Color.fromRGBO(
+    Color backgroundColor = Color.fromRGBO(
       rgboValues[0],
       rgboValues[1],
       rgboValues[2],
@@ -449,20 +454,23 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       ),
 
       // outside the panel
-      body: Column(
-        children: [
-          SizedBox(height: MediaQuery.of(context).size.height / 5),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 1.5,
-            child: Column(
-              children: [
-                playerPlacementGrid,
-                // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
-                widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placeDominoButton,
-              ],
+      body: Container(
+        color: Color.fromRGBO(rgboValues[0], rgboValues[1], rgboValues[2], 0.5),
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height / 5),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: Column(
+                children: [
+                  playerPlacementGrid,
+                  // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
+                  widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placeDominoButton,
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

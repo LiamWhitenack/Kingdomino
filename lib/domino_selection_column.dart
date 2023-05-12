@@ -66,33 +66,35 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
     // if there aren't any dominoes, no need to do anything :)
     if (widget.dominoOptionsForSelection.isEmpty) return const SizedBox();
     return Column(
-      children: widget.dominoOptionsForSelection.asMap().entries.map((entry) {
-        final int index = entry.key;
-        final Domino dominoOption = entry.value;
-        Widget dominoDisplay = dominoOption.placed
-            ? SizedBox(height: (MediaQuery.of(context).size.height / 13))
-            : displayDominoInABox(dominoOption, MediaQuery.of(context).size.height, MediaQuery.of(context).size.width,
-                colorOfTheBox: dominoOption.noColorIfDominoNotTakenElseColor);
+      children: widget.dominoOptionsForSelection.asMap().entries.map(
+        (entry) {
+          final int index = entry.key;
+          final Domino dominoOption = entry.value;
+          Widget dominoDisplay = dominoOption.placed
+              ? SizedBox(height: (MediaQuery.of(context).size.height / 13))
+              : displayDominoInABox(dominoOption, MediaQuery.of(context).size.height, MediaQuery.of(context).size.width,
+                  colorOfTheBox: dominoOption.noColorIfDominoNotTakenElseColor);
 
-        return dominoOption.placed
-            ? const SizedBox()
-            : Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      _onCardTapped(index);
-                    },
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 2.45,
-                      child: dominoDisplay,
+          return dominoOption.placed
+              ? const SizedBox()
+              : Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _onCardTapped(index);
+                      },
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 2.45,
+                        child: dominoDisplay,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 31,
-                  ),
-                ],
-              );
-      }).toList(),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 31,
+                    ),
+                  ],
+                );
+        },
+      ).toList(),
     );
   }
 }

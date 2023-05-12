@@ -239,6 +239,14 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       }
     }
 
+    List<int> rgboValues = colors[widget.kingdoms[kingdomTurnIndex].color]!;
+    Color backgroundColor = Color.fromRGBO(
+      rgboValues[0],
+      rgboValues[1],
+      rgboValues[2],
+      1.0,
+    );
+
     List<Domino> dominoesInTheBox = widget.dominoesInTheBox;
 
     scoreTextWidget = Text(
@@ -300,6 +308,31 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         ),
       ),
     );
+
+    String getWinningKingdomString(List<Kingdom> kingdoms) {
+      List<Kingdom> kingdomsListWithoutDuplicates = [];
+      for (Kingdom kingdom in kingdoms) {
+        if (!kingdomsListWithoutDuplicates.contains(kingdom)) {
+          kingdomsListWithoutDuplicates.add(kingdom);
+        }
+      }
+      kingdoms = kingdomsListWithoutDuplicates;
+      int maxScore = 0;
+      //
+      String winningColor = '';
+      String endString = 'kingdom wins!!';
+      for (int i = 0; i < kingdoms.length; i++) {
+        if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) > maxScore) {
+          maxScore = kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors);
+          winningColor = kingdoms[i].color;
+          endString = 'kingdom wins!!';
+        } else if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) == maxScore) {
+          winningColor = '$winningColor and ${kingdoms[i].color}';
+          endString = 'kingdoms win!!';
+        }
+      }
+      return 'The $winningColor $endString';
+    }
 
     String getWinningKingdomColor(List<Kingdom> kingdoms) {
       List<Kingdom> kingdomsListWithoutDuplicates = [];
@@ -372,21 +405,27 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         width: MediaQuery.of(context).size.width,
       );
 
-      return Column(
-        children: [
-          SizedBox(height: MediaQuery.of(context).size.height / 5),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 1.5,
-            child: Column(
-              children: [
-                // if there's no domino selected there's no need to show all of the bells and whistles
-                playerPlacementGrid,
-                // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
-                widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placeDominoButton,
-              ],
+      rgboValues = colors[widget.kingdoms[kingdomTurnIndex].color]!;
+      backgroundColor = Color.fromRGBO(rgboValues[0], rgboValues[1], rgboValues[2], 0.5);
+
+      return Container(
+        color: backgroundColor,
+        child: Column(
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height / 5),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: Column(
+                children: [
+                  // if there's no domino selected there's no need to show all of the bells and whistles
+                  playerPlacementGrid,
+                  // widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : playerPlacementGrid,
+                  widget.kingdoms[kingdomTurnIndex].domino == null ? const SizedBox() : placeDominoButton,
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     }
 
@@ -395,14 +434,6 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         child: Text(getWinningKingdomColor(widget.kingdoms)),
       );
     }
-
-    List rgboValues = colors[widget.kingdoms[kingdomTurnIndex].color]!;
-    Color backgroundColor = Color.fromRGBO(
-      rgboValues[0],
-      rgboValues[1],
-      rgboValues[2],
-      1.0,
-    );
 
     return SlidingUpPanel(
       defaultPanelState: PanelState.OPEN,

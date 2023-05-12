@@ -309,30 +309,30 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       ),
     );
 
-    String getWinningKingdomString(List<Kingdom> kingdoms) {
-      List<Kingdom> kingdomsListWithoutDuplicates = [];
-      for (Kingdom kingdom in kingdoms) {
-        if (!kingdomsListWithoutDuplicates.contains(kingdom)) {
-          kingdomsListWithoutDuplicates.add(kingdom);
-        }
-      }
-      kingdoms = kingdomsListWithoutDuplicates;
-      int maxScore = 0;
-      //
-      String winningColor = '';
-      String endString = 'kingdom wins!!';
-      for (int i = 0; i < kingdoms.length; i++) {
-        if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) > maxScore) {
-          maxScore = kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors);
-          winningColor = kingdoms[i].color;
-          endString = 'kingdom wins!!';
-        } else if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) == maxScore) {
-          winningColor = '$winningColor and ${kingdoms[i].color}';
-          endString = 'kingdoms win!!';
-        }
-      }
-      return 'The $winningColor $endString';
-    }
+    // String getWinningKingdomString(List<Kingdom> kingdoms) {
+    //   List<Kingdom> kingdomsListWithoutDuplicates = [];
+    //   for (Kingdom kingdom in kingdoms) {
+    //     if (!kingdomsListWithoutDuplicates.contains(kingdom)) {
+    //       kingdomsListWithoutDuplicates.add(kingdom);
+    //     }
+    //   }
+    //   kingdoms = kingdomsListWithoutDuplicates;
+    //   int maxScore = 0;
+    //   //
+    //   String winningColor = '';
+    //   String endString = 'kingdom wins!!';
+    //   for (int i = 0; i < kingdoms.length; i++) {
+    //     if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) > maxScore) {
+    //       maxScore = kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors);
+    //       winningColor = kingdoms[i].color;
+    //       endString = 'kingdom wins!!';
+    //     } else if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) == maxScore) {
+    //       winningColor = '$winningColor and ${kingdoms[i].color}';
+    //       endString = 'kingdoms win!!';
+    //     }
+    //   }
+    //   return 'The $winningColor $endString';
+    // }
 
     String getWinningKingdomColor(List<Kingdom> kingdoms) {
       List<Kingdom> kingdomsListWithoutDuplicates = [];
@@ -388,7 +388,6 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
             findTheHighestScoringSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
         if (coordinates.isEmpty) {
           endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
-          showAlertDialog(context, 'Domino Lost', 'That domino will not fit on your kingdom');
         } else {
           i = coordinates[0];
           j = coordinates[1];

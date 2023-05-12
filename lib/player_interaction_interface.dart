@@ -95,7 +95,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       kingdomToReturn.dominoesInPurgatory.add(domino);
 
       List<int> coordinates =
-          findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
+          findTheHighestScoringSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
         endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
         setState(() {});
@@ -229,7 +229,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     int j = widget.kingdoms.length;
     if (widget.kingdoms[kingdomTurnIndex].domino != null) {
       List<int> coordinates =
-          findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
+          findTheHighestScoringSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
         // endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
         showAlertDialog(context, 'Domino Lost', 'That domino will not fit on your kingdom');
@@ -385,7 +385,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         }
 
         coordinates =
-            findTheFirstAvailableSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
+            findTheHighestScoringSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
         if (coordinates.isEmpty) {
           endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
           showAlertDialog(context, 'Domino Lost', 'That domino will not fit on your kingdom');

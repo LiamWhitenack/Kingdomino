@@ -71,6 +71,54 @@ class Kingdom {
     }
   }
 
+  List<List<int>> returnNewKingdomCrowns(Domino domino, int i, int j) {
+    fullyUpdated = false;
+    this.i = i;
+    this.j = j;
+    this.domino = domino;
+    newKingdomCrowns = deepCopyCrowns(kingdomCrowns);
+    newKingdomColors = deepCopyColors(kingdomColors);
+
+    // place the domino horizontally or horizontally
+    if (!domino.horizontal) {
+      newKingdomCrowns[i][j] = domino.crowns[0];
+      newKingdomCrowns[i + 1][j] = domino.crowns[1];
+      // newKingdomColors[i][j] = domino.colors[0];
+      // newKingdomColors[i + 1][j] = domino.colors[1];
+    } else {
+      newKingdomCrowns[i][j] = domino.crowns[0];
+      newKingdomCrowns[i][j + 1] = domino.crowns[1];
+      // newKingdomColors[i][j] = domino.colors[0];
+      // newKingdomColors[i][j + 1] = domino.colors[1];
+    }
+
+    return newKingdomCrowns;
+  }
+
+  List<List<String>> returnNewKingdomColors(Domino domino, int i, int j) {
+    fullyUpdated = false;
+    this.i = i;
+    this.j = j;
+    this.domino = domino;
+    newKingdomCrowns = deepCopyCrowns(kingdomCrowns);
+    newKingdomColors = deepCopyColors(kingdomColors);
+
+    // place the domino horizontally or horizontally
+    if (!domino.horizontal) {
+      // newKingdomCrowns[i][j] = domino.crowns[0];
+      // newKingdomCrowns[i + 1][j] = domino.crowns[1];
+      newKingdomColors[i][j] = domino.colors[0];
+      newKingdomColors[i + 1][j] = domino.colors[1];
+    } else {
+      // newKingdomCrowns[i][j] = domino.crowns[0];
+      // newKingdomCrowns[i][j + 1] = domino.crowns[1];
+      newKingdomColors[i][j] = domino.colors[0];
+      newKingdomColors[i][j + 1] = domino.colors[1];
+    }
+
+    return newKingdomColors;
+  }
+
   // this synchronized old and new grid values - cannot be reversed
   void updateBoard() {
     checkValidPlacementAtPositionIJ(this, domino!, i, j);

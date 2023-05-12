@@ -156,7 +156,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     // force the player to place their domino if they have a domino ready to place
     if (widget.kingdoms[widget.kingdomSelectingIndex].domino != null) {
       // if there is a space to put the domino, close the selection interface
-      if ((findTheFirstAvailableSpot(
+      if ((findTheHighestScoringSpot(
               widget.kingdoms[widget.kingdomSelectingIndex], widget.kingdoms[widget.kingdomSelectingIndex].domino!))
           .isNotEmpty) {
         widget.panelController.hide();

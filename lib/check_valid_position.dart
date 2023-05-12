@@ -198,3 +198,104 @@ List<int> findTheFirstAvailableSpot(Kingdom kingdom, Domino domino) {
   // For now just return an empty list
   return [];
 }
+
+List<int> findTheHighestScoringSpot(Kingdom kingdom, Domino domino) {
+  // I'm not sure why this needs to be here, but sometimes I have
+  // newKingdomColors that are mysteriously different than their correct value
+  kingdom.newKingdomColors = kingdom.kingdomColors;
+  kingdom.newKingdomCrowns = kingdom.kingdomCrowns;
+
+  // record the important rows and columns
+  List rowsAndColumns = kingdom.getImportantRowsAndColumns(kingdom.newKingdomColors);
+  List<int> rows = rowsAndColumns[0];
+  List<int> columns = rowsAndColumns[1];
+
+  int maxRow = rows.reduce(max);
+  int minRow = rows.reduce(min);
+  int maxColumn = columns.reduce(max);
+  int minColumn = columns.reduce(min);
+
+  int highestPossibleScore = -1;
+  int newestScore;
+  List<int> finalCoordinates = [];
+  int rotation = 0;
+
+  // first assume that the domino is oriented horizontally and try to find a spot
+  for (int i = minRow - 1; i < maxRow + 2; i++) {
+    for (int j = minColumn - 2; j < maxColumn + 2; j++) {
+      if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
+        newestScore =
+            kingdom.score(kingdom.returnNewKingdomCrowns(domino, i, j), kingdom.returnNewKingdomColors(domino, i, j));
+        kingdom.newKingdomColors = kingdom.kingdomColors;
+        kingdom.newKingdomCrowns = kingdom.kingdomCrowns;
+        if (newestScore > highestPossibleScore) {
+          highestPossibleScore = newestScore;
+          finalCoordinates = [i, j];
+          rotation = 0;
+        }
+      }
+    }
+  }
+
+  domino.rotate();
+  // then assume that the domino is oriented vertically and try to find a spot
+  for (int i = minRow - 2; i < maxRow + 2; i++) {
+    for (int j = minColumn - 1; j < maxColumn + 2; j++) {
+      if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
+        newestScore =
+            kingdom.score(kingdom.returnNewKingdomCrowns(domino, i, j), kingdom.returnNewKingdomColors(domino, i, j));
+        kingdom.newKingdomColors = kingdom.kingdomColors;
+        kingdom.newKingdomCrowns = kingdom.kingdomCrowns;
+        if (newestScore > highestPossibleScore) {
+          highestPossibleScore = newestScore;
+          finalCoordinates = [i, j];
+          rotation = 1;
+        }
+      }
+    }
+  }
+
+  // keep going with every orientation
+  domino.rotate();
+  for (int i = minRow - 1; i < maxRow + 2; i++) {
+    for (int j = minColumn - 2; j < maxColumn + 2; j++) {
+      if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
+        newestScore =
+            kingdom.score(kingdom.returnNewKingdomCrowns(domino, i, j), kingdom.returnNewKingdomColors(domino, i, j));
+        kingdom.newKingdomColors = kingdom.kingdomColors;
+        kingdom.newKingdomCrowns = kingdom.kingdomCrowns;
+        if (newestScore > highestPossibleScore) {
+          highestPossibleScore = newestScore;
+          finalCoordinates = [i, j];
+          rotation = 2;
+        }
+      }
+    }
+  }
+
+  domino.rotate();
+  for (int i = minRow - 2; i < maxRow + 2; i++) {
+    for (int j = minColumn - 1; j < maxColumn + 2; j++) {
+      if (checkValidPlacementAtPositionIJ(kingdom, domino, i, j) == '') {
+        newestScore =
+            kingdom.score(kingdom.returnNewKingdomCrowns(domino, i, j), kingdom.returnNewKingdomColors(domino, i, j));
+        kingdom.newKingdomColors = kingdom.kingdomColors;
+        kingdom.newKingdomCrowns = kingdom.kingdomCrowns;
+        if (newestScore > highestPossibleScore) {
+          highestPossibleScore = newestScore;
+          finalCoordinates = [i, j];
+          rotation = 3;
+        }
+      }
+    }
+  }
+
+  domino.revertToOriginalOrientation();
+  for (int i = 0; i < rotation; i++) {
+    domino.rotate();
+  }
+
+  // return the final coordinates, which should have the highest possible score.
+  // the return could also just be empty, meaning that the domino doesn't fit.
+  return finalCoordinates;
+}

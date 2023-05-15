@@ -5,7 +5,7 @@ void showAlertDialog(BuildContext context, String title, String message) {
   Widget okButton = TextButton(
     child: const Text("OK"),
     onPressed: () {
-      Navigator.of(context).pop();
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
 

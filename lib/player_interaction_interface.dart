@@ -100,7 +100,6 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           findTheHighestScoringSpot(widget.kingdoms[kingdomTurnIndex], widget.kingdoms[kingdomTurnIndex].domino!);
       if (coordinates.isEmpty) {
         endTurnWithoutPlacingADomino(widget.kingdoms[kingdomTurnIndex], panelController);
-        setState(() {});
         showAlertDialog(context, 'Domino Lost', 'That domino will not fit on your kingdom');
       }
     });

@@ -1,7 +1,6 @@
 import 'package:kingdomino/player_placement_grid.dart';
 import 'colors.dart';
 import 'kingdoms.dart';
-import 'dominoes.dart';
 import 'package:flutter/material.dart';
 
 void showKingdomProgress(BuildContext context, List<Kingdom> kingdoms) {

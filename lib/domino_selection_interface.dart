@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:kingdomino/check_valid_position.dart';
+import 'package:kingdomino/domino_progress.dart';
 import 'package:kingdomino/kingdom_progress.dart';
 import 'package:kingdomino/player_placement_grid.dart';
 import 'package:kingdomino/show_domino_functions.dart';
@@ -233,7 +234,9 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     Widget showDominoes = SizedBox(
       width: 77,
       child: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          showDominoProgress(context, widget.dominoesInTheBox);
+        },
         icon: grey2x1Grid(30),
       ),
     );

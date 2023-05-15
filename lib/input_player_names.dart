@@ -35,7 +35,7 @@ class InputPlayerNamesWidget extends StatelessWidget {
               width: 0.5,
             ),
           ),
-          labelText: "Maroon Player Name",
+          labelText: "Red Player Name",
         ),
       ),
     );
@@ -56,7 +56,7 @@ class InputPlayerNamesWidget extends StatelessWidget {
               width: 0.5,
             ),
           ),
-          labelText: "Forest Player Name",
+          labelText: "Green Player Name",
         ),
       ),
     );
@@ -77,7 +77,7 @@ class InputPlayerNamesWidget extends StatelessWidget {
               width: 0.5,
             ),
           ),
-          labelText: "Navy Player Name",
+          labelText: "Blue Player Name",
         ),
       ),
     );

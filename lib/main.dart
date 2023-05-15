@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Kingdomino'),
+          title: const Text('Set Up Game'),
         ),
         body: Builder(builder: (context) {
           return Center(

@@ -70,7 +70,9 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
   // 2. rebuild the interface (if necessary) to show the new grid
   Kingdom onDominoChosenByActivePlayer(Domino domino) {
     int dominoesInPurgatoryMinimum = 1;
-    if (widget.numberOfUniqueKingdoms == 2) dominoesInPurgatoryMinimum = 2;
+    if (widget.numberOfUniqueKingdoms == 2) {
+      dominoesInPurgatoryMinimum = 2;
+    }
     Kingdom kingdomToReturn = widget.kingdoms[kingdomTurnIndex];
 
     setState(() {
@@ -334,7 +336,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
     //   return 'The $winningColor $endString';
     // }
 
-    String getWinningKingdomColor(List<Kingdom> kingdoms) {
+    String getWinningKingdomName(List<Kingdom> kingdoms) {
       List<Kingdom> kingdomsListWithoutDuplicates = [];
       for (Kingdom kingdom in kingdoms) {
         if (!kingdomsListWithoutDuplicates.contains(kingdom)) {
@@ -344,19 +346,19 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
       kingdoms = kingdomsListWithoutDuplicates;
       int maxScore = 0;
       //
-      String winningColor = '';
+      String winningName = '';
       String endString = 'kingdom wins!!';
       for (int i = 0; i < kingdoms.length; i++) {
         if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) > maxScore) {
           maxScore = kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors);
-          winningColor = kingdoms[i].color;
-          endString = 'kingdom wins!!';
+          winningName = kingdoms[i].name;
+          endString = ' wins!!';
         } else if (kingdoms[i].score(kingdoms[i].kingdomCrowns, kingdoms[i].kingdomColors) == maxScore) {
-          winningColor = '$winningColor and ${kingdoms[i].color}';
-          endString = 'kingdoms win!!';
+          winningName = '$winningName and ${kingdoms[i].name}';
+          endString = ' win!!';
         }
       }
-      return 'The $winningColor $endString';
+      return '$winningName $endString';
     }
 
     // this is purely for the UI
@@ -379,7 +381,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
         } else {
           return Center(
             child: Text(
-              getWinningKingdomColor(widget.kingdoms),
+              getWinningKingdomName(widget.kingdoms),
             ),
           );
         }
@@ -430,7 +432,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
 
     if (roundCounter == widget.numberOfRounds) {
       return Center(
-        child: Text(getWinningKingdomColor(widget.kingdoms)),
+        child: Text(getWinningKingdomName(widget.kingdoms)),
       );
     }
 
@@ -467,16 +469,20 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
           ],
         ),
         margin: const EdgeInsets.all(12.0),
-        child: Stack(
-          alignment: Alignment.topCenter,
+        child: Column(
           children: [
-            dominoSelectionInterface,
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 10,
-              child: const Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Colors.grey,
+            SizedBox(height: MediaQuery.of(context).size.height / 16),
+            Text(
+              "${widget.kingdoms[kingdomTurnIndex].name}'s turn",
+              style: TextStyle(
+                fontSize: 20,
+                color: Color.fromRGBO(rgboValues[0], rgboValues[1], rgboValues[2], 0.75),
               ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height / 16),
+            SizedBox(
+              height: 634,
+              child: dominoSelectionInterface,
             ),
           ],
         ),

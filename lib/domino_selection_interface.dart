@@ -247,7 +247,6 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
         children: [
           Column(
             children: [
-              SizedBox(height: MediaQuery.of(context).size.height / 7.83),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

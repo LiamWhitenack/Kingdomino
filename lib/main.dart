@@ -4,6 +4,14 @@ import 'package:kingdomino/input_player_names.dart';
 import 'package:kingdomino/kingdoms.dart';
 import 'package:kingdomino/player_interaction_interface.dart';
 
+List<String> returnImportantNames(List<TextEditingController> controllers, int n) {
+  List<String> names = [];
+  for (int i = 0; i < n; i++) {
+    names.add(controllers[i].text);
+  }
+  return names;
+}
+
 void main() {
   runApp(const HomeScreen());
 }
@@ -16,15 +24,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double numberOfPlayers = 3;
-
-  List<String> returnImportantNames(List<TextEditingController> controllers, int n) {
-    List<String> names = [];
-    for (int i = 0; i < n; i++) {
-      names.add(controllers[i].text);
-    }
-    return names;
-  }
+  double numberOfPlayers = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 Center(
                   child: SizedBox(
-                    width: 200,
+                    width: 250,
                     child: Slider(
                       value: numberOfPlayers,
                       min: 2,
@@ -88,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(
                             builder: (context) => GameScreen(
                               playerNames: returnImportantNames(controllers, numberOfPlayers.round()),
+                              numberOfPlayers: numberOfPlayers.round(),
                             ),
                           ),
                         );
@@ -110,13 +111,14 @@ class _HomeScreenState extends State<HomeScreen> {
 // this is where you should be able to set up a game with custom settings
 class GameScreen extends StatelessWidget {
   final List<String> playerNames;
-  const GameScreen({required this.playerNames, super.key});
+  final int numberOfPlayers;
+  const GameScreen({required this.playerNames, super.key, required this.numberOfPlayers});
 
   List<Kingdom> generateListOfNKingdoms(List<String> playerNames) {
     List<String> colors = ['maroon', 'forest', 'navy', 'yellow'];
     List<Kingdom> kingdoms = [];
     for (int i = 0; i < playerNames.length; i++) {
-      kingdoms.add(Kingdom(colors[i]));
+      kingdoms.add(Kingdom(colors[i], playerNames[i]));
     }
     if (kingdoms.length == 2) {
       kingdoms.addAll([...kingdoms]);
@@ -127,10 +129,9 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int numberOfKingdoms = 3;
     int numberOfRounds = 13;
     List<Kingdom> kingdoms = generateListOfNKingdoms(playerNames);
-    if (numberOfKingdoms == 2) numberOfRounds = 7;
+    if (numberOfPlayers == 2) numberOfRounds = 7;
     return MaterialApp(
       title: 'Kingdomino',
       home: Scaffold(
@@ -139,7 +140,7 @@ class GameScreen extends StatelessWidget {
           dominoesInTheBox: returnEveryDominoFunction(),
           numberOfRounds: numberOfRounds,
           kingdoms: kingdoms,
-          numberOfUniqueKingdoms: numberOfKingdoms,
+          numberOfUniqueKingdoms: numberOfPlayers,
           interfaceHeight: MediaQuery.of(context).size.height,
           interfaceWidth: MediaQuery.of(context).size.width,
         ),

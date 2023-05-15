@@ -23,9 +23,10 @@ class Kingdom {
   // Every kingdom needs a unique color to choose from to distinguish themselves
   // during gameplay
   final String color;
+  final String name;
 
   // initialize the kingdom as a 9x9 grid with one spot filled in
-  Kingdom(this.color) {
+  Kingdom(this.color, this.name) {
     kingdomCrowns = List.generate(9, (_) => List.filled(9, -1));
     kingdomColors = List.generate(9, (_) => List.filled(9, 'noColor'));
     kingdomCrowns[4][4] = 0;

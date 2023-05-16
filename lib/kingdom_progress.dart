@@ -39,7 +39,7 @@ void showKingdomProgress(BuildContext context, List<Kingdom> kingdoms) {
 
   TextButton closeWindowButton = TextButton(
     onPressed: () {
-      Navigator.of(context).pop();
+      Navigator.of(context, rootNavigator: true).pop();
     },
     child: const Text('close'),
   );

@@ -30,6 +30,9 @@ void showDominoProgress(BuildContext context, List<Domino> dominoesRemaining) {
     }
   }
 
+  // sort the colors
+  allDominoData.sort(mySortComparison);
+
   // initialize domino counts
   for (DominoSectionData dominoSectionData in allDominoData) {
     originalDominoCount[dominoSectionData] = 0;
@@ -52,11 +55,19 @@ void showDominoProgress(BuildContext context, List<Domino> dominoesRemaining) {
     for (int i = 0; i < 2; i++) {
       for (DominoSectionData dominoSectionData in allDominoData) {
         if (dominoSectionData.hasSameData(domino.colors[i], domino.crowns[i])) {
-          originalDominoCount[dominoSectionData] = originalDominoCount[dominoSectionData]! + 1;
+          currentDominoCount[dominoSectionData] = currentDominoCount[dominoSectionData]! + 1;
         }
       }
     }
   }
+
+  // "close" button
+  TextButton closeWindowButton = TextButton(
+    onPressed: () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+    child: const Text('close'),
+  );
 
   // show the dialog
   showDialog(
@@ -66,11 +77,28 @@ void showDominoProgress(BuildContext context, List<Domino> dominoesRemaining) {
         color: Colors.white,
         child: ListView(
           scrollDirection: Axis.vertical,
-          children: const [SizedBox()],
+          children: [...showDominoCounts(originalDominoCount, currentDominoCount), closeWindowButton],
         ),
       );
     },
   );
+}
+
+int mySortComparison(DominoSectionData a, DominoSectionData b) {
+  if (appearsBefore(a, b, ['yellow', 'swamp_green', 'baby_blue', 'pink', 'brown', 'purple'])) {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+bool appearsBefore(DominoSectionData a, DominoSectionData b, List<String> father) {
+  if (a.color == b.color) return (a.value < b.value);
+  for (String color in father) {
+    if (color == b.color) return false;
+    if (color == a.color) return true;
+  }
+  return false;
 }
 
 class DominoSectionData {
@@ -92,20 +120,46 @@ bool checkIfListContainsList(List container, List element) {
   return false;
 }
 
-Widget showSection(List data, double size) {
+Widget showSection(DominoSectionData data, double size) {
   // data is in form [color, value]
 
   Text overlayText = Text(
-    data[1],
+    data.value > 0 ? '${data.value}' : '',
     style: const TextStyle(
       fontSize: 45,
       color: Color.fromRGBO(245, 245, 245, 0.9),
     ),
   );
 
-  Widget dominoSection = showDominoSection(data[0], size);
+  Widget dominoSection = showDominoSection(data.color, size);
 
   return Stack(
+    alignment: AlignmentDirectional.center,
     children: [dominoSection, overlayText],
   );
+}
+
+List<Widget> showDominoCounts(
+  Map<DominoSectionData, int> originalDominoCount,
+  Map<DominoSectionData, int> currentDominoCount,
+) {
+  List<Widget> dominoSections = [const SizedBox(height: 50)];
+  for (DominoSectionData dominoSectionData in originalDominoCount.keys) {
+    dominoSections.add(Center(
+        child: SizedBox(
+      width: 150,
+      child: Row(
+        children: [
+          showSection(dominoSectionData, 60.0),
+          const SizedBox(width: 20),
+          Text(
+            '${currentDominoCount[dominoSectionData]!} / ${originalDominoCount[dominoSectionData]!}',
+            style: const TextStyle(fontSize: 20),
+          )
+        ],
+      ),
+    )));
+    dominoSections.add(const SizedBox(height: 80.0 / 2));
+  }
+  return [...dominoSections];
 }

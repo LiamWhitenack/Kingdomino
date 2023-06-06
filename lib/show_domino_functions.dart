@@ -40,7 +40,7 @@ List<Widget> getImages(int n, int m, List<List<int>> values, List<List<String>> 
       Widget borderedStack = Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: const Color.fromRGBO(245, 245, 245, 0),
+            color: Colors.transparent,
             width: 2,
           ),
         ),
@@ -110,12 +110,12 @@ Widget displayDominoInABox(Domino domino, double interfaceHeight, double interfa
   int b = color[2];
 
   return Container(
-    height: interfaceHeight / 8.7,
-    width: interfaceWidth / 3.15,
+    height: 80,
+    width: 141,
     color: Color.fromRGBO(r, g, b, 0.5),
     child: Center(
       child: SizedBox(
-        width: interfaceWidth / 3.15,
+        width: 140,
         child: displayDomino(domino),
       ),
     ),

@@ -71,7 +71,7 @@ class _DominoSelectionColumnState extends State<DominoSelectionColumn> {
           final int index = entry.key;
           final Domino dominoOption = entry.value;
           Widget dominoDisplay = dominoOption.placed
-              ? SizedBox(height: (MediaQuery.of(context).size.height / 13))
+              ? SizedBox(height: 80)
               : displayDominoInABox(dominoOption, MediaQuery.of(context).size.height, MediaQuery.of(context).size.width,
                   colorOfTheBox: dominoOption.noColorIfDominoNotTakenElseColor);
 

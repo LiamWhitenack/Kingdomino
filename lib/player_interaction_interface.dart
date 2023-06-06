@@ -480,7 +480,7 @@ class _PlayerInteractionInterfaceState extends State<PlayerInteractionInterface>
             ),
             SizedBox(height: MediaQuery.of(context).size.height / 16),
             SizedBox(
-              height: 634,
+              height: MediaQuery.of(context).size.height - 160,
               child: dominoSelectionInterface,
             ),
           ],

@@ -163,24 +163,30 @@ class PlayerKingdomGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 100,
-          child: Center(child: scoreTextWidget),
-        ),
-        Container(
-          color: const Color.fromRGBO(245, 245, 245, 0.1),
-          height: height / 2.1,
-          child: Center(
-            child: SizedBox(
-              width: (width / 1.3) * (numColumns / 5) + numColumns * 4,
-              height: (width / 1.3) * (numRows / 5) + numRows * 4,
-              child: Column(children: getImages(numRows, numColumns, crowns, colors)),
+    double gridWidth = 60 * (numColumns) + numColumns * 4;
+    double gridHeight = 60 * (numRows) + numRows * 4;
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 100,
+            child: Center(child: scoreTextWidget),
+          ),
+          Container(
+            color: const Color.fromRGBO(245, 245, 245, 0.1),
+            width: width,
+            height: height / 2.1 + 40,
+            child: Center(
+              child: SizedBox(
+                width: gridWidth,
+                height: gridHeight,
+                child: Column(children: getImages(numRows, numColumns, crowns, colors)),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

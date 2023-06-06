@@ -246,8 +246,36 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
       color: Colors.white,
       margin: const EdgeInsets.all(12.0),
       child: Stack(
-        alignment: AlignmentDirectional.bottomCenter,
+        fit: StackFit.loose,
         children: [
+          Column(
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height - 300),
+              Center(
+                child: SizedBox(
+                  width: 300,
+                  height: 100,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        showKingdomProgressButton,
+                        SizedBox(
+                          width: 300 - (77 * 2),
+                          child: widget.showTextButton
+                              ? selectDominoTextButton
+                              : const SizedBox(
+                                  width: 200 - (57 * 2),
+                                ),
+                        ),
+                        showDominoes
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
           Column(
             children: [
               Row(
@@ -264,27 +292,6 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 16),
             ],
-          ),
-          SizedBox(
-            width: 300,
-            height: 100,
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  showKingdomProgressButton,
-                  SizedBox(
-                    width: 300 - (77 * 2),
-                    child: widget.showTextButton
-                        ? selectDominoTextButton
-                        : const SizedBox(
-                            width: 200 - (57 * 2),
-                          ),
-                  ),
-                  showDominoes
-                ],
-              ),
-            ),
           ),
         ],
       ),

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:kingdomino/check_valid_position.dart';
 import 'package:kingdomino/domino_progress.dart';
 import 'package:kingdomino/kingdom_progress.dart';
-import 'package:kingdomino/player_placement_grid.dart';
-import 'package:kingdomino/show_domino_functions.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'colors.dart';
 import 'domino_selection_column.dart';
@@ -210,6 +208,7 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
     FloatingActionButton selectDominoTextButton = FloatingActionButton(
       backgroundColor: Color.fromRGBO(backgroundColorInfo[0], backgroundColorInfo[1], backgroundColorInfo[2], 0.6),
       elevation: 0,
+      hoverElevation: 0,
       onPressed: () {
         selectPieceAction();
         setState(() {});
@@ -281,13 +280,19 @@ class _DominoSelectionInterfaceState extends State<DominoSelectionInterface> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  dominoSelectionColumnOne,
+                  SizedBox(
+                    width: 161,
+                    child: dominoSelectionColumnOne,
+                  ),
                   // add a gap if there's two columns
                   (dominoSelectionColumnOne.dominoOptionsForSelection.isNotEmpty &&
                           dominoSelectionColumnTwo.dominoOptionsForSelection.isNotEmpty)
                       ? SizedBox(width: MediaQuery.of(context).size.width / 39)
                       : const SizedBox(width: 0),
-                  dominoSelectionColumnTwo,
+                  SizedBox(
+                    width: 161,
+                    child: dominoSelectionColumnTwo,
+                  ),
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 16),

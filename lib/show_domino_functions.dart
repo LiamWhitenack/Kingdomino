@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'dominoes.dart';
 import 'colors.dart';
-import 'package:flutter/cupertino.dart';
 
 List<Widget> getImages(int n, int m, List<List<int>> values, List<List<String>> colors) {
   List<Widget> images = [];
@@ -110,12 +108,12 @@ Widget displayDominoInABox(Domino domino, double interfaceHeight, double interfa
   int b = color[2];
 
   return Container(
-    height: 80,
-    width: 141,
+    height: 85,
+    width: 140,
     color: Color.fromRGBO(r, g, b, 0.5),
     child: Center(
       child: SizedBox(
-        width: 140,
+        width: 125,
         child: displayDomino(domino),
       ),
     ),
